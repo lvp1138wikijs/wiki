@@ -1,11 +1,20 @@
 ---
-title: Serverpoint Wiki
+title: Internal control panel
 description: 
 published: true
-date: 2021-02-26T18:38:27.859Z
+date: 2021-02-26T19:47:41.838Z
 tags: 
 editor: markdown
 dateCreated: 2021-02-26T18:38:27.859Z
 ---
 
-SERVERPOINT WIKI
+Important Links In Order to Get Started :)
+ICP - Internal Control Panels
+Inventory
+Ticket System
+cPanel License Activation
+Plesk License Management
+Tools to Check BlackList
+ServerPoint Internal Servers Setup Instructions
+Setup Image Templates for ColossusCloud
+TINC - Installation and Configuration
