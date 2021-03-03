@@ -2,7 +2,7 @@
 title: App Installer for WebHosting Account
 description: 
 published: true
-date: 2021-03-03T01:38:33.571Z
+date: 2021-03-03T01:40:17.971Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-03T00:19:48.303Z
@@ -39,6 +39,7 @@ That's all. The installation will start automatically and send an email to the c
 
 **List/Edit/Update/Backup/Uninstall the Installed Applications 
 **
+
 - Go to App Installer through the client portal.
 - Click on My Applications to list the installed application on that account.
 ```diagram
