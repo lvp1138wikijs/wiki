@@ -2,7 +2,7 @@
 title: App Installer for WebHosting Account
 description: 
 published: true
-date: 2021-03-03T01:40:17.971Z
+date: 2021-03-03T01:51:16.513Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-03T00:19:48.303Z
@@ -37,8 +37,8 @@ Complete the form and then click on the Install button.
 
 That's all. The installation will start automatically and send an email to the customer email address. 
 
-**List/Edit/Update/Backup/Uninstall the Installed Applications 
-**
+List/Edit/Update/Backup/Uninstall the Installed Applications 
+# 
 
 - Go to App Installer through the client portal.
 - Click on My Applications to list the installed application on that account.
@@ -47,8 +47,8 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 ```
 - From there you can perform the update,edit,backup,clone and uninstall operations on the installed applications. Just select application from the list and click on the operation you want to do.
 
-**Restore the Application from Backup
-**
+Restore the Application from Backup
+## 
 Customer can restore the applications from the backup they created through app installer. 
 
 - Go to App Installer through the client portal.
