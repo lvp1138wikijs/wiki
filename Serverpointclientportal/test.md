@@ -2,7 +2,7 @@
 title: App Installer for WebHosting Account
 description: 
 published: true
-date: 2021-03-03T00:45:30.008Z
+date: 2021-03-03T01:20:24.534Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-03T00:19:48.303Z
@@ -27,9 +27,15 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 ```
 - Click on the application you want to install. Then click on the Install this application button. 
 
-
-
+```diagram
+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSIxcHgiIGhlaWdodD0iMXB4IiB2aWV3Qm94PSItMC41IC0wLjUgMSAxIiBjb250ZW50PSImbHQ7bXhmaWxlIGhvc3Q9JnF1b3Q7ZW1iZWQuZGlhZ3JhbXMubmV0JnF1b3Q7IG1vZGlmaWVkPSZxdW90OzIwMjEtMDMtMDNUMDE6MjA6MTguMTU1WiZxdW90OyBhZ2VudD0mcXVvdDs1LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzg4LjAuNDMyNC4xOTAgU2FmYXJpLzUzNy4zNiZxdW90OyBldGFnPSZxdW90OzlUdlYwMEhnWmI1ZXVOdHFXbW5HJnF1b3Q7IHZlcnNpb249JnF1b3Q7MTQuNC4zJnF1b3Q7IHR5cGU9JnF1b3Q7ZW1iZWQmcXVvdDsmZ3Q7Jmx0O2RpYWdyYW0gaWQ9JnF1b3Q7dTVWYXRFTWVFSmxlSnd5aTUzTnQmcXVvdDsgbmFtZT0mcXVvdDtQYWdlLTEmcXVvdDsmZ3Q7ZGRIQkVvSWdFQURRcitHT2tOWGRMQytkUEhSbVpCTm0wSFdRUnV2cjB3RXp4cm93eTl1RlpSYkNzMmE4V05HcEswb3doRkU1RW40aWpCMzI2YlRPOFBTd1M1aUgybXJwS1ZtaDFDOElTSU0rdElRK0tuU0l4dWt1eGdyYkZpb1htYkFXaDdqc2ppYnUyb2thTmxCV3dtejFwcVZUWG84cFhiMEFYYXVsYzBKRHBoRkxjWUJlQ1luREYvR2M4TXdpT2g4MVl3Wm1udDB5RjMvdS9DZjdlWmlGMXYwNE1BWHIzZE1tK2lDZXZ3RT0mbHQ7L2RpYWdyYW0mZ3Q7Jmx0Oy9teGZpbGUmZ3Q7Ij48ZGVmcy8+PGcvPjwvc3ZnPg==
 ```
+
+
+
+
+
+
 
 
 - It will open the installation window. From that window you can select the website and location you want to install, username, password, email address, etc.
