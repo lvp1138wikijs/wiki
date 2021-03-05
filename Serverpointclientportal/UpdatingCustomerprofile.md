@@ -2,7 +2,7 @@
 title: Updating Customer profile
 description: 
 published: true
-date: 2021-03-03T07:06:37.781Z
+date: 2021-03-05T06:52:01.369Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-03T07:06:37.781Z
@@ -11,10 +11,11 @@ dateCreated: 2021-03-03T07:06:37.781Z
 ```
 On this page:
 
-- Change password to Client Portal 
-- Log in to Client Portal with an email address
-- Changing email contact addresses
-- Editing Personal Information
+Change password to Client Portal 
+Log in to Client Portal with an email address
+Changing email contact addresses
+Editing Personal Information
+
 ```
 
 Login to Client portal at http://ServerpointAPPS.com and click on **MENU** on left top >> Click on **Edit your profile**.
