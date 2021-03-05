@@ -2,7 +2,7 @@
 title: Abuse-ServerPoint Procedure
 description: 
 published: true
-date: 2021-03-05T05:42:31.652Z
+date: 2021-03-05T05:43:57.986Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-05T03:33:31.469Z
@@ -39,6 +39,7 @@ dateCreated: 2021-03-05T03:33:31.469Z
 ## Open a ticket in the ticket system
 
 - Inform Customer about complaint and to ask for action in his side to solve problem. Use this reply template
+
 - Copy and paste part of the complaint for the customer reference.
 - Put the ticket on hold and setup a follow up to check after 24 hours.
 - Do a forward to the email received in gmail and add the following info
