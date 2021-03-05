@@ -2,19 +2,19 @@
 title: Client Portal - Website and stats
 description: 
 published: true
-date: 2021-03-03T05:56:58.306Z
+date: 2021-03-05T06:49:46.558Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-03T05:56:58.306Z
 ---
 
 ```
-On this page:
-Create Domain
-Create Domain Pointer
-Create Sub Domains
-Check statistics of shared hosting website account
-Delete Subwebsite / Domain pointer /Sub domains
+- On this page:
+- Create Domain
+- Create Domain Pointer
+- Create Sub Domains
+- Check statistics of shared hosting website account
+- Delete Subwebsite / Domain pointer /Sub domains
 ```
 
 **Create Domain**
