@@ -2,13 +2,13 @@
 title: Abuse-ServerPoint Procedure
 description: 
 published: true
-date: 2021-03-05T05:41:45.755Z
+date: 2021-03-05T05:42:31.652Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-05T03:33:31.469Z
 ---
 
-[AbuseServerPointProcedure](/AbuseDepartment/AbuseServerPointProcedure)# Inbox and Abuse-ServerPoint Procedure
+
 
 ```
 - Inbox and Abuse-ServerPoint Procedure
