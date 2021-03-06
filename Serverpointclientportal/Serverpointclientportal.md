@@ -2,7 +2,7 @@
 title: Serverpointclient portal
 description: 
 published: true
-date: 2021-03-06T03:42:50.103Z
+date: 2021-03-06T04:32:31.423Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-06T03:38:03.063Z
@@ -18,30 +18,33 @@ Go to https://www.serverpointapps.com >> Click on Client Portal and Use register
 - **Common for All Accounts**
 
 - [Billing](/Serverpointclientportal/BillingOptionforWebHostingAccounts)
-- Domain Names
-- Edit your profile
-- User/Role Management
-- Web Hosting Accounts
-- Apps
-- Billing Option for WebHosting Accounts (Account information, cancellation, Billing cycle, prepay, etc)
-- Databases
-- DNS
-- Email Management
-- SSL-Certificates and IP
-- Weebly Website builder
-- Website and stats
-- Dedicated Accounts
-- Hosted Servers
+- [DomainNames](/Serverpointclientportal/DomainNames)
+- [Edit your profile](/Serverpointclientportal/UpdatingCustomerprofile)
+- [UserRoleManagement](/Serverpointclientportal/UserRoleManagement)
 
-Billing Option for Dedicated Account
+**Web Hosting Accounts**
 
-ColossusCloud Accounts
-ColossusCloud Manager
+- [Apps](/Serverpointclientportal/AppInstallerforWebHostingAccount)
+- [Billing Option for WebHosting Accounts](/Serverpointclientportal/ClientPortalBillingfunctionsforWebHosting) (Account information, cancellation, Billing cycle, prepay, etc)
+- [Databases](/Serverpointclientportal/ClientPortalDatabases)
+- [DNS](/Serverpointclientportal/DNSWebHostingAccount)
+- [EmailManagement](/Serverpointclientportal/ClientPortalEmailManagement)
+- [SSL certificates and IPs](/Serverpointclientportal/SSLcertificatesandIPs)
+- [Weebly Website builder](/Serverpointclientportal/WeeblyWebsitebuilder)
+- [Website and stats](/Serverpointclientportal/Websiteandstats)
 
-Other Options in ServerPoint Apps
-Email & Groupware :- This is an Interface for access email accounts for shared hosting customers
-go to https://www.serverpointapps.com/ , click on Email & Groupware » Use existing email accounts to login.
-File/FTP Manager :- This is an Interface for managing files and folders of shared hosting accounts
-go to https://www.serverpointapps.com/ , click on File/FTP Manager » Use existing FTP login details to login
-DB Manager :- Feature manage databases 
-go to https://www.serverpointapps.com/ , click on DB Manager
+
+ **ColossusCloud Accounts**
+ 
+- [ColossusCloud Manager](/Serverpointclientportal/ColossusCloud/Serverpointclientportal)
+
+**Other Options in ServerPoint Apps**
+
+1. **Email & Groupware** :- This is an Interface for access email accounts for shared hosting customers
+    go to https://www.serverpointapps.com/ , click on Email & Groupware » Use existing email accounts to login.
+ 
+1. **File/FTP Manager**:- This is an Interface for managing files and folders of shared hosting accounts
+   go to https://www.serverpointapps.com/ , click on File/FTP Manager » Use existing FTP login details to login
+
+1. **DB Manager** :- Feature manage databases 
+    go to https://www.serverpointapps.com/ , click on DB Manager
