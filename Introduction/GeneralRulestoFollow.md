@@ -2,7 +2,7 @@
 title: General Rules to Follow
 description: 
 published: true
-date: 2021-02-16T16:58:52.852Z
+date: 2021-03-06T04:55:37.852Z
 tags: 
 editor: markdown
 dateCreated: 2021-02-16T16:57:41.528Z
