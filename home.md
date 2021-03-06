@@ -1,8 +1,8 @@
 ---
-title: Internal control panel
+title: Internal 
 description: 
 published: true
-date: 2021-02-26T20:44:23.724Z
+date: 2021-03-06T03:19:47.266Z
 tags: 
 editor: markdown
 dateCreated: 2021-02-26T18:38:27.859Z
