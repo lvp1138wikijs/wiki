@@ -2,7 +2,7 @@
 title: Abuse-ServerPoint Procedure
 description: 
 published: true
-date: 2021-03-05T06:45:36.288Z
+date: 2021-03-09T23:44:16.198Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-03-05T06:02:36.739Z
@@ -38,16 +38,31 @@ dateCreated: 2021-03-05T06:02:36.739Z
 <p>In 24 hours ticket will re-appear on ticket, if customer hasn't reply or solve problem and we are receiving more complaints, then send , then do the following..</p>
 <p><i><mark class="pen-red"><strong>For NEW customer:</strong></mark></i></p>
 <ul>
-  <li>Send another email and set the follow up in 24 hours again. &nbsp;</li>
+  <li>Send another email and set the follow up in 24 hours again.</li>
   <li>If client not replying, then do the following</li>
 </ul>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;-He is definitely a spammer. Inform Ms. Minerva about this issue and provide his account details to take a &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; decision on this customer</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp; -DON'T suspend/cancel client account without Minerva's approval.</p>
 <p><i><mark class="pen-red"><strong>For OLD customer:</strong></mark></i></p>
-<p>It may due to some of their account hacked or server is compromised.</p>
-<p>Keep sending him followups</p>
-<p>If no update from customer after 3/4 days and we are still receiving abuse complaints, then do the following</p>
-<p>Inform Ms. Minerva with all details and provide her a short summery about customer and this complaint details. It will help to take a good decision.</p>
-<p>Summery like how old he is, how many server he has, when he contacted us last time, how much he is paying, is there any older complaint from server, etc.</p>
-<p>DON'T suspend/cancel client account without Minerva's approval.</p>
-<p>If a server SUSPENDED due abuse, then keep the ticket OPEN and send an email to all staff.</p>
+<ul>
+  <li>It may due to some of their account hacked or server is compromised.</li>
+  <li>Keep sending him followups</li>
+  <li>If no update from customer after 3/4 days and we are still receiving abuse complaints, then do the following &nbsp; &nbsp;<br>&nbsp; - Inform Ms. Minerva with all details and provide her a short summery about customer and this complaint details. It will help to take a good decision</li>
+</ul>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; -Summery like how old he is, how many server he has, when he contacted us last time, how much he is &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; paying, is there any older complaint from server, etc.</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-DON'T suspend/cancel client account without Minerva's approval.</p>
+<p><mark class="pen-red"><strong>If a server SUSPENDED due abuse, then keep the ticket OPEN and send an email to all staff.</strong></mark></p>
+<p>&nbsp;</p>
+<p><strong>When a customer reply back with confirmation that spam source is terminated, or account was suspended or cancel, then do the following steps</strong></p>
+<p>&nbsp;</p>
+<ul>
+  <li>Go to the URL specified in the email spamcop sent and follow the procedure to notify then we took action.</li>
+  <li>Scan that customer's ip at http://mxtoolbox.com and confirm if IP is listed on some dnsbl or not. If it is, then immediately proceed to contact specific dnsbl and get ip delisted</li>
+  <li>Close ticket in Ticket System</li>
+</ul>
+<h4><strong>Note</strong></h4>
+<p>&nbsp;</p>
+<p>Spamcop do not just list ip directly, first they send alerts and they include a link in alert. We need to take care of the alert and then go to the link provided in their email and select that the issue is solve, and once this is done, they delete listing within 24 hours.</p>
+<p style="text-align:justify;">If they still keep receiving spams after 4-5 alerts, then they list ips permanently. In Such case they require use to contact then directly to remove the IP for their block list. Avoid the extra work taking care of the situation as soon as it arrives.</p>
+<p>&nbsp;</p>
+<p>Reply Template.</p>
