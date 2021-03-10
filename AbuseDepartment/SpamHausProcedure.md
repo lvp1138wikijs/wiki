@@ -2,7 +2,7 @@
 title: SpamHaus Procedure
 description: 
 published: true
-date: 2021-03-10T04:17:36.540Z
+date: 2021-03-10T04:19:44.247Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-10T04:17:36.540Z
@@ -32,7 +32,7 @@ Once a complaint received to gmail account, then follow this procedure.
   b)If its set to a custom domain, then remove it from customer client portal.
   c)Login to client portal >> Click Server name >> Click on RDNS tab >> Remove the domain name related to IPs >>  Then save it.
    
-1. Then contact spamhaus to delist IPs. Use this [Reply Template to Contact SpamHaus](/Templates/SpamHausProcedure).
+1. Then contact spamhaus to delist IPs. Use this [Reply Template to contact spamhaus](/Templates/Spamhaustreplies)
 1. Once all these procedure done, then contact Ms. Minerva with all details and also inform about the actions already done.
 
 ### ***If its an old customer***: 
