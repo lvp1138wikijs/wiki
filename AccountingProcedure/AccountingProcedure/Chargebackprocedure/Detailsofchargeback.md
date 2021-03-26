@@ -2,7 +2,7 @@
 title: At any Chargeback issue we always need to know the following details.
 description: 
 published: true
-date: 2021-03-26T04:43:19.558Z
+date: 2021-03-26T04:43:59.407Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-26T03:58:38.153Z
@@ -45,3 +45,9 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 ```
 **
 b, From Billing Control Panel>>Accounting>>Under "Add Credit**"
+
+C.Payment Details.
+
+6- Anything that indicated this was a fraud?
+
+7- Any complaint in Gmail?
