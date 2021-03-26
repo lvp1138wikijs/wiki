@@ -2,13 +2,13 @@
 title:  Change of user for shared hosting account 
 description: 
 published: true
-date: 2021-03-26T12:10:19.742Z
+date: 2021-03-26T12:11:19.870Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-26T12:10:19.742Z
 ---
 
-# Change of user for shared hosting account
+# To change user for shared hosting account
 > update userdata set username = "_new-username_" where username = "_old-username_" and account_type != "dedicolo";
 > update userdata_customer set username = "_new-username_" where username = "_old-username_";
 > update sharedtrack set username = "_new-username_" where username = "_old-username_";
