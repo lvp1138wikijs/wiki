@@ -1,0 +1,15 @@
+<!--
+title:  Inserts For Getting The List of Auto Renewal Enabled Domains 
+description: 
+published: true
+date: 2021-03-26T13:49:14.996Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-03-26T13:49:14.996Z
+-->
+
+<p>Here is the inserts for getting the list of domains which enabled auto renewal feature</p>
+<blockquote>
+  <p>select username,domainregistered,expdate,sc_free from registered_domains where status = "A" and expdate &nbsp;&gt;"2017-6-01" and expdate &lt; "2017-9-31" and username != "minervag" and arenew = "1" order by expdate;</p>
+</blockquote>
+<p>Note: Change the expdate values before sending it to Peter.</p>
