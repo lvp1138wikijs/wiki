@@ -1,0 +1,26 @@
+<!--
+title:  Insert A New Domain 
+description: 
+published: true
+date: 2021-03-26T12:25:04.987Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-03-26T12:25:04.987Z
+-->
+
+<p>Query to insert a domain so that it shows up in domain renewal screen. <i><strong>The last 4 parameters never change</strong></i></p>
+<p>Prepare the inserts in a single line and send it.</p>
+<blockquote>
+  <p>insert into registered_domains (domain,domainusername,domainregistered,firstname,lastname,orgname,address1,city,state,zip,country,phone,email,dayregistered,expdate,username,period,dns1,dns2,status,created) VALUES ('main_domain_name','domain_username_to be registered','domain_name_to be registered','FN','LN','Organisation_Name','Address1','City','State','Zip Code','Country','PH','Email','Day_registered','Exp_Date','Main_User_Name','1','dns1.serverpoint.com','dns2.serverpoint.com','A','1');</p>
+</blockquote>
+<p>Example</p>
+<p>normyip.com :: Main_domain_name</p>
+<p>normyip :: Main_User_name</p>
+<p>These informations are should be the account where you want the domain to show for renewal</p>
+<p>mirkotur :: domain_username_to be registered</p>
+<p>mirkoturla.com :: domain_name_to be registered</p>
+<p>&nbsp;</p>
+<p><strong>Sample Query</strong></p>
+<blockquote>
+  <p>insert into registered_domains(domain,domainusername,domainregistered,firstname,lastname,orgname,address1,city,state,zip,country,phone,email,dayregistered,expdate,username,period,dns1,dns2,status,created) VALUES ('normyip.com','mirkotur','mirkoturla.com','Norm','yip','Norm Yip Photography','8B Kamcourt Building, 60-62 Bonham Strand East, Sheung Wan','Hong Kong','HKChina','014','HK','85225406267','nyhk@pacific.net.hk','2007-01-13','2011-01-13','normyip','1','lasvegas-nv-us.aplushosting.com','fremont-ca-us.aplushosting.com','A','1');</p>
+</blockquote>
