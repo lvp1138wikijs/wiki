@@ -1,0 +1,25 @@
+<!--
+title: Catch All Email address
+description: 
+published: true
+date: 2021-03-26T12:18:17.974Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-03-26T12:18:17.974Z
+-->
+
+<p>Catch-all usually refers to a mailbox on a domain that will “catch all” of the emails addressed to the domain that do not exist in the mail server. Configuring a catch-all address can help avoid losing emails due to misspelling.</p>
+<p>For example: if <a href="mailto:catchall@example.com">catchall@example.com</a> is configured to be the catch-all email address on example.com, then any email sent to an undefined @example.com email address will be forwarded to <a href="mailto:catchall@example.com">catchall@example.com</a> instead of being rejected as an Undeliverable message or Unknown User error.</p>
+<p>&nbsp;</p>
+<blockquote>
+  <p>insert into pop3_catchall (email_user,username,sc_domain) values ('_email_','_account_user_','_Domain_');</p>
+</blockquote>
+<p>Example:</p>
+<p>Domain : owensullivan.com</p>
+<p>Username : owensull</p>
+<p>Email User: victoria</p>
+<p>&nbsp;</p>
+<blockquote>
+  <p>insert into pop3_catchall (email_user,username,sc_domain) values ('victoria','owensull','owensullivan.com');</p>
+</blockquote>
+<p>&nbsp;</p>
