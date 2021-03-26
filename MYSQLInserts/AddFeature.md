@@ -2,13 +2,13 @@
 title:  Add/Remove Features 
 description: 
 published: true
-date: 2021-03-26T11:29:42.912Z
+date: 2021-03-26T11:30:59.634Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-26T11:28:45.721Z
 ---
 
-# Add/Remove Features 
+# Add/Remove Features (Shared accounts)
 
 ## Setup Extra FTP User for a Shared hosting account
 
