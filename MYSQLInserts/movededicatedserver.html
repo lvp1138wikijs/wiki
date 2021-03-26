@@ -1,0 +1,56 @@
+<!--
+title: Move Dedicate Server to another User
+description: 
+published: true
+date: 2021-03-26T13:37:14.195Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-03-26T13:37:14.195Z
+-->
+
+<ul>
+  <li><strong>Replace [_oldusername_] with customer username and&nbsp;[_oldhostname_] with old server name</strong></li>
+</ul>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>update servertrack set username = "_newusername_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update cidrtracker set username = "_newusername_"</code> <code>where hostname = "_oldhostname_";</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<ul>
+  <li><strong>Replace [newhostname], [oldhostname] with server new and old names and also&nbsp;Replace [_oldusername_] [_newusername_]&nbsp;with customer old and new username</strong></li>
+</ul>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>update servertracker set hostname = "_newhostname_",tocreate = "1",modified = "mrtg"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update servertrack set hostname = "_newhostname_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update servertrack_ethernet set hostname = "_newhostname_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update servertrack_power set hostname = "_newhostname_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update servertrack_memo set hostname = "_newhostname_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update dns_reverse set hostname = "_newhostname_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update cidrtracker set hostname = "_newhostname_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update bandtrack set hostname = "_newhostname_"</code> <code>where hostname = "_oldhostname_";</code></p>
+          <p><code>update iplist_dedi set sc_username = "_newusername_"</code> <code>where sc_username = "_oldusername_";</code></p>
+          <p><code>update orderprocess_selfprovisioning set sc_username = "_newusername_"</code> <code>where sc_username = "_oldusername_";</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
