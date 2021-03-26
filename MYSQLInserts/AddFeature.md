@@ -2,7 +2,7 @@
 title:  Add/Remove Features 
 description: 
 published: true
-date: 2021-03-26T11:28:45.721Z
+date: 2021-03-26T11:29:42.912Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-26T11:28:45.721Z
@@ -19,7 +19,7 @@ dateCreated: 2021-03-26T11:28:45.721Z
 Example: FTP user: votevega, Domainname: vote.vegas, servername: maya.asdf456.com, password: tR5Li8jGtnm, main username: adlavac1
 {.is-success}
 
->      insert into extraaccounts (username,domain,directoryname,created,password,server,sc_username) values ("votevega","vote.vegas","",1,"tR5Li8jGtnm",'maya.asdf456.com','adlavac1');
+insert into extraaccounts (username,domain,directoryname,created,password,server,sc_username) values ("votevega","vote.vegas","",1,"tR5Li8jGtnm",'maya.asdf456.com','adlavac1');
 
 
 
