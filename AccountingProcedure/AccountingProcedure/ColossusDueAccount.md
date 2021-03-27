@@ -2,7 +2,7 @@
 title: Colossus Due Account - Procedure
 description: 
 published: true
-date: 2021-03-27T23:02:26.218Z
+date: 2021-03-27T23:28:24.386Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-27T22:50:30.996Z
@@ -18,7 +18,7 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 
 1. Search with the username in NEW ICP "https://secure.serverpoint.com/cgi-bin/ordersystem/engine.cgi?template_file=accounting-searchclient" to see if account is actually due.
 1. If due, then enter the details in the google doc "https://docs.google.com/spreadsheets/d/1lN7EFc3Nn99HD3v2P0W59By2o15QYzF8iRyyeWcKQ7M/edit#gid=0", where we keep the list of due accounts (ONLY COLOSSUS CLOUD)
-1. Next step is to open a ticket to customer as mentioned at "Requests for Customer to Pay Due Invoice".
+1. Next step is to open a ticket to customer as mentioned at "[Requests for Customer to PayDueInvoice](/Templates/RequestsforCustomertoPayDueInvoice)".
 1. Make sure to send right template, depending on whether cx got CC on file or not. The information regarding CC will be there in the invoice notice itself.
 
 
