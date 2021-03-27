@@ -1,0 +1,81 @@
+<!--
+title: SPAM Filters 
+description: 
+published: true
+date: 2021-03-27T15:12:01.386Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-03-27T15:12:01.386Z
+-->
+
+<h2>Custom Score</h2>
+<h3>To set custom score for a domain</h3>
+<blockquote>
+  <p><code>DELETE FROM email_properties WHERE sc_domain = "_domain_"</code> <code>AND username = "_username_";</code></p>
+  <p><code>INSERT INTO email_properties(username,sc_domain,sc_feature,sc_value) values ('_username_','_domain-name_','score','16');</code></p>
+</blockquote>
+<h3>To&nbsp; reset custom score for a domain to default</h3>
+<blockquote>
+  <p>DELETE FROM email_properties where username='_username_' and sc_domain='_domain-name_' and sc_feature='score';</p>
+</blockquote>
+<h3>To set custom score for an email account (i.e <a href="mailto:postmaster@jftechnologies.net">postmaster@jftechnologies.net</a>)</h3>
+<blockquote>
+  <p>INSERT INTO email_properties(username,sc_emailuser,sc_domain,sc_feature,sc_value) values ('_username_','_email-user_','_domain-name_','score','16');</p>
+</blockquote>
+<h3>To&nbsp; reset custom score for an email account</h3>
+<blockquote>
+  <p>DELETE FROM email_properties where username='_username_' and sc_emailuser='_email-user_' and &nbsp;sc_domain='_domain-name_' and sc_feature='score';</p>
+</blockquote>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Enable/Disable Complete Spam Checking</h2>
+<p>&nbsp;</p>
+<h3>To Disable spam checking for a domain (Full spam checking including smtpd, simscan and spamassassin)</h3>
+<blockquote>
+  <p>INSERT INTO email_properties(username,sc_domain,sc_feature,sc_value) values ('_username_','_domain-name_','av','0');</p>
+</blockquote>
+<h3>To reset and again enable&nbsp; spam checking for a domain (Full spam checking including smtpd, simscan and spamassassin)</h3>
+<blockquote>
+  <p><code>DELETE FROM email_properties where username='_username_'</code> <code>and sc_domain='_domain-name_'</code> <code>and sc_feature='av';</code></p>
+  <p><code>INSERT INTO email_properties(username,sc_domain,sc_feature,sc_value) values ('_username_','_domain-name_','av','1');</code></p>
+</blockquote>
+<h3>To Disable spam checking for an email account (i.e <a href="mailto:postmaster@jftechnologies.net">postmaster@jftechnologies.net</a>)</h3>
+<blockquote>
+  <p>INSERT INTO email_properties(username,sc_emailuser,sc_domain,sc_feature,sc_value) values ('_username_','_email-user_','_domain-name_','av','0');</p>
+</blockquote>
+<h3>&nbsp;</h3>
+<h3>To reset and again enable&nbsp; spam checking for a domain (Full spam checking including smtpd, simscan and spamassassin)</h3>
+<blockquote>
+  <p><code>DELETE FROM email_properties where username='_username_'</code> <code>and sc_emailuser='_email-user_'</code> <code>and&nbsp; sc_domain='_domain-name_'</code> <code>and sc_feature='av';</code></p>
+  <p><code>INSERT INTO email_properties(username,sc_emailuser,sc_domain,sc_feature,sc_value) values ('_username_','_email-user_','_domain-name_','av','1');</code></p>
+</blockquote>
+<p>&nbsp;</p>
+<h2>Enable/Disable Reverse DNS</h2>
+<h3>To Disable rdns checking for a domain</h3>
+<blockquote>
+  <p>INSERT INTO email_properties(username,sc_domain,sc_feature,sc_value) values ('_username_','_domain-name_','check_ip_reverse','0');</p>
+</blockquote>
+<h3>To reset and again enable&nbsp; rdns checking for a domain</h3>
+<blockquote>
+  <p><code>DELETE FROM email_properties where username='_username_'</code> <code>and sc_domain='_domain-name_'</code> <code>and sc_feature='check_ip_reverse';</code></p>
+  <p><code>INSERT INTO email_properties(username,sc_domain,sc_feature,sc_value) values ('_username_','_domain-name_','check_ip_reverse','1');</code></p>
+</blockquote>
+<h3>&nbsp;</h3>
+<h3>To Disable rdns checking for an email account (i.e <a href="mailto:postmaster@jftechnologies.net">postmaster@jftechnologies.net</a>)</h3>
+<blockquote>
+  <p>INSERT INTO email_properties(username,sc_emailuser,sc_domain,sc_feature,sc_value) values ('_username_','_email-user_','_domain-name_','check_ip_reverse','0');</p>
+</blockquote>
+<h3>&nbsp;</h3>
+<h3>To reset and again enable&nbsp; rdns checking for a domain (Full spam checking including smtpd, simscan and spamassassin)</h3>
+<blockquote>
+  <p><code>DELETE FROM email_properties where username='_username_'</code> <code>and sc_emailuser='_email-user_'</code> <code>and&nbsp; sc_domain='_domain-name_'</code> <code>and sc_feature='check_ip_reverse';</code></p>
+  <p><code>INSERT INTO email_properties(username,sc_emailuser,sc_domain,sc_feature,sc_value) values ('_username_','_email-user_','_domain-name_','check_ip_reverse','1');</code></p>
+</blockquote>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
