@@ -1,0 +1,25 @@
+<!--
+title:  Limit CPU of VM 
+description: 
+published: true
+date: 2021-03-27T13:15:55.135Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-03-27T13:15:55.135Z
+-->
+
+<p>Following query is used to limit cpu of vm from whatever is assigned to it as per package to below down to 50%</p>
+<blockquote>
+  <p>INSERT INTO sc_trigger (server,sc_trigger,domain,param1,param2) values('vm','vmcpucap','username','vm_id','50');</p>
+</blockquote>
+<p>Eg:-&nbsp;</p>
+<p>INSERT INTO sc_trigger (server,sc_trigger,domain,param1,param2) values('vm','vmcpucap','michae44','2b42f0735d6f021cb3ab3da0dd7a781c','50');</p>
+<p>&nbsp;</p>
+<p>This query can be used without username too, just leave user name empty</p>
+<blockquote>
+  <p>INSERT INTO sc_trigger (server,sc_trigger,domain,param1,param2) values('vm','vmcpucap','','vm_id','50');</p>
+</blockquote>
+<p>Eg: -</p>
+<p>INSERT INTO sc_trigger (server,sc_trigger,domain,param1,param2) values('vm','vmcpucap','','2b42f0735d6f021cb3ab3da0dd7a781c','50');</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
