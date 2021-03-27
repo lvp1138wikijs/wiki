@@ -1,0 +1,42 @@
+<!--
+title:  Update Account information 
+description: 
+published: true
+date: 2021-03-27T15:16:59.213Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-03-27T15:16:59.213Z
+-->
+
+<h2>Update NPD</h2>
+<h3>For dedicated server account</h3>
+<p>&nbsp;</p>
+<h4>Via ICP</h4>
+<p>Go to ICP » Search dedi/colo.</p>
+<p>Then Search by hostname, serial number or username and click on “search”.</p>
+<p>You will get the selected server and click on “View Server”.</p>
+<p>You will see option right below “Accounting information” to update NPD . Put correct NPD and click on “Modify npd” to change</p>
+<p>&nbsp;</p>
+<h4>Via Insert</h4>
+<p>&nbsp;</p>
+<blockquote>
+  <p><code>put_hostname_here&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : Replace with the correct hostname.</code></p>
+  <p><code>update servertrack set npd = date_add(npd , interval 6</code> <code>month) where hostname = "put_hostname_here";&nbsp; (NOTE: This will add 6</code> <code>months to the actual NPD)</code></p>
+  <p><code>OR</code></p>
+  <p><code>update userdata&nbsp; set npd = "Date"</code> <code>where username = "UserName";</code></p>
+  <p><code>update sharedtrack set npd = "Date"</code> <code>where username = "UserName";</code></p>
+</blockquote>
+<p>&nbsp;</p>
+<h3>For shared accounts</h3>
+<blockquote>
+  <p><code>put_username_here&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : Replace with the correct Username</code></p>
+  <p><code>update sharedtrack set npd = date_add(npd , interval 36</code> <code>month) where username = "put_username_here";&nbsp; (NOTE: This will add 6</code> <code>months to the actual NPD)</code></p>
+  <p><code>OR</code></p>
+  <p><code>update userdata&nbsp; set npd = "2016-01-01"</code> <code>where username = "Put_username";</code></p>
+  <p><code>update sharedtrack set npd = "2016-01-01"</code> <code>where username = "Put_username";</code></p>
+</blockquote>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
