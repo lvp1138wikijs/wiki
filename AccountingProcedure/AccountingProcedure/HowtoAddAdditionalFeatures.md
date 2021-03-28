@@ -2,7 +2,7 @@
 title: How to Add Additional Features to Client Accounts
 description: 
 published: true
-date: 2021-03-28T00:18:31.060Z
+date: 2021-03-28T00:19:02.043Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-27T23:48:44.767Z
