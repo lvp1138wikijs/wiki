@@ -2,7 +2,7 @@
 title: Shared Account Reactivation
 description: 
 published: true
-date: 2021-03-28T01:02:15.364Z
+date: 2021-03-28T01:35:07.995Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-28T01:01:08.643Z
@@ -40,9 +40,10 @@ If a customer contact us to to reactivate the resold account , then do the follo
 
 2. **Main Account is Cancelled and the Resold is Available to Reactivate**.
 
-1. Then we can convert this account to as main account . Send client this reply
-1. Once customer reply back with details , then prepare the following inserts and send to Minerva. The NPD should be current date, so that system will generate a new invoice in the next billing run.
-1. Once query run , then provide client the login detail and procedure to add credit card to their account
+  1. Then we can convert this account to as main account . Send client this [reply](/Templates/Reactivationrepliesforshared)
+
+  2. Once customer reply back with details , then prepare the following inserts and send to Minerva. The NPD should be current date, so that system will generate a new invoice in the next billing run.
+  3. Once query run , then provide client the login detail and procedure to add credit card to their account
 
 3. **MAIN Account is Active and Resold Account is Cancelled**
 
