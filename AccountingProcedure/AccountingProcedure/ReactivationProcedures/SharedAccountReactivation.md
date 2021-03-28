@@ -2,7 +2,7 @@
 title: Shared Account Reactivation
 description: 
 published: true
-date: 2021-03-28T01:35:50.572Z
+date: 2021-03-28T01:39:57.872Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-28T01:01:08.643Z
@@ -61,6 +61,6 @@ If client want the backup of data then do the following
 
 > Please Note:
 > 
-> If 5 days were over, then there is no chance to restore. The accounts is permanently removed from the server. Customer will have to start over. He want to place order from website if they want to proceed. Then send this reply to customer
+> If 5 days were over, then there is no chance to restore. The accounts is permanently removed from the server. Customer will have to start over. He want to place order from website if they want to proceed. Then send this [reply](/Templates/Reactivationrepliesforshared) to customer
 {.is-warning}
 
