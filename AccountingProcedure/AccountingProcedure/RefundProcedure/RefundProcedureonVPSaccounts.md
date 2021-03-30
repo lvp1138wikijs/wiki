@@ -2,7 +2,7 @@
 title: Refund Procedure on VPS accounts
 description: 
 published: true
-date: 2021-03-28T03:18:50.605Z
+date: 2021-03-30T22:49:53.421Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-28T03:18:50.605Z
@@ -47,4 +47,4 @@ Transaction type
 Source of Credit
 Source detail
 ```
-1. Send the account, Payment and refund details to Minerva and get it refunded.
+5. Send the account, Payment and refund details to Minerva and get it refunded.
