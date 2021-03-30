@@ -2,7 +2,7 @@
 title: Remote Hand Service [ RHS ]
 description: 
 published: true
-date: 2021-03-30T22:54:36.542Z
+date: 2021-03-30T23:18:42.450Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-30T22:54:36.542Z
@@ -31,7 +31,7 @@ dateCreated: 2021-03-30T22:54:36.542Z
 
 Check the billable details from following page
 
-Identifying billable support
+[Identifying billable support](/AccountingProcedure/AccountingProcedure/RemoteHandService/RemoteHandService)
 
 **How to Charge Remote Hand Service (RHS) for Support Work**
 
