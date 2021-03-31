@@ -2,7 +2,7 @@
 title: Suspend / Un-suspend
 description: 
 published: true
-date: 2021-03-30T23:56:38.114Z
+date: 2021-03-31T00:06:19.716Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-30T23:56:38.114Z
@@ -66,3 +66,74 @@ This manual procedure is only need for suspend account due to charge back and ab
 
 To suspend a shared account. Please send the insert to Ms. Minerva. 
 
+**Dedicated Service**
+
+**Due to non payment**
+
+To suspend a server for lack of payment when you get the suspension notice (sample below) from our billing software, just Turn OFF the server's Ethernet port.  This can be done from staff cp (Search SN>> CLick Hostname>> Change 1G to Disable)
+
+**Suspension notification for Dedicated Server**
+
+```
+Subject: 422340; TO SUSPEND: httpsoun-64-235-53-82.serverpoint.com
+
+Please suspend service to this client. Do so only between 9AM and 12PM PST, Monday through Thursday.
+Invoice number: 422340
+Amount due: 143.99
+Due date: 2012-09-30
+This notice is ONLY sent on the 6th attempt to charge client, whether to charge their credit card or from credit.
+```
+
+Do not suspend servers on weekends due to payment issue. Preferably do this on from Monday - Thursday
+
+
+When a client pays his/her invoice, whether it is via the client portal or because we have updated a new credit card, etc, the system will automatically reactivate server by enabling its Ethernet port, and will send a notice to ticket system (sample below). All you need is to check and confirm that server is up.
+
+**Re-activation notification for Dedicated server**
+ 
+```
+Subject: 382059; SUSPENDED S/N 1562 now reactivated: check!
+To: system-alerts@serverpoint.com
+
+
+Server 1562 had its ethernet port disabled due to suspension, but now has been automatically enabled. Confirm.
+```
+
+**Due to Abuse / ChargeBack / Others**
+
+To suspend just disable Ethernet port from staff cp (Search SN>> CLick Hostname>> Change 1G to Disable)
+
+To activate just Enable Ethernet port (Search SN>> CLick Hostname>> Change DISABLE to 1 G port)
+
+**VPS Service**
+
+For payment issues, system will send a suspend notification to ticketing system. We need to suspend those servers manually.
+
+**For suspension notification will be**
+
+```
+Subject: 423628; SUSPEND CLOUD SERVICE FOR USER: jamieswa
+
+Please suspend service to this client. Do so only between 9AM and 12PM PST, Monday through Thursday.
+Invoice number: 423628
+Amount due: 20.99
+Due date: 2012-10-04
+This notice is ONLY sent on the 6th attempt to charge client, whether to charge their credit card or from credit.
+```
+
+**For un-suspension notification will be**
+
+```
+Subject: 427067; REACTIVATE CLOUD FOR USER: sharprac
+
+Please reactivate cloud service to client sharprac. Invoice has been paid.
+Invoice number: 427067
+This notice is ONLY sent when a previously suspended account is reactivated.
+```
+
+**Suspend Colossus VPS Service**
+
+ To suspend a colossus vps you can follow the steps given below
+
+1) Search the username and click edit
+2) From there you can suspend the VPS account due to fraud or payment. 
