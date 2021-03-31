@@ -2,7 +2,7 @@
 title: Accounting Related Pre-maid Replies
 description: 
 published: true
-date: 2021-03-31T04:46:45.780Z
+date: 2021-03-31T05:07:55.336Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-31T01:21:32.275Z
@@ -10,9 +10,9 @@ dateCreated: 2021-03-31T01:21:32.275Z
 
 **ADD / UPDATE Credit Cards on Account Record**
 
-- How to add new credit card / Update credit card information
-- FAQ About Credit card Updates
-- AVS Mismatch
+- [How to add new credit card / Update credit card information](/Templates/Pre-maidReplies/HowtoaddnewcreditcardorUpdatecreditcardinformation)
+- [FAQ About Creditcard Updates](/Templates/Pre-maidReplies/FAQAboutCreditcardUpdates)
+- [AVS Mismatch](/Templates/Pre-maidReplies/AVSMismatch)
 
 **Advance / Pre-payment / Billing Cycle Change on Shared / Dedicated / VPS**
 
@@ -51,6 +51,5 @@ dateCreated: 2021-03-31T01:21:32.275Z
 
 - Pre-made Replies on Reseller Service
 - [Reply when a Dedicated customer is not suitable](/Templates/Pre-maidReplies/ReplywhenaDedicatedcustomerisnotsuitable)
-- Question about Special Reseller Discounts
-- Cloud Transition Reply
-- SSL: Premaid Replies
+- [Quetions about Special Reseller Discounts](/Templates/Pre-maidReplies/SpecialResellerDiscounts)
+- [SSL: Premaid Replies](/Templates/Pre-maidReplies/SSLRelatedReplies)
