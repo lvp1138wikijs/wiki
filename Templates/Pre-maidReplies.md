@@ -2,7 +2,7 @@
 title: Accounting Related Pre-maid Replies
 description: 
 published: true
-date: 2021-03-31T05:07:55.336Z
+date: 2021-03-31T05:09:12.124Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-31T01:21:32.275Z
@@ -49,7 +49,7 @@ dateCreated: 2021-03-31T01:21:32.275Z
 
 **Other Replies Related to Accounting**
 
-- Pre-made Replies on Reseller Service
+
 - [Reply when a Dedicated customer is not suitable](/Templates/Pre-maidReplies/ReplywhenaDedicatedcustomerisnotsuitable)
 - [Quetions about Special Reseller Discounts](/Templates/Pre-maidReplies/SpecialResellerDiscounts)
 - [SSL: Premaid Replies](/Templates/Pre-maidReplies/SSLRelatedReplies)
