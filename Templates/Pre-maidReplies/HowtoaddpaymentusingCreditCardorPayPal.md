@@ -2,7 +2,7 @@
 title: How to add payment using Credit Card / PayPal
 description: 
 published: true
-date: 2021-03-31T03:47:55.587Z
+date: 2021-03-31T03:49:38.967Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-31T03:47:55.587Z
@@ -49,3 +49,30 @@ Here the procedure,
 
 The payment will be charged from the registered credit card or from the available credit.
 ```
+
+## Credit Charge Fail
+
+```
+If there are problems charging your credit card, we continue charging for a few days after the due date.
+
+Sometimes the server at the bank may be so congested with traffic that it does not allow the charge to go through. Only very rarely we get declined 
+because a client's CC has no more credit left.
+
+Check with your bank to learn why they declined the charge.  We will keep trying for the next few days.
+
+What we do recommend to add account funds  to your account by logging to your Client Portal from  https://www.serverpointapps.com. Once the payment added, then please let us know.
+
+
+
+
+**__SPANISH__**
+
+Si hay problemas cargando su tarjeta, el sistema automatico de cargos continuara intentando hacer cargos.  Durante todo ese período, el sistema envía 
+al e-mail primario de contacto de la cuenta los avisos de que el cobro falló.
+
+Contacte a su banco para saber por que rechazaron los cargos.  Seguiremos intentando cargar su tarjeta temporeramente.
+
+Por ahora le recomendamos anada creditos manualmente en su panel de control **Menu -> Accounting -> clic '$'** y con dichos creditos pague 
+manualmente por meses de servicio en su cuenta. De esta forma evitara cualquier interrupcion al servicio de su cuenta 
+```
+
