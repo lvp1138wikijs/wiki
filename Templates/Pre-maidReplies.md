@@ -2,7 +2,7 @@
 title: Accounting Related Pre-maid Replies
 description: 
 published: true
-date: 2021-03-31T01:21:32.275Z
+date: 2021-03-31T04:46:45.780Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-31T01:21:32.275Z
@@ -16,41 +16,41 @@ dateCreated: 2021-03-31T01:21:32.275Z
 
 **Advance / Pre-payment / Billing Cycle Change on Shared / Dedicated / VPS**
 
-- Advanced Payment / Billing Cycle Change
+- [Advanced Payment /Billing Cycle Change](/Templates/Pre-maidReplies/AdvancedPaymentBillingCycleChange)
 
 **Payment Related**
 
-- Add Payment using Credit Card / PayPal
-- Payment From Wire/ Check/ Pay Order/ Money Order
-- Payment from Western Union
-- Direct paypal payment [ you got to let the client know in case she/he didn't get our announcement ]
-- Requests for Customer to Pay Due Invoice
+- [Add Payment using Credit Card/ Paypal](/Templates/Pre-maidReplies/HowtoaddpaymentusingCreditCardorPayPal)
+- [Payment From Wire/ Check/ Pay Order/ Money Order](/Templates/Pre-maidReplies/HowtosendPaymentUsingWire)
+- [Payment from WesternUnion](/Templates/Pre-maidReplies/PaymentfromWesternUnion)
+- [Requests for Customer to Pay Due Invoice](/Templates/Pre-maidReplies/RequestsforCustomertoPayDueInvoice)
 
 **Cancellation Related Replies**
 
-- Shared Service
-- VPS Service
-- Dedicated Service
+- [Shared Service ](/Templates/Pre-maidReplies/CancellationonSharedService)
+- [VPS Service ](/Templates/Pre-maidReplies/CancellationonVPS)
+- [Dedicated Service ](/Templates/Pre-maidReplies/CancellationonDedicated)
 
 **Fraud/ChargeBacks**
 
-- Suspected fraud reply
-- Charge-Back
+- [Suspected Fraud reply](/Templates/Pre-maidReplies/SuspectedFraudreply)
+- [Charge Back](/Templates/Pre-maidReplies/ChargeBackReplies)
 
 **Order Rejection / IP Justificaiton replies**
 
-- Rejection email to dedi server order
-- IP Justification repliesIP Justification replies
+- [Rejection email to dedi server order](/Templates/Pre-maidReplies/Rejectionemailtodediserverorder)
+- [IP Justification replies](/Templates/Pre-maidReplies/IPJustificationreplies)
+
 
 **Reactivation Replies**
 
-- Shared Account
-- Dedicated / VPS Account.
+- [Shared Account](/Templates/Pre-maidReplies/Reactivationrepliesforshared)
+- [Dedicated / VPS Account](/Templates/Pre-maidReplies/ReactivationrepliesforDedicatedorVPS).
 
 **Other Replies Related to Accounting**
 
 - Pre-made Replies on Reseller Service
-- Reply when a Dedicated customer is not suitable
+- [Reply when a Dedicated customer is not suitable](/Templates/Pre-maidReplies/ReplywhenaDedicatedcustomerisnotsuitable)
 - Question about Special Reseller Discounts
 - Cloud Transition Reply
 - SSL: Premaid Replies
