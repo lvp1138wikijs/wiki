@@ -2,7 +2,7 @@
 title: Sales Department
 description: 
 published: true
-date: 2021-04-03T01:02:25.786Z
+date: 2021-04-03T01:03:36.651Z
 tags: 
 editor: markdown
 dateCreated: 2021-04-03T00:58:20.996Z
@@ -22,7 +22,10 @@ dateCreated: 2021-04-03T00:58:20.996Z
 - Contact us: http://www.serverpoint.com/en/contactus.phtml
 
 
-```
+## 
+
+
+
 - About Us
 - [Our support structure and procedures](/home/Introduction/EmergencyProcedure/Structureofoursupportdepartmentandprocedures)
 - Support for Shared hosting
@@ -33,7 +36,7 @@ dateCreated: 2021-04-03T00:58:20.996Z
 - Initial/Welcome Emails for new orders
 - Price list
 
-```
+
 
 ## Procedures to follow when a new Order is Arrived
 
