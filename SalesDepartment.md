@@ -2,7 +2,7 @@
 title: Sales Department
 description: 
 published: true
-date: 2021-04-03T00:58:20.996Z
+date: 2021-04-03T01:02:25.786Z
 tags: 
 editor: markdown
 dateCreated: 2021-04-03T00:58:20.996Z
@@ -24,7 +24,7 @@ dateCreated: 2021-04-03T00:58:20.996Z
 
 ```
 - About Us
-- Our support structure and procedures
+- [Our support structure and procedures](/home/Introduction/EmergencyProcedure/Structureofoursupportdepartmentandprocedures)
 - Support for Shared hosting
 - Support for Dedicated server/VPS/Cloud+
 - Fully Managed
