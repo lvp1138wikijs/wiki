@@ -2,7 +2,7 @@
 title: The From Address while replying to a ticket in Kayako
 description: 
 published: true
-date: 2021-04-03T12:40:43.285Z
+date: 2021-04-03T12:41:28.489Z
 tags: 
 editor: markdown
 dateCreated: 2021-04-03T12:40:43.285Z
@@ -20,4 +20,6 @@ We have to set the correct From address when replying to a ticket. Here is the c
 
     Abuse - when reply use from address as ticket-abuse@serverpoint.com
 
-    When From address is selected as "system-alerts@aplushosting.com" .While customer directly replies to the mail it will be sent to the Gmail Inbox(aplushosting@gmail.com) 
+
+
+*  When From address is selected as "system-alerts@aplushosting.com" .While customer directly replies to the mail it will be sent to the Gmail Inbox(aplushosting@gmail.com) *
