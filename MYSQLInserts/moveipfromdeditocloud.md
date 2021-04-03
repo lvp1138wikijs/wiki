@@ -2,15 +2,14 @@
 title: Queries to move an IP from Dedicated to colossuscloud 
 description: 
 published: true
-date: 2021-04-03T09:52:44.796Z
+date: 2021-04-03T10:51:34.124Z
 tags: 
 editor: markdown
 dateCreated: 2021-04-03T09:52:44.796Z
 ---
 
-# Header
--     These are some queries to move IPs from a Dedicated  to a colossuscloud one. This will NOT WORK in every case.
--     These queries require the VMID of the colossuscloud VM. Get it from the new admin panel.
+
+These are some queries to move IPs from a Dedicated  to a colossuscloud one. This will NOT WORK in every case.     These queries require the VMID of the colossuscloud VM. Get it from the new admin panel.
 
 > update iplist_vps set sc_vmid = '',sc_username = '',sc_hv = '' where sc_type = 'pub' and sc_vmid = '_VMID_';
 >  
