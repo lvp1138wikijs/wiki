@@ -2,7 +2,7 @@
 title: Introduction
 description: 
 published: true
-date: 2021-04-09T13:36:11.652Z
+date: 2021-04-09T13:50:34.591Z
 tags: 
 editor: markdown
 dateCreated: 2021-02-16T16:33:09.082Z
@@ -97,4 +97,45 @@ WinSCP is an open source SFTP client and FTP client for Windows. Its main functi
 You can download and install the latest version from the following URL: http://winscp.net/eng/download.php
 
 You can refer the installation documents from the URL: http://winscp.net/eng/docs/installation
+
+**Open office**
+
+Openoffice is the software we use to create documents or read business documents.
+
+**efax viewer**
+
+We'reusingefaxviewerto open faxes received from the customers.
+
+You can download it using the following link: http://a248.g.akamai.net/f/248/528/7d/images.j2.com/twa/US/msgrplus.exe
+
+**Kayako Desktop app for chat support**
+
+DO CHAT SUPPORT ONLY WHEN YOU ARE CLEAR TO DO SO.
+
+You can download http://hotfix.kayako.com/latest.php?product=kd&platform=win32&buildtype=stable
+
+URL is: https://secure.serverpoint.com/tickets
+
+Use the same login details as your kayako control panel
+
+**Mozilla Thunderbird**
+
+Mozilla Thunderbird is a free, open source, cross-platform email and news client developed by the Mozilla Foundation.
+
+You can use thunderbird to configure official email address.
+
+URL: http://www.mozilla.org/en-US/thunderbird/
+
+**TrueCrypt**
+
+Truecrypt is aopen source disk encryption software and it is recommended to use it to store sensitive data like passwords.
+
+If you are using simple notepad file to store your username/password for internal usage at Serverpoint.com then you must use Truecrypt to create disk encryption. Click here to read how you can use TrueCrypt.
+
+**Opening a Shared Hosting Account**
+
+Opening a shared hosting account will get you get more familiar with the account creation, plan, rates, services offered and our in-house control panel.
+
+Once the account is approved by our staff, a welcome email will be sent to the address you specified at the time of account creation. Log in to the control panel and go through each section to get familiar with it.
+
 
