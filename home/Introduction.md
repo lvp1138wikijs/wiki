@@ -2,7 +2,7 @@
 title: Introduction
 description: 
 published: true
-date: 2021-04-09T13:50:34.591Z
+date: 2021-04-09T14:22:52.154Z
 tags: 
 editor: markdown
 dateCreated: 2021-02-16T16:33:09.082Z
@@ -138,4 +138,92 @@ Opening a shared hosting account will get you get more familiar with the account
 
 Once the account is approved by our staff, a welcome email will be sent to the address you specified at the time of account creation. Log in to the control panel and go through each section to get familiar with it.
 
+**CONTROL PANEL**
+
+Once your account is created, you will receive a welcome email which contains the link to our control panel along with your new username and password. You can access the control panel in the followingURL: https://www.serverpointapps.com/ , click on “Client Portal”
+
+Be sure you carefully read and understand all the features included in the control panel. Remember features vary depending on the type of account that you have.
+
+**Difference between main and resold account**
+
+The owner of resold accounts the main account user in other words, all resold accounts belong to their reseller. The main user can cancel, suspend, downgrade/upgrade the resold account.
+
+control panel for both accounts: https://www.serverpointapps.com/
+
+There is no accounting and reseller section in the resold control panel since the main account is fully responsible for all that.
+
+
+**WEBMAIL**
+
+You can send and read emails using our webmail interface.
+
+You can access our webmail interface at the following URL: https://www.serverpointapps.com/webmail
+
+Enter the username for the pop3 account in the first box.In second box enter your domains name. In the last box enter password for the user. Then hit on the login button.
+
+**Setting up SSH Tunnelling**
+
+**How to find IP of your email server**
+
+We have 4 email servers, for now, therefore you need to find out what email server is being used for your domain. To find, open putting and run host command for your domain, see example below
+
+```
+-sh-4.2$ host serverpointsupport.com
+serverpointsupport.com has address 64.235.42.4
+serverpointsupport.com mail is handled by 10 email-mx.serverpointsupport.com.
+-sh-4.2$ host email-mx.serverpointsupport.com.
+email-mx.serverpointsupport.com has address 72.18.207.140
+-sh-4.2$
+```
+
+So this shows 72.18.207.140 is your email server, and you can replace it in below explanation of setting up ssh tunnel.
+
+
+**Windows Platform**
+
+- Open Putty, in the left panel, expand the Connection → SSH → Select Tunnels and add new forwarded port
+
+- source port: 1110
+- Destination: 72.18.207.139:110
+
+Leave other settings unchanged. Click Add to Save it. Now add another port
+
+- source port: 125
+- Destination: 72.18.207.139:25
+- Click Add to Save it.
+
+Now login to your account at ServerPoint and these ports will be automatically forwarded to localhost. It is advised you save it as a session in Putty so you can load the configuration every time you open Putty.
+
+**Note that Destination has IP/Hostname of mail server your account resides on. It may differ from IP mentioned above**.
+
+Refer the following URL for more details: http://www.jfitz.com/tips/putty_config.html
+
+**Linux Platform**
+
+ssh username@domainname.com -L 125:72.18.207.139:25 -L 1110:72.18.207.139:110
+
+The above command will open ports on 125 and 1110 respectively in Linux
+
+**Email Client**
+
+Once tunneling is setup confirm this by using telnet command
+
+telnet localhost 1110
+telnet localhost 125
+If it is successful, update the email client to use new ports. In email account config, update following info
+
+Mail Server (Incoming/Outgoing): localhost
+Incoming Port: 1110
+Outgoing Port: 125
+UserName : username@domainname.com
+
+**Script Installation**
+
+As part of your training, you should install and configure a series of scripts. You must familiar with the installation and configuration so that you can support to our customers.
+
+Login to Client Portal from Serverpointapps.com >> Then Menu >> Web Apps Installer. Select the application you want to install, then click on Install This Application button.
+
+**Welcome to Our Team**
+
+I hope we can work together as a team for a very long time. Wish you good luck and success.
 
