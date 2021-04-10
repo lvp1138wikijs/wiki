@@ -1,0 +1,27 @@
+<!--
+title: Kayako Setup
+description: Kayako Setup
+published: true
+date: 2021-04-10T05:45:19.089Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T05:45:19.089Z
+-->
+
+<h2>Kayako related issues, manual modifications, etc</h2>
+<h3><strong>Known problems</strong></h3>
+<h4><strong>1:&nbsp;No visitors appear on LiveResponse</strong></h4>
+<p>Sometimes, for some unknown reason, visitors on the web site will not show up on LiveResponse.</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>mysql -u kayako_user -p kayako_suite -h mysql1a.asdf456.com</code></p>
+          <p><code>DELETE FROM swvisitorfootprints;</code></p>
+          <p><code>DELETE FROM swsessions;</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
