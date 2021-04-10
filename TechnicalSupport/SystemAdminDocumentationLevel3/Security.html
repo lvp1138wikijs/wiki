@@ -1,0 +1,345 @@
+<!--
+title: Security
+description: 
+published: true
+date: 2021-04-10T06:52:56.556Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:52:56.556Z
+-->
+
+<h2>NM Firewall</h2>
+<h3><strong>Server Firewall</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables -N FILTER_INPUT</code></p>
+          <p><code>/sbin/iptables --policy INPUT DROP</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT ACCEPT</code></p>
+          <p><code>#Global accepts</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 443</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 5252</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport ! 5252</code> <code>-j FILTER_INPUT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p udp --dport ! 5252</code> <code>-j FILTER_INPUT</code></p>
+          <p><code>#all other traffic only from serverpoint network</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 64.235.52.174</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Firewall for netboot servers</strong></h3>
+<p><strong>placed in /nocmonkey/recoveryos/tsl-2.x/sysroot/bin/firewall called from /nocmonkey/recoveryos/tsl-2.x/sysroot/init/local.tar.gz (with in that tar file from /shm/etc/rc.local)</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>modprobe xt_tcpudp</code></p>
+          <p><code>modprobe iptable_filter</code></p>
+          <p><code>modprobe iptable_nat</code></p>
+          <p><code>modprobe ip_tables</code></p>
+          <p><code>modprobe ipt_LOG</code></p>
+          <p><code>modprobe ipt_state</code></p>
+          <p><code>modprobe ipt_MASQUERADE</code></p>
+          <p><code>modprobe iptable_nat</code></p>
+          <p><code>modprobe ip_conntrack</code></p>
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables -N FILTER_INPUT</code></p>
+          <p><code>/sbin/iptables --policy INPUT ACCEPT</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 22</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -p tcp -j DROP</code></p>
+          <p><code>#allow global http access</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 80</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport ! 80</code> <code>-j FILTER_INPUT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p udp --dport ! 80</code> <code>-j FILTER_INPUT</code></p>
+          <p><code>#all other traffic only from serverpoint network</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 64.235.52.174</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -p tcp -j DROP</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Access Servers Firewall</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N FILTER_OUTPUT</code></p>
+          <p><code>/sbin/iptables -N FILTER_INPUT</code></p>
+          <p><code>/sbin/iptables --policy INPUT DROP</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT DROP</code></p>
+          <p><code>#Global allow pings in and out</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>#global allow ssh on 5252</code> <code>in and out</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 5252</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp --sport 5252</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>#Allow input only from serverpoint network</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp -j FILTER_INPUT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p udp -j FILTER_INPUT</code></p>
+          <p><code>#all other traffic only from serverpoint network</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_INPUT -s 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>#Allow output only for</code> <code>serverpoint network</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp -j FILTER_OUTPUT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p udp -j FILTER_OUTPUT</code></p>
+          <p><code>#all other traffic only from serverpoint network</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Spam Filter Servers Firewall</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables -N SPAMASSASSIN</code></p>
+          <p><code>/sbin/iptables -N DNS</code></p>
+          <p><code>/sbin/iptables --policy INPUT DROP</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT ACCEPT</code></p>
+          <p><code>#Global accepts</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 22</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 783</code> <code>-j SPAMASSASSIN</code></p>
+          <p><code>#spamassassin access</code></p>
+          <p><code>/sbin/iptables -A SPAMASSASSIN -s 72.18.207.136</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SPAMASSASSIN -s 72.18.207.139</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p udp --sport 53</code> <code>-j DNS</code></p>
+          <p><code>#spamassassin access</code></p>
+          <p><code>/sbin/iptables -A DNS -s 64.235.53.251</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A DNS -s 64.235.53.253</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>#Allow requests from within the server like clamd virus update etc</code></p>
+          <p><code>/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>DNS Cache Servers Firewall (Latest with heartbeat failover)</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables -N DNS</code></p>
+          <p><code>/sbin/iptables --policy INPUT ACCEPT</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT ACCEPT</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>#Global accepts</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 5252</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -p tcp -j DROP</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>/sbin/iptables -A INPUT -p udp --dport 53</code> <code>-j DNS</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 53</code> <code>-j DNS</code></p>
+          <p><code>#DNS access</code></p>
+          <p><code>/sbin/iptables -A DNS -s 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A DNS -s 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A DNS -s 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A DNS -j DROP</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>#Allow requests from within the server like clamd virus update etc</code></p>
+          <p><code>/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<h3><strong>DNS Cache Servers Firewall (Old DNS CACHE)</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables -N DNS</code></p>
+          <p><code>/sbin/iptables --policy INPUT DROP</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT ACCEPT</code></p>
+          <p><code>#Global accepts</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 22</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p udp --dport 53</code> <code>-j DNS</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 53</code> <code>-j DNS</code></p>
+          <p><code>#DNS access</code></p>
+          <p><code>/sbin/iptables -A DNS -s 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A DNS -s 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A DNS -s 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>#Allow requests from within the server like clamd virus update etc</code></p>
+          <p><code>/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>DNS Servers Firewall</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables -N DNS</code></p>
+          <p><code>/sbin/iptables --policy INPUT DROP</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT ACCEPT</code></p>
+          <p><code>#Global accepts</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 5252</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 53</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p udp --dport 53</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p udp --sport 53</code> <code>-j DNS</code></p>
+          <p><code>#DNS access</code></p>
+          <p><code>/sbin/iptables -A DNS -s 64.235.53.251</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A DNS -s 64.235.53.253</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>#Allow requests from within the server like clamd virus update etc</code></p>
+          <p><code>/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Nagios Servers Firewall</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N FILTER_OUTPUT</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables --policy INPUT DROP</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT DROP</code></p>
+          <p><code>#Allow replies for</code> <code>internal connections</code></p>
+          <p><code>/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>#Global allow pings in and out</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>#Allow local network</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>#Allow HTTP access to public</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 7777</code> <code>-j ACCEPT</code></p>
+          <p><code>#Allow outgoing smtp</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp --dport 25</code> <code>-j ACCEPT</code></p>
+          <p><code>#Allow Yum</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp --dport 80</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 5252</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>#Allow output only for</code> <code>serverpoint network</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp -j FILTER_OUTPUT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p udp -j FILTER_OUTPUT</code></p>
+          <p><code>#all other traffic only from serverpoint network</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Client Nagios Servers Firewall</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>/sbin/iptables -F</code></p>
+          <p><code>/sbin/iptables -X</code></p>
+          <p><code>/sbin/iptables -N FILTER_OUTPUT</code></p>
+          <p><code>/sbin/iptables -N SSH</code></p>
+          <p><code>/sbin/iptables --policy INPUT DROP</code></p>
+          <p><code>/sbin/iptables --policy OUTPUT DROP</code></p>
+          <p><code>#Allow replies for</code> <code>internal connections</code></p>
+          <p><code>/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>#Global allow pings in and out</code></p>
+          <p><code>/sbin/iptables -A INPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p ICMP -j ACCEPT</code></p>
+          <p><code>#Allow local network</code></p>
+          <p><code>/sbin/iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>#Allow HTTP access to public</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 7777</code> <code>-j ACCEPT</code></p>
+          <p><code>#Allow outgoing smtp</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp --dport 25</code> <code>-j ACCEPT</code></p>
+          <p><code>#Allow Yum</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp --dport 80</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A INPUT -p tcp --dport 5252</code> <code>-j SSH</code></p>
+          <p><code>#ssh access</code></p>
+          <p><code>/sbin/iptables -A SSH -s 72.18.206.242</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A SSH -s 64.235.52.174</code> <code>-p tcp -j ACCEPT</code></p>
+          <p><code>#Allow output only for</code> <code>serverpoint network</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p tcp -j FILTER_OUTPUT</code></p>
+          <p><code>/sbin/iptables -A OUTPUT -p udp -j FILTER_OUTPUT</code></p>
+          <p><code>#all other traffic only from serverpoint network</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 64.235.32.0/19</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 72.18.192.0/20</code> <code>-j ACCEPT</code></p>
+          <p><code>/sbin/iptables -A FILTER_OUTPUT -d 216.108.224.0/20</code> <code>-j ACCEPT</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
