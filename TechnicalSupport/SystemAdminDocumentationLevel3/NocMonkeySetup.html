@@ -1,0 +1,509 @@
+<!--
+title: NocMonkey Setup
+description: NocMonkey Setup
+published: true
+date: 2021-04-10T05:39:15.462Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T05:39:15.462Z
+-->
+
+<h1>NocMonkey Installation/modification/customization</h1>
+<h3><strong>Setting up NocMonky on Centos</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:894px;">
+          <p><code>-------------------------------</code></p>
+          <p><code>Data copied from original nm server</code></p>
+          <p><code>-------------------------------</code></p>
+          <p><code>#/nocmonkey (Full directory/subdirectories)</code></p>
+          <p><code>#/user/bin/dhcpd (Binary only)</code></p>
+          <p><code>#/etc/init.d/nocmonkey (Start Script)</code></p>
+          <p><code>#nocmonkey database</code></p>
+          <p><code>----------------------------</code></p>
+          <p><code>Install required packages</code></p>
+          <p><code>----------------------------</code></p>
+          <p><code>yum install</code> <code>tftp-server</code></p>
+          <p><code>yum install</code> <code>dhcp</code></p>
+          <p><code>yum install</code> <code>mysql-server</code></p>
+          <p><code>yum install</code> <code>httpd</code></p>
+          <p><code>yum install</code> <code>nfsd</code></p>
+          <p><code>----------------------------</code></p>
+          <p><code>tftp run throug xinetd</code></p>
+          <p><code>---------------------------</code></p>
+          <p><code># set /etc/xinetd.d/tftpd as below</code></p>
+          <p><code>service tftp</code></p>
+          <p><code>{</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; socket_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = dgram</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; protocol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = udp</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wait&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = yes</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = root</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/sbin/in.tftpd</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; server_args&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = -s /nocmonkey/tftp</code> <code>-r blksize</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; disable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = no</code></p>
+          <p><code>}</code></p>
+          <p><code>---------------------------------------------------</code></p>
+          <p><code>DHCPD</code></p>
+          <p><code>---------------------------------------------------</code></p>
+          <p><code>#Make sure below links exist other wise the /nocmonkey/server/scripts/sudo binary of nocmonkey will not work</code></p>
+          <p><code>/usr/lib/libldap.so.2</code></p>
+          <p><code>/usr/lib/libldap.so</code></p>
+          <p><code>#Note: replace dhcpd executeable with dhcpd of nm. nm's dhcpd is patched to read</code></p>
+          <p><code>#/var/state/dhcp/netboot.cliets file dynamically. so servers can turn on/off</code></p>
+          <p><code>#netboot without restarting dhcpd</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>ln</code> <code>-s /var/lib/dhcpd</code> <code>/var/state/dhcp</code></p>
+          <p><code>#to generate /etc/dhcpd.conf on new server run this</code></p>
+          <p><code>#perl /nocmonkey/server/scripts/create_dhcpd_conf.pl</code></p>
+          <p><code>------------------------------------------------</code></p>
+          <p><code>NFS</code></p>
+          <p><code>-----------------------------------------------</code></p>
+          <p><code>#/etc/exports will be automatically created by nocmonkey when started but</code></p>
+          <p><code>#just in case the content of /etc/exports should be below</code></p>
+          <p><code>/nocmonkey/share/spool</code> <code>*(rw,no_root_squash,sync)</code></p>
+          <p><code>/nocmonkey/share/os_images</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>###-&gt;&gt;&gt; NOCMONKEY - do not change it ! [ 2008.12.12 16:23:50 ]</code></p>
+          <p><code>/nocmonkey/recoveryos/tsl-2.x/modules</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>/nocmonkey/recoveryos/tsl-2.x/sysroot</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>/nocmonkey/recoveryos/tsl-2.x/web</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>/nocmonkey/recoveryos/tsl-2.x/scripts</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>/nocmonkey/recoveryos/freebsd-6.x/sysroot</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>/nocmonkey/recoveryos/freebsd-6.x/web</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>/nocmonkey/recoveryos/freebsd-6.x/scripts</code> <code>*(ro,no_root_squash,sync)</code></p>
+          <p><code>###-&lt;&lt;&lt; NOCMONKEY - do not change it !</code></p>
+          <p><code>---------------------------------------------</code></p>
+          <p><code>NM Database configuration</code></p>
+          <p><code>---------------------------------------------</code></p>
+          <p><code>database in</code> <code>/nocmonkey/conf/nocmonkey</code></p>
+          <p><code>----------------------------------------------</code></p>
+          <p><code>httpd</code></p>
+          <p><code>----------------------------------------------</code></p>
+          <p><code>#Disable http configuration in nocmonkey start scripts otherwise it will mess httpd.conf everytime it will run</code></p>
+          <p><code>#httpd host can be configured as per requirments using root directory /nocmonkey/server/web</code></p>
+          <p><code>----------------------------------------------</code></p>
+          <p><code>*NOTE Disable ipv6 on server otherwise nm scripts can not parse output of ifconfig</code></p>
+          <p><code>----------------------------------------------</code></p>
+          <p><code>7. How do</code> <code>I disable IPv6?</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp; * Edit /etc/sysconfig/network</code> <code>and set</code> <code>"NETWORKING_IPV6"</code> <code>to "no"</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp; * Add the following to /etc/modprobe.conf :</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alias</code> <code>ipv6 off</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alias</code> <code>net-pf-10 off</code></p>
+          <p><code>&nbsp;&nbsp;</code>&nbsp;</p>
+          <p><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Run chkconfig ip6tables off to disable the IPv6 firewall</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp; * Reboot the system</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Modifications done to integrate NM in SC</strong></h3>
+<p>/nocmonkey/server/web/admin.php Line 80, 81… Take out % from database query</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>#Also this code is added</code></p>
+          <p><code>if</code> <code>(sql($search_name) == "")</code></p>
+          <p><code>$search_name = "%";</code></p>
+          <p><code>if</code> <code>(sql($search_mac) == "")</code></p>
+          <p><code>$search_mac = "%";</code></p>
+          <p><code>if</code> <code>(sql($search_ip) == "")</code></p>
+          <p><code>$search_ip = "%";</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Added freebsd 7 profile/netboot os to support new hardware</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1014px;">
+          <p><code>cd</code> <code>/nocmonkey/recoveryos/</code></p>
+          <p><code>rsync</code> <code>-avh freebsd-6.x/* freebsd-7.x/*</code></p>
+          <p><code>cp</code> <code>/home/os_mages/15/boot.tar.gz /nocmonkey/recoveryos/freebsd-7.x/sysroot/</code></p>
+          <p><code>(Image id</code> <code>15 is the freebsd 7 image)</code></p>
+          <p><code>tar</code> <code>xzf boot.tar.gz</code></p>
+          <p><code>insert into netboot_os (name,path,descr,httpd_document_root) values ("freebsd","freebsd-7.x","FreeBSD 7.0","/nocmonkey/web");</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Added New kernels</strong></h3>
+<p>Note: 32 bit kernel is compiled on vz2 and 64 bit kernel is compiled on vz9</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>cd /usr/src</code></p>
+          <p><code>wget http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.34.2.tar.bz2</code></p>
+          <p><code>tar -xjvf linux-2.6.34.2.tar.bz2 -C /usr/src</code></p>
+          <p><code>cd /usr/src</code></p>
+          <p><code>cd linux-2.6.34.2</code></p>
+          <p><code>#copy preserved .config file</code></p>
+          <p><code>make menuconfig</code></p>
+          <p><code>make modules</code></p>
+          <p><code>make modules_install</code></p>
+          <p><code>make install</code></p>
+          <p><code>cd /boot</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Changes to add winpe</strong></h3>
+<h4><strong>TFTP Changes</strong></h4>
+<p>tftpd-hpa can easily be configured to support broken TFTP clients by using a remap file. Verify that your TFTP server supports a remap file by typing&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;"><code>/usr/sbin/in.tftpd -V</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>You should see output such as</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>[root@dolphin ~]# /usr/sbin/in.tftpd -V</code></p>
+          <p><code>tftp-hpa 0.40, with remap, with tcpwrappers</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<ul>
+  <li>If the “with remap” text is not present, then you need to rebuild your TFTP server with remapping support before proceeding.</li>
+</ul>
+<p>Create the file /etc/tftpd.map containing</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code># Convert backslashes to slashes</code></p>
+          <p><code>rg \\ /</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Edit /etc/xinetd.d/tftp and append&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;"><code>-m /etc/tftpd.map</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>to the server_args line. Your modified /etc/xinetd.d/tftp file should look something like&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>service tftp</code></p>
+          <p><code>{</code></p>
+          <p><code>disable = no</code></p>
+          <p><code>socket_type = dgram</code></p>
+          <p><code>protocol = udp</code></p>
+          <p><code>wait = yes</code></p>
+          <p><code>user = root</code></p>
+          <p><code>server = /usr/sbin/in.tftpd</code></p>
+          <p><code>server_args = -s /var/lib/tftpboot</code> <code>-m /etc/tftpd.map</code></p>
+          <p><code>}</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Kill off any existing tftpd processes and restart xinetd:</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>killall tftpd</code></p>
+          <p><code>killall in.tftpd</code></p>
+          <p><code>/etc/init.d/xinetd</code> <code>restart</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<ul>
+  <li>The TFTP server should now accept paths using either the usual forward slash (/) or a backslash (\) as a path separator.</li>
+</ul>
+<h4><strong>Create the file /etc/tftpd.map containing</strong></h4>
+<p>copy to /nocmonkey/tftp/Boot the files:</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>BCD</code></p>
+          <p><code>winpe.wim</code></p>
+          <p><code>pxeboot.n12</code></p>
+          <p><code>bootmgr.exe</code></p>
+          <p><code>boot.sdi (not sure if</code> <code>its needed)</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>create dir&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;"><code>mkdir</code> <code>/nocmonkey/recoveryos/winpe</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>do the following changes to NM's tables:</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1038px;">
+          <p><code>insert into pxefiles (name) value ("\\\\Boot\\\\pxeboot.n12");</code></p>
+          <p><code>insert into netboot_os (name,path,descr,httpd_document_root) values ("winpe","winpe","WinPE ActiveDisk","/dev/null");</code></p>
+          <p><code>insert into kernels (name,path,descr,filename) values ("winpe","/nocmonkey/tftp/Boot/bootmgr.exe","WinPE Kernel","bootmgr.exe");</code></p>
+          <p><code># now do a select on those 3 tables to get IDs of those records, and insert the appropriate values below.</code></p>
+          <p><code>insert into profiles (name,descr,kernel_id,pxe_id,nb_os_id) values ("WindowsPE","WinPE ActiveDisk","9","6","6");</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h2>Internal structure of NocMonkey, by Peter</h2>
+<h4><strong>Changes</strong></h4>
+<ul>
+  <li>A new e2fsprogs was compiled on 207.146Italic Text.</li>
+</ul>
+<p>With these commands you can copy the recently compiled binaries (within 24 hours) from e2fsprogs:</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>mkdir</code> <code>/root/e2fs</code></p>
+          <p><code>mkdir</code> <code>/root/e2fs/sbin</code></p>
+          <p><code>mkdir</code> <code>/root/e2fs/usr-sbin</code></p>
+          <p><code>mkdir</code> <code>/root/e2fs/usr-bin</code></p>
+          <p><code>cd</code> <code>/sbin</code></p>
+          <p><code>find</code> <code>./ -type</code> <code>f -ctime -1</code></p>
+          <p><code>cd</code> <code>/usr/sbin</code></p>
+          <p><code>find</code> <code>. -type</code> <code>f -ctime -1 -exec</code> <code>cp</code> <code>"{}"</code> <code>/root/e2fs/usr-sbin/</code> <code>-apRfv \;</code></p>
+          <p><code>cd</code> <code>/usr/bin</code></p>
+          <p><code>find</code> <code>. -type</code> <code>f -ctime -1 -exec</code> <code>cp</code> <code>"{}"</code> <code>/root/e2fs/usr-bin/</code> <code>-apRfv \;</code></p>
+          <p><code>tar</code> <code>-cf e2fs.tar</code> <code>e2fs</code></p>
+          <p><code>gzip</code> <code>-9 e2fs.tar</code></p>
+          <p><code>scp</code> <code>-P5252 e2fs.tar.gz pcruz@72.18.207.145:/home/pcruz</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<ul>
+  <li>I replaced mke2fs and fsck, as well as copied mkfs.* and fsck.* to /nocmonkey/recoveryos/tsl-2.x/sysroot/sbin</li>
+  <li>The newly compiled binaries are in /nocmonkey/recoveryos/tsl-2.x/sysroot/sbin/e2fs/sbin</li>
+</ul>
+<h3><strong>Locations</strong></h3>
+<ul>
+  <li>When a server netboots, the OS that is mounted is located in /nocmonkey/recoveryos/tsl-3.x/sysroot</li>
+  <li>/home/os_images contains the OS images</li>
+  <li>/home/os_images/X/disk_template contains the original partition settings</li>
+  <li>/home/httpd/html/nocmonkey/ios/X is the path to images from a netbooted server</li>
+  <li>/nocmonkey/recoveryos is where the netboot OS are located</li>
+  <li>/nocmonkey/recoveryos/tsl-3.x/scripts/ is where all scripts to image, grab images, etc, are located</li>
+  <li>/home/spool/logs is where you can see current installation status of a server, netboots, netboot kernel output, etc</li>
+</ul>
+<h4><strong>When netbooted:</strong></h4>
+<ul>
+  <li>/nfsroot/home/httpd/html/nocmonkey/scripts/mount_sysimage.pl mounts partitions on /mnt/sysimage/</li>
+  <li>/nfsroot/shm/mnt/nfsrw is actually /home/spool on the nocmonkey server\</li>
+</ul>
+<h3><strong>Scripts</strong></h3>
+<p>All scripts are located in <strong>/nocmonkey/recoveryos/tsl-2.x/scripts/</strong></p>
+<p>Within the script, change $DEBUG=“file” to $DEBUG=“screen” for easy debugging</p>
+<h5><strong>Goals:</strong></h5>
+<p>Support ext4<br>Support Windows 2008 - DONE</p>
+<h3><strong>TODO</strong></h3>
+<ul>
+  <li>grep “ext3” on /nocmonkey/recoveryos/tsl-3.x/scripts and modify scripts to add mention of ext4 (in some, only if needed)</li>
+  <li>test first mount_diskimage.pl with ext4 and LVM partitions</li>
+  <li>disk_prepare.pl</li>
+</ul>
+<h3><strong>disks_template_linux.php</strong></h3>
+<p>This is on /nocmonkey/recoveryos/tsl-2.x/web. Modified it to include ext4</p>
+<h5><strong>fdisk.pl</strong></h5>
+<p>Runs mke2fs based on ext3, mkreiserfs based on reiserfs, etc. Most likely needs to be modified for ext4. mkntfs for NTFS (might need some parameter for windows 2008)</p>
+<h5><strong>grab_os.pl</strong></h5>
+<p>Changes done:</p>
+<ul>
+  <li>&nbsp;<ul>
+      <li>Added a function that, if it finds two NTFS partitions, it assumes it is Windows 2008 R2 and does a dump of the partitions, instead of trying to use NTFS tools.</li>
+    </ul>
+  </li>
+</ul>
+<h3><strong>grab_linux function</strong></h3>
+<p>The following information occur while a server is netbooted.</p>
+<ul>
+  <li>first runs mount_sysimage.pl –sysimagedir=\”$GRAB_FROM_PATH\” –templatefile=\”$GRAB_TEMPLATE\” to create disk_template and to also mount all partitions.</li>
+  <li>The GRAB variables point to /mnt/sysimage/grab_X/</li>
+  <li>It creates tar.gz of any empty directories in /mnt/sysimage.</li>
+  <li>Then it creates tar.gz of each directory from the OS.</li>
+</ul>
+<h3><strong>grab_windows function</strong></h3>
+<p>runs create-disks-template.pl –template=$GRAB_TEMPLATE to create a template file&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>/dev/sda</code> <code>60786 255 63 512</code></p>
+          <p><code>/dev/sda1</code> <code>1 1 6374 ntfs sda1.img,6190800000</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<ul>
+  <li>Test that script with Windows 2008 to see what happens. See if it picks up the smaller partition.</li>
+  <li>It does “$FDISK -l | $GREP ^/dev” to determine the partitions that are present. See if FDISK shows that small partition Windows 2008 creates.</li>
+  <li>Problem with Windows 2008: it uses GPT instead of a master boor record.</li>
+  <li>That fdisk command, fdisk -l, does it show something related to GPT and that other small partition windows creates?</li>
+  <li>Wikipedia: A master boot record (MBR), or partition sector, is the 512-byte boot sector that is the first sector (“LBA/absolute sector 0”) of a partitioned data storage device such as a hard disk.</li>
+</ul>
+<p>according to <a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">http://en.wikipedia.org/wiki/GUID_Partition_Table</a>:</p>
+<p>64-bit Windows operating systems reserve 16,384 bytes (or 32 sectors) for the GPT, leaving LBA 34 as the first usable sector on the disk.</p>
+<ul>
+  <li>dd if=/dev/sda of=/dev/sdb bs=512 count=1</li>
+  <li>However, winrestore.pl has this to restore mbr: $DD if=$imagepath/mbr.save of=$boothdd bs=446 count=1</li>
+</ul>
+<p>See comments on page <a href="http://www.cyberciti.biz/faq/howto-copy-mbr/">http://www.cyberciti.biz/faq/howto-copy-mbr/</a> to know why you should only restore 446 bytes</p>
+<p>&nbsp;- MBR is divided into 3 sections
+  - Bootstrap . 446 bytes
+  - Partition table. 64 bytes
+  - Signature. 2 bytes</p>
+<h3><strong>install_os.sh</strong></h3>
+<h5><strong>load_fs_modules.sh</strong></h5>
+<p>Seems to load modules to support format types, such as ext3, reiserfs, and more.</p>
+<h5><strong>mount_sysimage.pl</strong></h5>
+<ul>
+  <li>&nbsp;<ul>
+      <li>Format type agnostic: there is no evidence it cares about ext3, ext4, reiserfs, etc. Just partition type.</li>
+      <li>It uses mount -t auto and it automatically detects partition type. Perhaps mount needs updating?</li>
+      <li>Seems to have LVM support and is able to mount LVM partitions.</li>
+    </ul>
+  </li>
+</ul>
+<h6><strong>Changes done:</strong></h6>
+<p>mount -t auto does not work to mount ext4 partitions. So I added code to use -t ext4 if -t auto did not work.</p>
+<h3><strong>ntfsimage.pl</strong></h3>
+<p>Commented few lines before sub backup because they were not compatible with GPT drives. fdisk would return incorrect information</p>
+<h3><strong>winrestore.pl</strong></h3>
+<p>Restores Windows images</p>
+<h6><strong>Changes done:</strong></h6>
+<p>Modified script to detect the image of a Windows 2k8 dump, and thus do a dump of that image onto a target hard disk.</p>
+<h2>NocMonkey Problems &amp; Solutions</h2>
+<h3><strong>Servers booting on netboot</strong></h3>
+<ul>
+  <li>Turn on and then turn off the netboot from web interface.</li>
+</ul>
+<p>Execute this script in shell&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;"><code>/nocmonkey/server/scripts/netboot_off.pl</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Make sure there is no cron entry like this in cronjob, If it is there then remove it&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:814px;"><code>0-59 * * * * /nocmonkey/server/scripts/cron_reboot.sh --mode=install</code> <code>--install-id=141 --server-id=59</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Creating a new image manually</strong></h3>
+<p>Choose an old image of same distro/os in nm which you will replace with new image. Login to nm server and go to that image directory&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>cd</code> <code>/home/os_images/&nbsp;</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>#make a backup of the image before replacing it&nbsp;</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>cp</code> <code>ID ID.old -r (replace ID with id</code> <code>of that image)</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Login to the server from where you will create an image manually.&nbsp;</p>
+<figure class="table" style="height:auto !important;width:664.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:649px;">
+          <p><code>cd</code> <code>/</code></p>
+          <p><code>#Make a tar file of each and every directory/file in / of the server.</code></p>
+          <p><code>e.g</code></p>
+          <p><code>tar</code> <code>czf bin.tar.gz bin</code></p>
+          <p><code>tar</code> <code>czf root.tar.gz root</code></p>
+          <p><code>tar</code> <code>czf boot.tar.gz boot</code></p>
+          <p><code>....</code></p>
+          <p><code>#Then copy those files to nm server replacing old files</code></p>
+          <p><code>scp</code> <code>*.tar.gz root@72.18.207.145:/home/os_images/ID/</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<ul>
+  <li>Now try to install a test server using same image and it shoudl work.</li>
+</ul>
+<h3><strong>Booting problem with some hardware</strong></h3>
+<p>Nocmonkey installation dont mark a partition as bootable. This work ok with most of hardware but Intel Atom servers dont boot from such installation.</p>
+<p>There is a new kid of server Intel Atom (s/n 1276). That hardware need the partition mark as boot. When you will install Linux on it then after installation netboot it and then run this command.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>#No need to mount sysimage</code></p>
+          <p><code>fdisk</code> <code>/dev/hda</code> <code>(Or fdisk</code> <code>/dev/sda)</code></p>
+          <p><code>#Then at fdisk prompt press "a"</code></p>
+          <p><code>#It wil ask you wich partition you want to mark as bootable. There press "1".</code></p>
+          <p><code>#Now press "w" to write the changes to disk and then exit fdisk prompt and reboot</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>So far you have to do this only for Intel Atom servers.</p>
