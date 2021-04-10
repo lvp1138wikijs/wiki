@@ -1,0 +1,43 @@
+<!--
+title: Lantronix Spider KVM over IP
+description: 
+published: true
+date: 2021-04-10T06:51:29.435Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:51:29.435Z
+-->
+
+<h3><strong>Default login credentials</strong></h3>
+<p>Username is “sysadmin” and password is “PASS”.</p>
+<h3><strong>Reset its password</strong></h3>
+<p>Connect to the KVM device via a serial connection. Press ENTER several times until you see the console prompt.</p>
+<p>Enter “reset” and answer “yes”. Immediately after that, press ESC several times. It will now return you back to a prompt. There, enter “defaults”. It should then acknowledge the request with “ok”.</p>
+<p>At that point, reboot, and start configuration again.</p>
+<p>This is what you should see:</p>
+<p>=====
+  Welcome!
+  Choose a command for the following features:
+  -Initial IP configuration: "config".
+  -Reset device: "reset".
+  [x.x.x.x spider]&gt; reset
+  To reset the device enter "yes": yes
+  0 &lt;-- This is when you press Esc a few times
+  =&gt; defaults
+  Please wait...
+  ok
+  =====&nbsp;</p>
+<h2>Configuring IPs</h2>
+<h3><strong>Web interface configuration</strong></h3>
+<p><a href="https://ip_address/">https://Ip_address</a></p>
+<ul>
+  <li>&nbsp;<ul>
+      <li>login, user is sysadmin, pass is PASS</li>
+      <li>change password to something temporary</li>
+      <li>interfaces -&gt; keyb/mouse &gt; ps2</li>
+      <li>user accounts &gt; user/group -&gt; select sysadmin &gt; change to admin &gt; click modify</li>
+      <li>services &gt; security &gt; force https</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>KVM have to be entered in DB under customer's username after delivery</strong></p>
