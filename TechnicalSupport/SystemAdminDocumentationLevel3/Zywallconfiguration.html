@@ -1,0 +1,156 @@
+<!--
+title: Zywall configuration
+description: 
+published: true
+date: 2021-04-10T06:50:00.698Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:50:00.698Z
+-->
+
+<h2 style="text-align:justify;">Initial setup of a Zywall firewall</h2>
+<p>Connect port 4 to a NIC configured for 192.168.1.0/24 in a Windows server</p>
+<p>From within that Windows server, access&nbsp;<a href="https://192.168.1.1/">https://192.168.1.1</a></p>
+<p>After accepting the secure certificate, enter user and password. Default user is “admin” and default password is “1234”</p>
+<p>Provide a new password. We suggest to use our default password until firewall is ready for delivery.</p>
+<p>It will then log you out. Log in again, and skip the setup wizard by clicking “Go to Dashboard”.</p>
+<p>Most likely access to the fw will not be given to client, so use default password. It is safe as the only way to access the fw is via a direct connection on port 4 to&nbsp;<a href="https://192.168.1.1/">https://192.168.1.1</a>. No one from outside can access it.</p>
+<p>Connect the switch's WAN1 port to our public switch.</p>
+<p>Connect client's servers to ports 4 through 7. I would suggest configuring the firewall first before you do this, as it will cut off connectivity to the client's servers.</p>
+<p>Update the firewall's firmware before proceeding.</p>
+<p>Be aware that the servers behind the firewall must all be of the same VLAN, and that the IP to be assigned to this firewall should also be the same VLAN as the servers.</p>
+<h2>Object concept of Zywall's interface</h2>
+<p>On a Zywall, everything is based on an object. For example, if you wish to allow IPs X, Y and Z access to a port, then you create an object of IPs X, Y and Z as source, and then, you apply that object to a rule. More on this below.</p>
+<h2>Types of firewall</h2>
+<p>There are two types of firewall structures that we can do.</p>
+<h4><strong>NAT</strong></h4>
+<p>In this method, the servers behind the firewall have a non-public IP, such as 192.168.1.10, while the firewall has a real configured IP, such as 64.235.51.20. In this case, the firewall is configured to forward packets arriving at 64.235.51.20 to the server that has 192.168.1.10.</p>
+<h4><strong>Bridge/transparent mode</strong></h4>
+<p>This is the method we prefer. In this method, the server also has a public IP, such as 64.235.51.20 and the firewall also has that IP. The firewall will just forward packets arriving at the external 64.235.51.20 to the internal 64.235.51.20.</p>
+<p>Why do we prefer this method? Because if for some reason the firewall fails, we can just connect the servers directly to our public switches, and they will come back online easily without us having to change their IPs.</p>
+<h2>Initial configurations</h2>
+<p>Click the gears tab on the left</p>
+<p>Network → Interface → Port role: assign ports 5 and higher to LAN2 (not 4, as you are connected through it).</p>
+<h2>Configuring the Zywall for NAT mode</h2>
+<p>To do later. It involves creating an object for the IPs, then creating a virtual server for that object, and then applying NAT 1:1 rule. We will never configure a firewall this way unless a client asks for it.</p>
+<h2>Configuring the Zywall for bridge/transparent mode</h2>
+<p>Click the gears icon, then on network → interface, then click on Bridge tab. There, click the add icon. The information for this bridge is to be entered as follows:</p>
+<p>Assign a number to interface name. br0 is ok.</p>
+<p>Zone:&nbsp;WAN</p>
+<p>Description: “server-XXXX-XXXX” where XXXX is the serial number(s) of the servers that this firewall will protect.</p>
+<p>Under member configuration, Add WAN1 and LAN2 to “Member”</p>
+<p>Under IP Address Assignment, specify the IP number that will be assigned to the firewall, NOT the IPs of the servers that this firewall will be protecting. Subnet will be 255.255.255.0, unless it is not in a /24 VLAN.</p>
+<p>Configure the gateway for that subnet.</p>
+<p>Now, save the information. The server behind the firewall (on ports5, 6 or 7) should be responding.</p>
+<h2>Configuring the bridge's routing</h2>
+<p>Notes: let's just do the entire subnet</p>
+<p>Click the “gears” icon on the left, then Object → Address</p>
+<p>Click +Add icon</p>
+<p>Specify “server-XXXX-XXXX” where XXXX is the serial number(s) of the servers that this firewall will protect.</p>
+<p>Address type: subnet. Specify the entire VLAN. In this example: 64.235.50.0, and netmask 255.255.255.0</p>
+<h2>Creating firewall rules</h2>
+<p>Let's first edit some rules. Click firewall on the menu to the left.</p>
+<h4><strong>Block all Internet access to firewall</strong></h4>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Edit rule 1, from&nbsp;WAN&nbsp;to ZyWall. Change its access to “deny”. We don't want anyone accessing the firewall from outside.</p>
+<p>To edit a rule, click on the rule, then click “edit” above the list of rules.</p>
+<h4><strong>Open all access from the Internet to the customer's servers</strong></h4>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>First, we should create a rule that opens all access to the client's servers. Edit the pre-existing rule “WAN&nbsp;to LAN2” and set its access to “allow”. Also, “move” that rule to the beginning of the list. Click the rule, then click “Move” and enter 1 (which means to move it position 1). Press ENTER.</p>
+<p><strong>If the rule is missing, create it.</strong></p>
+<h4><strong>Open all access to the Internet from the customer's servers</strong></h4>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Create a new rule by clicking +Add.</p>
+<p>From: LAN2</p>
+<p>To:&nbsp;WAN</p>
+<p>Access: Allow</p>
+<p>Move this rule to the beginning</p>
+<h4><strong>Open access to the firewall from a specific IP</strong></h4>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Click Object → Address on the menu to the left</p>
+<p>Click +Add</p>
+<p>Name it “serverpoint_access”</p>
+<p>Address Type: host</p>
+<p>IP Address: 64.235.52.120</p>
+<p>OK</p>
+<p>Now, let's create the rule for that object.</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Click firewall on the menu to the left</p>
+<p>Click +Add</p>
+<p>From:&nbsp;WAN</p>
+<p>To: Zywall</p>
+<p>Source: serverpoint_access</p>
+<p>Access: allow</p>
+<p>OK</p>
+<h4><strong>Let's create some rules for several ports</strong></h4>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>You can add rules of the form&nbsp;WAN&nbsp;→ LAN2, allow, and specifying the service (most are pre-defined).</p>
+<p>To create a service that is not predefined, click on object → service, then the Add icon.</p>
+<p>You can create a group of services by clicking on the Service Group tab in that very same screen.</p>
+<h4><strong>After rules are created</strong></h4>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Move back to the beginning the rule “serverpoint_acess” to the beginning, as well as the LAN2 to&nbsp;WAN&nbsp;rule.</p>
+<p>Change the&nbsp;WAN&nbsp;to LAN2 rule to deny, after all the rules you entered.</p>
+<h4><strong>Sample rules</strong></h4>
+<p>Let's now create a rule. Let's say you wish to allow access to “server-XXXX” from IP 64.235.52.94 and block everything else.</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Object → Address, click +</p>
+<p>Name: let's call it ip-64-235-51-94</p>
+<p>Address type: host</p>
+<p>Specify IP address. As you can see you can also specify ranges, subnets, etc.</p>
+<p>Now, click on the firewall menu and let's create the firewall rule.</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Click the + icon</p>
+<p>From:&nbsp;WAN</p>
+<p>To: LAN2</p>
+<p>Description: ip-64-235-51-94-allow</p>
+<p>Source: ip-64-235-51-94</p>
+<p>Destination: server-XXXX</p>
+<p>Service: any</p>
+<p>Access: allow</p>
+<p>Save</p>
+<p>You will now see that this new rule you created is at the top of the firewall list, thus, it is the first one to be executed for each packet.</p>
+<p>Let's now block all access to “server-XXXX”</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Click the + icon</p>
+<p>From:&nbsp;WAN</p>
+<p>To: LAN2</p>
+<p>Description: blockallelse</p>
+<p>Source: any</p>
+<p>Destination: server-XXXX</p>
+<p>Service: any</p>
+<p>Access: deny</p>
+<p>Save</p>
+<p>Now, this rule shows up at the top of the firewall list, which we don't want. If not it will also block the IPs we want to open. So now, move the rule.</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
+<p>Click &gt;N at the end of the row of the rule</p>
+<p>Change its position number</p>
+<p>Press enter</p>
+<p>And that should be it!</p>
+<p>From this moment on, the only way to access the firewall is 64.235.52.120.</p>
+<p>We should decide if we should open access to the fw from an IP within our network.</p>
+<h2>Documentation</h2>
+<p>Instructions:&nbsp;<a href="ftp://ftp.zyxel.com/ZYWALL_USG_100/user_guide/">ftp://ftp.zyxel.com/ZYWALL_USG_100/user_guide/</a></p>
+<p>&nbsp;</p>
