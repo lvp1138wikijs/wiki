@@ -1,0 +1,32 @@
+<!--
+title: Simple PHP Installation
+description: 
+published: true
+date: 2021-04-10T06:21:30.880Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:21:30.880Z
+-->
+
+<p>This is a light/simple php installation with commonly required modules. It was installed this way on serverpoint.com (alecka)</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:4006px;">
+          <p><code>mkdir /root/php</code></p>
+          <p><code>cd /root/php</code></p>
+          <p><code>wget http://us.php.net/distributions/php-5.2.14.tar.gz</code></p>
+          <p><code>tar xzf php-5.2.14.tar.gz</code></p>
+          <p><code>cd php-5.2.*</code></p>
+          <p><code>./configure --prefix=/var/serverchameleon/php5 --with-mysql=/var/serverchameleon/mysql5 --with-gd --with-png-dir --with-jpeg-dir --enable-fastcgi --with-openssl --enable-safe-mode --enable-sockets --enable-force-cgi-redirect --with-config-file-path=/var/serverchameleon/conf/php5 --with-freetype-dir --with-zlib-dir --with-imap --with-imap-ssl=/var/serverchameleon/imp/imap-2007b --with-imap=/var/serverchameleon/imp/imap-2007b --with-ttf --with-tiff-dir --enable-ftp --enable-mbstring --with-mcrypt</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/php</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
