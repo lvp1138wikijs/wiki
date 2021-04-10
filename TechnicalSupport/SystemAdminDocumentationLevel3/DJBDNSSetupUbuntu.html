@@ -1,0 +1,192 @@
+<!--
+title: DJBDNS Setup (Ubuntu)
+description: 
+published: true
+date: 2021-04-10T06:23:21.732Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:23:21.732Z
+-->
+
+<h3><strong>Pre requsitions</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>apt-get install libc6-dev make gcc++ patch</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>ucspi</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/ucspi</code></p>
+          <p><code>cd /root/ucspi</code></p>
+          <p><code>wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz</code></p>
+          <p><code>tar -xzf ucspi-tcp-0.88.tar.gz</code></p>
+          <p><code>cd ucspi-tcp*</code></p>
+          <p><code>wget http://www.qmail.org/rpms/patches/ucspi-tcp-0.88.errno.patch</code></p>
+          <p><code>patch -p1 &lt; ucspi-tcp-0.88.errno.patch</code></p>
+          <p><code>make</code></p>
+          <p><code>make setup check</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rf /root/ucspi</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>daemontools</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /usr/local/daemontools</code></p>
+          <p><code>cd /usr/local/daemontools</code></p>
+          <p><code>wget http://cr.yp.to/daemontools/daemontools-0.76.tar.gz</code></p>
+          <p><code>wget http://www.qmail.org/moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</code></p>
+          <p><code>tar -xzf daemontools-0.76.tar.gz</code></p>
+          <p><code>cd admin/daemontools-*/src</code></p>
+          <p><code>patch -p1 &lt; ../../../daemontools-0.76.errno.patch</code></p>
+          <p><code>&gt;&gt;&gt; /usr/local/daemontools/admin/daemontools-0.76/src/error.h</code></p>
+          <p><code>cd ..</code></p>
+          <p><code>package/install</code></p>
+          <p><code>echo "start on runlevel [123456]"</code> <code>&gt; /etc/event.d/svscanboot</code></p>
+          <p><code>echo "respawn"</code> <code>&gt;&gt; /etc/event.d/svscanboot</code></p>
+          <p><code>echo "exec /command/svscanboot "</code> <code>&gt;&gt; /etc/event.d/svscanboot</code></p>
+          <p><code>start svscanboot</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>djbdns</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/djbdns</code></p>
+          <p><code>cd /root/djbdns</code></p>
+          <p><code>wget http://cr.yp.to/djbdns/djbdns-1.05.tar.gz</code></p>
+          <p><code>tar xzvf djbdns-1.05.tar.gz</code></p>
+          <p><code>cd djbdns-1.05</code></p>
+          <p><code>mkdir -p /var/serverchameleon/djbdns</code></p>
+          <p><code>echo /var/serverchameleon/djbdns &gt; conf-home</code></p>
+          <p><code>echo gcc -O2 -include /usr/include/errno.h &gt; conf-cc</code></p>
+          <p><code>make</code></p>
+          <p><code>make setup check</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/djbdns</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Cache Server</strong></h3>
+<p>First make sure “Basic setup” is done.</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:854px;">
+          <p><code>mkdir /var/serverchameleon/dnscache</code></p>
+          <p><code>/usr/sbin/useradd -d /var/serverchameleon/dnscache -s /bin/false</code> <code>-c dnscache dnscache</code></p>
+          <p><code>/usr/sbin/useradd -d /var/serverchameleon/dnscache -s /bin/false</code> <code>-c dnslog dnslog</code></p>
+          <p><code>/usr/local/djbdns/bin/dnscache-conf dnscache dnslog /var/serverchameleon/dnscache/dnscache1 72.18.192.255</code></p>
+          <p><code>cd /var/serverchameleon/dnscache/dnscache1/root/ip/</code></p>
+          <p><code>ln -sf /var/serverchameleon/dnscache/dnscache1 /service/</code></p>
+          <p><code>touch 64.235.32</code></p>
+          <p><code>touch 64.235.33</code></p>
+          <p><code>touch 64.235.34</code></p>
+          <p><code>touch 64.235.35</code></p>
+          <p><code>touch 64.235.36</code></p>
+          <p><code>touch 64.235.37</code></p>
+          <p><code>touch 64.235.38</code></p>
+          <p><code>touch 64.235.39</code></p>
+          <p><code>touch 64.235.40</code></p>
+          <p><code>touch 64.235.41</code></p>
+          <p><code>touch 64.235.42</code></p>
+          <p><code>touch 64.235.43</code></p>
+          <p><code>touch 64.235.44</code></p>
+          <p><code>touch 64.235.45</code></p>
+          <p><code>touch 64.235.46</code></p>
+          <p><code>touch 64.235.47</code></p>
+          <p><code>touch 64.235.48</code></p>
+          <p><code>touch 64.235.49</code></p>
+          <p><code>touch 64.235.50</code></p>
+          <p><code>touch 64.235.51</code></p>
+          <p><code>touch 64.235.52</code></p>
+          <p><code>touch 64.235.53</code></p>
+          <p><code>touch 64.235.54</code></p>
+          <p><code>touch 64.235.55</code></p>
+          <p><code>touch 64.235.56</code></p>
+          <p><code>touch 64.235.57</code></p>
+          <p><code>touch 64.235.58</code></p>
+          <p><code>touch 64.235.59</code></p>
+          <p><code>touch 64.235.60</code></p>
+          <p><code>touch 64.235.61</code></p>
+          <p><code>touch 64.235.62</code></p>
+          <p><code>touch 64.235.63</code></p>
+          <p><code>touch 72.18.192</code></p>
+          <p><code>touch 72.18.193</code></p>
+          <p><code>touch 72.18.194</code></p>
+          <p><code>touch 72.18.195</code></p>
+          <p><code>touch 72.18.196</code></p>
+          <p><code>touch 72.18.197</code></p>
+          <p><code>touch 72.18.198</code></p>
+          <p><code>touch 72.18.199</code></p>
+          <p><code>touch 72.18.200</code></p>
+          <p><code>touch 72.18.201</code></p>
+          <p><code>touch 72.18.202</code></p>
+          <p><code>touch 72.18.203</code></p>
+          <p><code>touch 72.18.204</code></p>
+          <p><code>touch 72.18.205</code></p>
+          <p><code>touch 72.18.206</code></p>
+          <p><code>touch 72.18.207</code></p>
+          <p><code>touch 216.108.224</code></p>
+          <p><code>touch 216.108.225</code></p>
+          <p><code>touch 216.108.226</code></p>
+          <p><code>touch 216.108.227</code></p>
+          <p><code>touch 216.108.228</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Tiny DNS</strong></h3>
+<p>First make sure “Basic setup” is done.</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:854px;">
+          <p><code>mkdir /var/serverchameleon/tinydns</code></p>
+          <p><code>/usr/sbin/useradd -d /var/serverchameleon/tinydns -s /bin/false</code> <code>-c tinydns tinydns</code></p>
+          <p><code>/usr/sbin/useradd -d /var/serverchameleon/tinydns -s /bin/false</code> <code>-c tinylog tinylog</code></p>
+          <p><code>/var/serverchameleon/djbdns/bin/tinydns-conf tinydns tinylog /var/serverchameleon/tinydns 216.108.224.244</code></p>
+          <p><code>#Adding a dns record using scripts</code></p>
+          <p><code>cd /var/serverchameleon/tinydns/root</code></p>
+          <p><code>./add-ns jftechnologies.net 127.0.0.1</code></p>
+          <p><code>./add-ns 0.0.127.in-addr.arpa 127.0.0.1</code></p>
+          <p><code>./add-mx jftechnologies.net 64.235.49.50</code></p>
+          <p><code>./add-host jftechnologies.net 64.235.49.50</code></p>
+          <p><code>./add-alias unagi.jftechnologies.net 64.235.49.50</code></p>
+          <p><code>./add-alias *.jftechnologies.net 64.235.49.50</code></p>
+          <p><code>make</code></p>
+          <p><code>ln -sf /var/serverchameleon/tinydns /service</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
