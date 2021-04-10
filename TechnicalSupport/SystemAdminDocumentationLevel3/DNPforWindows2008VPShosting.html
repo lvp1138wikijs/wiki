@@ -1,0 +1,116 @@
+<!--
+title: DNP for Windows 2008 VPS hosting
+description: 
+published: true
+date: 2021-04-10T06:46:48.853Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:46:48.853Z
+-->
+
+<h1 style="text-align:justify;">Checking Windows Updates</h1>
+<p>Please make sure you have the following KB950050 update installed on the Virtualization server:
+  http://www.microsoft.com/downloads/details.aspx?FamilyId=F3AB3D4B-63C8-4424-A738-BADED34D24ED&amp;displaylang=en
+  You could see the list of installed Windows updates here: Control panel -&gt; Programs and Features -&gt; Installed updates.
+  More info about KB950050 update: http://support.microsoft.com/kb/950050</p>
+<h2>DotnetPanel Installation</h2>
+<p>&nbsp;</p>
+<p>Now you have to install DotnetPanel (DNP) in the server. Which requires SQL server, .Net 3.5 framework, windows installer 4.5.
+
+  To download SQL server2008,
+  http://www.microsoft.com/downloads/details.aspx?FamilyID=58ce885d-508b-45c8-9fd3-118edd8e6fff&amp;DisplayLang=en
+
+  You will get an error saying .net framework 2sp edition is not installed. To fix that error, install .NET Framework 3.5.
+
+  To download .NET Framework3.5,
+  http://www.microsoft.com/downloads/details.aspx?FamilyId=333325FD-AE52-4E35-B531-508D977D32A6&amp;displaylang=en
+
+  Then install Windows Installer 4.5. You can download it from the url:
+
+  http://www.microsoft.com/downloads/details.aspx?FamilyId=5A58B56F-60B6-4412-95B9-54D056D6F9F4&amp;displaylang=en
+
+  Install DNP as mentioned here: http://www.mbk505.com/wiki/index.php?title=Dotnetpanel</p>
+<h2>Hyper-V Installation</h2>
+<p>&nbsp;</p>
+<p>In addition to these, "Hyper-V" and IIS should be installed with ASP.NET.
+
+  To install Hyper-V on a full installation of Windows Server 2008
+
+  Click Start, and then click Server Manager.
+
+  In the Roles Summary area of the Server Manager main window, click Add Roles.
+
+  On the Select Server Roles page, click Hyper-V.
+
+  On the Create Virtual Networks page, click one or more network adapters if you want to make their network connection
+  available to virtual machines.
+
+  On the Confirm Installation Selections page, click Install.
+
+  The computer must be restarted to complete the installation. Click Close to finish the wizard, and then click Yes to
+  restart the computer.</p>
+<h2>Template creation</h2>
+<p>&nbsp;</p>
+<p>Once you create VHD and copied it to templates folder, create an index.xml file which contains the list of all
+  available templates with the following structure:
+
+  ----
+
+  &lt;?xml version="1.0"?&gt;
+  &lt;items&gt;
+  &lt;item path="win2008-web-x86"&gt;
+  &lt;name&gt;Windows Server 2008 Web Edition x86&lt;/name&gt;
+  &lt;description&gt;Windows Server 2008 helps IT professionals to increase the flexibility and reliability of their server
+  infrastructure while offering developers a more robust web and applications platform for building connected applications
+  and services.&lt;/description&gt;
+  &lt;/item&gt;
+  &lt;item path="win2008-std-x64" legacyNetworkAdapter="true"&gt;
+  &lt;name&gt;Windows Server 2008 Standard x64&lt;/name&gt;
+  &lt;description&gt;Windows Server 2008 helps IT professionals to increase the flexibility and reliability of their server
+  infrastructure while offering developers a more robust web and applications platform for building connected applications
+  and services.&lt;/description&gt;
+  &lt;/item&gt;
+  &lt;/items&gt;
+
+  ---
+  provided there are two files in Templates folder: win2008-web-x86.vhd and win2008-std-x64.vhd</p>
+<h2>Hyper-V module configuration in DNP</h2>
+<p>&nbsp;</p>
+<p>Now you have to setup and configure Hyper-V module in DNP before creating customers VPS.
+
+  Login into DotNetPanel under "serveradmin" account (default password is "serveradmin") and open "Configuration -&gt; Servers" page.
+
+  Register DNP Server installed on Hyper-V virtualization server by clicking "Add Server" button:
+
+  Specify "Server URL" and "Server password" to the correct values selected during DNP Server installation.
+
+  Enter "DNP Remote Server" license ID into "License" field (you will install Hyper-V module license later) and
+  uncheck "Search installer software" checkbox.
+
+  On Server properties screen expand "Licenses" section and add Hyper-V module license. Now make sure you have
+  Enterprise-like licenses installed for DNP Enterprise Server. Open "Configuration -&gt; Licenses" page from the top menu
+  and see if there is "DotNetPanel Enterprise Edition" license in the list:
+
+  Now Open HyperV-01 server properties and click "Add" link in "Virtual Private Servers" group.
+
+  Select "Microsoft Hyper-V" from the dropdown and specify service name, for example "Hypervisor" or "Hyper-V". And enter the
+  service details.
+
+  Now you should create the pool of available external IP addresses. You can add it from Configuration -&gt; IP Addresses page.
+
+
+  Before creating user accounts and hosting spaces you should create a hosting plan. Being logged under "serveradmin"
+  click "Hosting Plans" left menu item.
+
+  To create a new user account open "Customers" page from the left menu at user home page and click "Create User" button.
+
+  Fill user account details information and click "Create" button.</p>
+<h2>VPS Backup &amp; Restoration</h2>
+<p>&nbsp;</p>
+<p>Backup and restore for individual virtual machines available to the customers (like in Virtuozzo) may not have sense in
+  Hyper-V because of Snapshotting.
+
+  To create Snapshot of a vps, Click Start &gt; Administrative Tools &gt; Hyper-V Manager &gt; Right Click the VE &gt; Snapshot.
+
+  To Restore the ve from snapshot, Click Start &gt; Administrative Tools &gt; Hyper-V Manager &gt; Right Click the VE &gt; There is an
+  option 'Revert'. Click to restore the vps from the snapshot.</p>
