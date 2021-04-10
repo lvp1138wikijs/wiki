@@ -1,0 +1,37 @@
+<!--
+title: Flvtool and mp4box Manual Configuration in Nahomi
+description: 
+published: true
+date: 2021-04-10T06:56:36.506Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:56:36.506Z
+-->
+
+<h2>flvtool installation</h2>
+<ul>
+  <li>mkdir /root/flvtool</li>
+  <li>cd /root/flvtool</li>
+  <li>wget&nbsp;<a href="http://rubyforge.org/frs/download.php/17497/flvtool2-1.0.6.tgz">http://rubyforge.org/frs/download.php/17497/flvtool2-1.0.6.tgz</a></li>
+</ul>
+<p>tar xzf flvtool2-1.0.6.tgz</p>
+<p>cd flvtool*</p>
+<p>ruby setup.rb config</p>
+<p>ruby setup.rb setup</p>
+<p>ruby setup.rb install</p>
+<p>cd /</p>
+<ul>
+  <li>rm -rf /root/flvtool</li>
+</ul>
+<h2>gpac/mp4box installation</h2>
+<p>Itemmkdir /root/mp4box</p>
+<p>cd /root/mp4box</p>
+<p>wget&nbsp;<a href="http://softlayer.dl.sourceforge.net/project/gpac/GPAC/GPAC%200.4.5/gpac-0.4.4.tar.gz">http://softlayer.dl.sourceforge.net/project/gpac/GPAC/GPAC%200.4.5/gpac-0.4.4.tar.gz</a></p>
+<p>tar xzf gpac-0.4.4.tar.gz</p>
+<p>cd gpac</p>
+<p>chmod +x configure</p>
+<p>./configure</p>
+<p>make</p>
+<p>make install</p>
+<p>cd /</p>
+<p>rm -rf /root/mp4box</p>
