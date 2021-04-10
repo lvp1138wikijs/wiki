@@ -1,0 +1,1272 @@
+<!--
+title: SC Setup (Ubuntu)
+description: 
+published: true
+date: 2021-04-10T06:04:24.089Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:04:24.089Z
+-->
+
+<h2>ServerChameleon Installation on a Ubuntu Server</h2>
+<h3><strong>Pre-Requisition</strong></h3>
+<p>These OS packages must be installed otherwise compilation of SC packages will fail.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:838px;">
+          <p><code>apt-get install bind9 openssl rsync stunnel4 libdb-dev libpam0g-dev</code></p>
+          <p><code>apt-get install emacs ncurses-dev libssl-dev g++ build-essential libdbd-mysql-perl</code></p>
+          <p><code>apt-get install flex bison libbz2-dev libcurl3-dev libfreetype6-dev</code></p>
+          <p><code>apt-get install libxml++2.6-dev libxslt1-dev libjpeg62-dev libxpm-dev</code></p>
+          <p><code>apt-get install libpng12-dev libldap2-dev libmcrypt-dev libmhash-dev</code></p>
+          <p><code>apt-get install sablotron libsablot0-dev autoconf libio-socket-ssl-perl</code></p>
+          <p><code>apt-get install unzip pciutils whois libwww-curl-perl libcurl3 libcurl3-dev ca-certificates libyaml-dev</code></p>
+          <p><code>apt-get install linux-headers-$(uname -r)</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Setup Aliases</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>echo "alias d='df -h;pstree -u;w'"</code> <code>&gt;&gt; /etc/profile</code></p>
+          <p><code>echo "alias ll='ls -al --color=auto'"</code> <code>&gt;&gt; /etc/profile</code></p>
+          <p><code>echo "alias cp='cp'"</code> <code>&gt;&gt; /etc/profile</code></p>
+          <p><code>echo "alias mv='mv'"</code> <code>&gt;&gt; /etc/profile</code></p>
+          <p><code>echo "alias rm='rm'"</code> <code>&gt;&gt; /etc/profile</code></p>
+          <p><code>echo "alias ll='ls -al --color=auto'"</code> <code>&gt;&gt; /root/.bashrc</code></p>
+          <p><code>echo "alias d='df -h;pstree -u;w'"</code> <code>&gt;&gt; /root/.bashrc</code></p>
+          <p><code>echo "alias sc='cd /var/serverchameleon/bin/scb'"</code> <code>&gt;&gt; /root/.bashrc</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Emacs setup</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:902px;">
+          <p><code>echo ";; Save positions in files between sessions"</code> <code>&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(require 'saveplace)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(setq-default save-place t)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; By default start in text mode."</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(setq initial-major-mode (lambda () (text-mode) (turn-on-auto-fill) "</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(font-lock-mode)))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; Macros to detect if we are under X."</code> <code>&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(defmacro Xlaunch (&amp;rest x) (list 'if (eq window-system 'x)(cons 'progn x)))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "; Under X to get the suppr key working."</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo '(Xlaunch (define-key global-map [(delete)] "\C-d"))'</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";;; XEmacs compatibility"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(control tab)] \`other-window)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta g)] \`goto-line)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(defun switch-to-other-buffer () (interactive) (switch-to-buffer "</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(other-buffer)))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta control ?l)] \`switch-to-other-buffer)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta O) ?H] 'beginning-of-line)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta O) ?F] 'end-of-line)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "; Don't add lines on the end of lines unless we want."</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(setq next-line-add-newlines nil)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "; X selection manipulation"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(defun x-own-selection (s) (x-set-selection \`PRIMARY s))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(shift insert)] '(lambda () (interactive) (insert "</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(x-get-selection))))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(control insert)] '(lambda () (interactive)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(x-own-selection (buffer-substring "</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(point) (mark)))))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "; Shift-arrows a la windows..."</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(custom-set-variables"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "'(pc-select-meta-moves-sexps t)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "'(pc-select-selection-keys-only t)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "'(pc-selection-mode t))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; Show parenthesis mode"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(show-paren-mode t)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; By default start in text mode."</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(setq initial-major-mode (lambda () (text-mode) (turn-on-auto-fill) "</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(font-lock-mode)))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "; Don't ask to revert for TAGS"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo '(setq revert-without-query (cons "TAGS" revert-without-query))'</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; Use the following for i18n"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";(standard-display-european t)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";(set-language-environment "latin-1")"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; Color and Fonts."</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(require 'font-lock)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(setq font-lock-mode-maximum-decoration t)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; turn on colorization."</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(if (fboundp 'global-font-lock-mode) (global-font-lock-mode t))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; turn on auto (de)compression"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(if (fboundp 'auto-compression-mode) (auto-compression-mode t))"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; Turn on selection and change the default color"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(setq transient-mark-mode 't highlight-nonselected-windows 't)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; Save positions in files between sessions"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(require 'saveplace)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(setq-default save-place t)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo ";; Visualize long lines"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+          <p><code>echo "(require 'auto-show)"</code> <code>&gt;&gt; /etc/emacs/site-start.el</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Setting up stunnel</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>cd /etc/stunnel</code></p>
+          <p><code>openssl req -new</code> <code>-x509 -days 3650</code> <code>-nodes -out stunnel.pem -keyout stunnel.pem</code></p>
+          <p><code># answer questions</code></p>
+          <p><code>chmod 600</code> <code>/etc/stunnel/stunnel.pem</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Fix the missing shells entry</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>echo "/bin/true"</code> <code>&gt;&gt; /etc/shells</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Serverchameleon user/group</strong></h3>
+<p>Create the SC user and group</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>useradd serverch -d /var/serverchameleon/</code></p>
+          <p><code>groupadd serverch -f</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Serverchameleon Directory Structure</strong></h3>
+<p>Create the necessary directory structure for SC applications.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /var/serverchameleon</code></p>
+          <p><code>mkdir /var/serverchameleon/bin</code></p>
+          <p><code>mkdir /var/serverchameleon/bin/scb</code></p>
+          <p><code>mkdir /var/serverchameleon/frontpage/</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel/sbin</code></p>
+          <p><code>mkdir /var/serverchameleon/conf</code></p>
+          <p><code>mkdir /var/serverchameleon/tmp</code></p>
+          <p><code>mkdir /var/serverchameleon/tmp/stunnel</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/internal</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/mysql5</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/mysql4</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/http/</code></p>
+          <p><code>mkdir /var/serverchameleon/bind/</code></p>
+          <p><code>mkdir /var/serverchameleon/bind/sbin</code></p>
+          <p><code>mkdir /var/serverchameleon/openssl</code></p>
+          <p><code>mkdir /var/serverchameleon/openssl/bin</code></p>
+          <p><code>mkdir /var/serverchameleon/rsync/</code></p>
+          <p><code>mkdir /var/serverchameleon/rsync/bin</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel/</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel/sbin</code></p>
+          <p><code>mkdir /var/serverchameleon/logs</code></p>
+          <p><code>mkdir /var/serverchameleon/logs/smtp</code></p>
+          <p><code>mkdir /var/serverchameleon/logs/smtp/magic</code></p>
+          <p><code>mkdir /usr/sbin/zeus</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/mysql5</code></p>
+          <p><code>mkdir -p /var/serverchameleon/m-mail/control</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/http/apache</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/php4</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/php5</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/dns</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/dns/named</code></p>
+          <p><code>mkdir -p /var/serverchameleon/openssl/lib</code></p>
+          <p><code>mkdir /var/serverchameleon/scstats</code></p>
+          <p><code>mkdir /var/serverchameleon/3ware_cli</code></p>
+          <p><code>mkdir /var/serverchameleon/bin/apps/mivamerchant_commerce/LATEST</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Serverchameleon Symlinks</strong></h3>
+<p>These symlinks are required because these applications will be used from the OS default packages.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>rm /var/serverchameleon/bind/sbin/named -f</code></p>
+          <p><code>ln -s /usr/sbin/named /var/serverchameleon/bind/sbin/</code></p>
+          <p><code>rm /var/serverchameleon/openssl/bin/openssl -f</code></p>
+          <p><code>ln -s /usr/bin/openssl /var/serverchameleon/openssl/bin/</code></p>
+          <p><code>rm /var/serverchameleon/rsync/bin/rsync -f</code></p>
+          <p><code>ln -s /usr/bin/rsync /var/serverchameleon/rsync/bin</code></p>
+          <p><code>rm /var/serverchameleon/stunnel/sbin/stunnel -f</code></p>
+          <p><code>ln -s /usr/bin/stunnel /var/serverchameleon/stunnel/sbin</code></p>
+          <p><code>ln -s /usr/sbin/zeus /var/serverchameleon</code></p>
+          <p><code>ln -s /var/serverchameleon/frontpage /usr/local/frontpage</code></p>
+          <p><code>ln -s /usr/lib/libssl.so.0.9.8</code> <code>/var/serverchameleon/openssl/lib/libssl.so</code></p>
+          <p><code>ln -s /usr/lib/libcrypto.so.0.9.8</code> <code>/var/serverchameleon/openssl/lib/libcrypto.so</code></p>
+          <p><code>ln -s /usr/bin/stunnel4 /var/serverchameleon/stunnel/sbin/stunnel_cp</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Uninstall packages</strong></h3>
+<p>Uninstall some packages as we will compile and install them manually.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>apt-get remove --purge apache2 apache2-mpm-prefork</code></p>
+          <p><code>apt-get remove --purge php5</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Required perl packages</strong></h3>
+<p>Lets install required perl packages</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1846px;">
+          <p><code>apt-get install libdigest-sha1-perl libhtml-parser-perl libnet-dns-perl libmail-spf-perl libmail-spf-query-perl razor libnet-ident-perl libdbi-perl libmail-dkim-perl libio-socket-inet6-perl libio-socket-ssl-perl libpdf-reuse-perl</code></p>
+          <p><code>perl -MCPAN -e 'install Bundle::CPAN'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::Telnet'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest::MD5'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::FTP'</code></p>
+          <p><code>perl -MCPAN -e 'install Crypt::CBC'</code></p>
+          <p><code>perl -MCPAN -e 'install Crypt::DES'</code></p>
+          <p><code>perl -MCPAN -e 'install Crypt::Rijndael'</code></p>
+          <p><code>perl -MCPAN -e 'install DBI'</code></p>
+          <p><code>perl -MCPAN -e 'install Data::Dumper'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest::MD5'</code></p>
+          <p><code>perl -MCPAN -e 'install FileHandle'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::Template'</code></p>
+          <p><code>perl -MCPAN -e 'install HTTP::Request::Common'</code></p>
+          <p><code>perl -MCPAN -e 'install IO::Socket::SSL'</code></p>
+          <p><code>perl -MCPAN -e 'install LWP::Protocol::https'</code></p>
+          <p><code>perl -MCPAN -e 'install LWP::UserAgent'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::FTP'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::Telnet'</code></p>
+          <p><code>perl -MCPAN -e 'install POSIX ":sys_wait_h"'</code></p>
+          <p><code>perl -MCPAN -e 'install Storable'</code></p>
+          <p><code>perl -MCPAN -e 'install Unicode::String'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::Parser'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::Smart'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::Form'</code></p>
+          <p><code>perl -MCPAN -e 'install HTTP::Cookies'</code></p>
+          <p><code>perl -MCPAN -e shell</code></p>
+          <p><code>force install DB_File</code></p>
+          <p><code>force install IP::Country</code></p>
+          <p><code>force install Mail::DomainKeys</code></p>
+          <p><code>force install LWP::UserAgent</code></p>
+          <p><code>force install HTTP::Date</code></p>
+          <p><code>force install Encode::Detect</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Confirm cron permissions</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>chmod 751</code> <code>/var/spool/cron</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>MySQL 5</strong></h3>
+<p>Lets install the latest version of Mysql 5.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2294px;">
+          <p><code>mkdir /root/mysql</code></p>
+          <p><code>cd /root/mysql</code></p>
+          <p><code>wget http://dev.mysql.com/get/Downloads/MySQL-5.1/mysql-5.1.43.tar.gz/from/</code><a href="http://mysql.he.net/"><code>http://mysql.he.net/</code></a></p>
+          <p><code>tar xzf mysql-5.1.43.tar.gz</code></p>
+          <p><code>cd mysql-5.1.43.tar</code></p>
+          <p><code>./configure --prefix=/var/serverchameleon/mysql5 --with-ssl --with-mysqlfs --with-isam --with-mysqld-user=mysql --enable-thread-safe-client --enable-local-infile --with-plugins=innobase</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>groupadd mysql</code></p>
+          <p><code>useradd -g mysql mysql -d /var/serverchameleon/mysql5</code></p>
+          <p><code>/var/serverchameleon/mysql5/bin/mysql_install_db</code></p>
+          <p><code>mkdir /var/serverchameleon/mysql5/tmp</code></p>
+          <p><code>chown mysql:mysql /var/serverchameleon/mysql5/tmp</code></p>
+          <p><code># ADDITION</code></p>
+          <p><code># These files should be on /conf</code></p>
+          <p><code>########my.cnf file for</code> <code>users mysql</code></p>
+          <p><code>echo "[mysqld]"</code> <code>&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "port = 3306"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "socket = /tmp/mysql.sock"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "skip-locking"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "key_buffer = 16M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "max_allowed_packet = 100M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "table_cache = 64"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 512K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "net_buffer_length = 8K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_buffer_size = 256K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_rnd_buffer_size = 512K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "myisam_sort_buffer_size = 8M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "max_connections = 500"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "MAX_USER_CONNECTIONS = 20"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "query-cache-type = 1"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "query-cache-size = 128M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "query_cache_limit = 8M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[mysql]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "no-auto-rehash"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[isamchk]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "key_buffer = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "write_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[myisamchk]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "key_buffer = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "write_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[mysqlhotcopy]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "interactive-timeout"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>#*******My.cnf file for</code> <code>mysql client***********************</code></p>
+          <p><code>echo "[client]"</code> <code>&gt; /etc/my.cnf</code></p>
+          <p><code>echo "port = 3306"</code> <code>&gt;&gt; /etc/my.cnf</code></p>
+          <p><code>echo "socket = /tmp/mysql.sock"</code> <code>&gt;&gt; /etc/my.cnf</code></p>
+          <p><code>chown -R mysql:mysql /var/serverchameleon/mysql5/</code></p>
+          <p><code>rm /usr/bin/mysql -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql /usr/bin/mysql</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/mysql</code></p>
+          <p><code>rm /usr/bin/mysql_config -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql_config /usr/bin/mysql_config</code></p>
+          <p><code>rm /usr/lib/libmysqlclient.so.15</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so.15</code> <code>/usr/lib/libmysqlclient.so.15</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so.15</code> <code>/usr/lib/libmysqlclient.so</code></p>
+          <p><code>rm /usr/bin/mysqladmin -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqladmin /usr/bin/mysqladmin</code></p>
+          <p><code>rm /usr/bin/mysql -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql /usr/bin/mysql</code></p>
+          <p><code>rm /usr/bin/mysqldump -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqldump /usr/bin/mysqldump</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/ /var/serverchameleon/mysql</code></p>
+          <p><code>rm /usr/lib/libmysqlclient.so -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so /usr/lib/libmysqlclient.so</code></p>
+          <p><code>rm -rf /usr/lib/mysql</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql /usr/lib/mysql</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>################Start script for</code> <code>mysql#########################</code></p>
+          <p><code>echo "echo \"Initializing temporary directories for mysql5....\""</code> <code>&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "TMPDIR=/var/serverchameleon/mysql5/tmp"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "export TMPDIR"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "TMP=/var/serverchameleon/mysql5/tmp"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "export TMP"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "echo \"Starting mysql at port 3306 ....\""</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "/var/serverchameleon/mysql5/bin/mysqld_safe --defaults-file=/var/serverchameleon/conf/mysql5/my.cnf --user=mysql --datadir=/var/serverchameleon/mysql5/var --pid-file=/var/serverchameleon/mysql5/var/dev1.aplushosting.com.pid &gt;/dev/null 2&gt;&amp;1 &amp;"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>rm /usr/bin/mysqladmin -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqladmin /usr/bin/mysqladmin</code></p>
+          <p><code>rm /usr/bin/mysql -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql /usr/bin/mysql</code></p>
+          <p><code>rm /usr/bin/mysqldump -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqldump /usr/bin/mysqldump</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/ /var/serverchameleon/mysql</code></p>
+          <p><code>rm /usr/lib/libmysqlclient.so -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so /usr/lib/libmysqlclient.so</code></p>
+          <p><code>rm -rf /usr/lib/mysql</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql /usr/lib/mysql</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>IMAP client library</strong></h3>
+<p>This library is required to compile IMAP support in php.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /var/serverchameleon/imp</code></p>
+          <p><code>cd /var/serverchameleon/imp</code></p>
+          <p><code>wget ftp://ftp.cac.washington.edu/mail/c-client.tar.Z</code></p>
+          <p><code>zcat c-client.tar.Z | tar -xvof -</code></p>
+          <p><code>cd imap-2007e</code></p>
+          <p><code>make ldb</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>PHP 4</strong></h3>
+<p>Lets compile and install php 4</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:990px;">
+          <p><code>mkdir /root/php4</code></p>
+          <p><code>cd /root/php4</code></p>
+          <p><code>rsync 72.18.207.142::sources/php-4.4.8.tar.gz ./</code></p>
+          <p><code>tar xzf php-4.4*.tar.gz</code></p>
+          <p><code>cd php-4.4*</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--with-xsl \</code></p>
+          <p><code>--with-dom-xslt \</code></p>
+          <p><code>--with-dom \</code></p>
+          <p><code>--enable-xslt \</code></p>
+          <p><code>--with-xslt-sablot \</code></p>
+          <p><code>--enable-mbstring \</code></p>
+          <p><code>--with-config-file-path=/var/serverchameleon/conf/php4 \</code></p>
+          <p><code>--with-mysql=/var/serverchameleon/mysql5 \</code></p>
+          <p><code>--with-imap-ssl=/var/serverchameleon/imp/imap-2007b \</code></p>
+          <p><code>--with-imap=/var/serverchameleon/imp/imap-2007b \</code></p>
+          <p><code>--prefix=/var/serverchameleon/php4 \</code></p>
+          <p><code>--enable-memcache \</code></p>
+          <p><code>--enable-fastcgi \</code></p>
+          <p><code>--with-openssl \</code></p>
+          <p><code>--with-zlib \</code></p>
+          <p><code>--with-curl \</code></p>
+          <p><code>--with-ldap \</code></p>
+          <p><code>--with-curlwrappers \</code></p>
+          <p><code>--enable-bcmath \</code></p>
+          <p><code>--with-gettext \</code></p>
+          <p><code>--with-bz2 \</code></p>
+          <p><code>--enable-calendar \</code></p>
+          <p><code>--enable-dio \</code></p>
+          <p><code>--enable-exif \</code></p>
+          <p><code>--enable-ftp \</code></p>
+          <p><code>--with-gd \</code></p>
+          <p><code>--enable-force-cgi-redirect \</code></p>
+          <p><code>--with-mcrypt \</code></p>
+          <p><code>--with-mhash \</code></p>
+          <p><code>--with-ncurses \</code></p>
+          <p><code>--with-xslt-sablot \</code></p>
+          <p><code>--enable-soap \</code></p>
+          <p><code>--enable-sockets \</code></p>
+          <p><code>--enable-maintainer-zts \</code></p>
+          <p><code>--enable-memory-limit \</code></p>
+          <p><code>--enable-zend-multibyte \</code></p>
+          <p><code>--with-tsrm-pthreads \</code></p>
+          <p><code>--with-tiff-dir \</code></p>
+          <p><code>--with-jpeg-dir \</code></p>
+          <p><code>--with-png-dir \</code></p>
+          <p><code>--with-zlib-dir \</code></p>
+          <p><code>--with-xpm-dir \</code></p>
+          <p><code>--with-ttf \</code></p>
+          <p><code>--with-freetype-dir \</code></p>
+          <p><code>--enable-gd-native-ttf \</code></p>
+          <p><code>--with-sqlite=shared \</code></p>
+          <p><code>--enable-safe-mode \</code></p>
+          <p><code>--enable-gd-jis-conv</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>#cp php.ini-recommended /var/serverchameleon/php4/lib/php.ini</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/php4</code></p>
+          <p><code>ln -s /var/serverchameleon/php4/bin/php /usr/bin</code></p>
+          <p><code>/var/serverchameleon/php4/bin/pecl install sqlite</code></p>
+          <p><code>cp /var/serverchameleon/php4/lib/php/extensions/no-debug*/sqlite.so /var/serverchameleon/php4/lib/php/extensions/sqlite.so</code></p>
+          <p><code>rm -rf /var/serverchameleon/php5/lib/php/extensions/no-debug*</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>PHP 5</strong></h3>
+<p>Lets compile and install php 5</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1038px;">
+          <p><code>mkdir /root/php5</code></p>
+          <p><code>cd /root/php5</code></p>
+          <p><code>wget http://www.php.net/get/php-5.3.1.tar.gz/from/this/mirror</code></p>
+          <p><code>tar xzf php-5.3.1.tar.gz</code></p>
+          <p><code>cd php-5.*</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--with-xsl \</code></p>
+          <p><code>--enable-mbstring \</code></p>
+          <p><code>--with-config-file-path=/var/serverchameleon/conf/php5 \</code></p>
+          <p><code>--with-mysql=/var/serverchameleon/mysql5 \</code></p>
+          <p><code>--with-imap-ssl=/var/serverchameleon/imp/imap-2007e \</code></p>
+          <p><code>--with-imap=/var/serverchameleon/imp/imap-2007e \</code></p>
+          <p><code>--prefix=/var/serverchameleon/php5 \</code></p>
+          <p><code>--with-openssl \</code></p>
+          <p><code>--with-zlib \</code></p>
+          <p><code>--with-pdo-mysql \</code></p>
+          <p><code>--with-curl \</code></p>
+          <p><code>--with-ldap \</code></p>
+          <p><code>--with-curlwrappers \</code></p>
+          <p><code>--enable-bcmath \</code></p>
+          <p><code>--with-gettext \</code></p>
+          <p><code>--with-bz2 \</code></p>
+          <p><code>--enable-calendar \</code></p>
+          <p><code>--enable-exif \</code></p>
+          <p><code>--enable-ftp \</code></p>
+          <p><code>--with-gd \</code></p>
+          <p><code>--with-mcrypt \</code></p>
+          <p><code>--with-mhash \</code></p>
+          <p><code>--enable-soap \</code></p>
+          <p><code>--enable-sockets \</code></p>
+          <p><code>--enable-maintainer-zts \</code></p>
+          <p><code>--enable-zend-multibyte \</code></p>
+          <p><code>--with-tsrm-pthreads \</code></p>
+          <p><code>--with-jpeg-dir \</code></p>
+          <p><code>--with-png-dir \</code></p>
+          <p><code>--with-zlib-dir \</code></p>
+          <p><code>--with-xpm-dir \</code></p>
+          <p><code>--with-ttf \</code></p>
+          <p><code>--with-freetype-dir \</code></p>
+          <p><code>--enable-gd-native-ttf \</code></p>
+          <p><code>--enable-safe-mode \</code></p>
+          <p><code>--with-sqlite=shared \</code></p>
+          <p><code>--enable-sqlite-utf8 \</code></p>
+          <p><code>--enable-gd-jis-conv \</code></p>
+          <p><code>--enable-zip</code></p>
+          <p><code>====================</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>#cp php.ini-recommended /var/serverchameleon/php5/lib/php.ini</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/php5</code></p>
+          <p><code>cp /var/serverchameleon/php5/lib/php/extensions/no-debug*/sqlite.so /var/serverchameleon/php5/lib/php/extensions/sqlite.so</code></p>
+          <p><code>rm -rf /var/serverchameleon/php5/lib/php/extensions/no-debug*</code></p>
+          <p><code>/var/serverchameleon/php5/bin/pear install MDB2#mysql</code></p>
+          <p><code>cp /var/serverchameleon/php5/lib/php/extensions/no-debug*/mysql.so /var/serverchameleon/php5/lib/php/extensions/</code></p>
+          <p><code>/var/serverchameleon/php5/bin/pear install MDB2#sqlite</code></p>
+          <p><code>cp /var/serverchameleon/php5/lib/php/extensions/no-debug*/sqlite.so /var/serverchameleon/php5/lib/php/extensions/</code></p>
+          <p><code>#installing pdo_mysql</code></p>
+          <p><code>#-----Below is required if</code> <code>/tmp is not executeable</code></p>
+          <p><code>cd /tmp/pear</code></p>
+          <p><code>mv cache /cache</code></p>
+          <p><code>ln -s /cache /tmp/pear/cache</code></p>
+          <p><code>#-----</code></p>
+          <p><code>/var/serverchameleon/php5/bin/pecl install PDO_MYSQL</code></p>
+          <p><code>cp /var/serverchameleon/php5/lib/php/extensions/no-debug-zts-20060613/pdo_mysql.so /var/serverchameleon/php5/lib/php/extensions/</code></p>
+          <p><code>chmod 755</code> <code>/var/serverchameleon/php5/lib/php/extensions/pdo_mysql.so</code></p>
+          <p><code>#Edit php.ini and put this</code></p>
+          <p><code>extension=pdo_mysql.so</code></p>
+          <p><code>#-----Below is required if</code> <code>/tmp is not executeable</code></p>
+          <p><code>cd /tmp/pear</code></p>
+          <p><code>rm cache</code></p>
+          <p><code>mv /cache /tmp/pear/cache</code></p>
+          <p><code>#-----</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Zend Optimizor</strong></h3>
+<p>Install Zend optimizor for php</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/zend</code></p>
+          <p><code>cd /root/zend</code></p>
+          <p><code>rsync 72.18.207.142::sources/ZendOptimizer-3.2.0-linux-glibc21-i386.tar.gz ./</code></p>
+          <p><code>tar xzvf ZendOptimizer-3.2.0-linux-glibc21-i386.tar.gz</code></p>
+          <p><code>cd ZendOptimizer-*</code></p>
+          <p><code>./install.sh</code></p>
+          <p><code># Provide location to install zend /var/serverchameleon/zend</code></p>
+          <p><code># Provide location of php.in /var/serverchameleon/php4/lib</code></p>
+          <p><code># Are you using apache ? NO</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rf /root/zend</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Ioncube loader</strong></h3>
+<p>Install Ioncube for php</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/ioncube</code></p>
+          <p><code>cd /root/ioncube</code></p>
+          <p><code>wget http://downloads2.ioncube.com/loader_downloads/ioncube_loaders_lin_x86.tar.gz</code></p>
+          <p><code>tar xzf ioncube_loaders_lin_x86.tar.gz</code></p>
+          <p><code>cd ioncube</code></p>
+          <p><code>mkdir /var/serverchameleon/ioncube</code></p>
+          <p><code>cp * /var/serverchameleon/ioncube/</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rf /root/ioncube</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Apache</strong></h3>
+<p>Install Apache. Currently Zeus is used for shared hosting but apache is installed for future compatibility</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:8358px;">
+          <p><code>mkdir /root/apache</code></p>
+          <p><code>cd /root/apache</code></p>
+          <p><code>wget http://apache.cyberuse.com/httpd/httpd-2.2.14.tar.gz</code></p>
+          <p><code>tar -xzf httpd-2.2.14.tar.gz</code></p>
+          <p><code>cd httpd*</code></p>
+          <p><code>./configure --enable-proxy --sysconfdir=/var/serverchameleon/apache/conf --prefix=/var/serverchameleon/apache --enable-auth-digest --enable-cache --enable-cern-meta --enable-charset-lite --enable-dav --enable-dav-fs --enable-disk-cache --enable-expires --enable-ext-filter --enable-file-cache --enable-headers --enable-info --enable-logio --enable-mem-cache --enable-mime-magic --enable-rewrite --enable-so --enable-speling --enable-ssl --with-ssl --enable-unique-id --enable-usertrack --enable-vhost-alias --enable-maintainer-mode --enable-v4-mapped --with-program-name=httpd --enable-static-support --enable-suexec --enable-static-ab --enable-static-htdigest --enable-static-htpasswd --enable-static-logresolve --enable-deflate --enable-static-rotatelogs --with-suexec-caller=nobody --with-mpm=worker --with-suexec-docroot=/ --enable-mods-shared='auth-digest cache cern-meta charset-lite deflate dav dav-fs disk-cache expires ext-filter file-cache headers info logio mem-cache rewrite speling unique-id usertrack vhost-alias maintainer-mode'</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm /root/apache -rf</code></p>
+          <p><code>rm /usr/bin/apachectl</code></p>
+          <p><code>rm /usr/sbin/apache</code></p>
+          <p><code>rm /usr/sbin/httpd</code></p>
+          <p><code>ln -s /var/serverchameleon/apache/bin/apachectl /usr/bin</code></p>
+          <p><code>ln -s /var/serverchameleon/apache /usr/sbin/apache</code></p>
+          <p><code>ln -s /var/serverchameleon/apache /usr/sbin/httpd</code></p>
+          <p><code># no need to link. Apache will be started by SC with the right location</code></p>
+          <p><code>for</code> <code>the httpd.conf file</code></p>
+          <p><code>#ln -s /var/serverchameleon/apache/conf/httpd.conf /var/serverchameleon/conf/http/apache/httpd.conf</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>FrontPage Extensions</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:766px;">
+          <p><code>mkdir /root/frontpage</code></p>
+          <p><code>cd /root/frontpage</code></p>
+          <p><code>rsync 72.18.207.142::sources/fp_install.sh.gz ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/fp50.linux.tar.Z ./</code></p>
+          <p><code>mkdir /var/serverchameleon/frontpage/</code></p>
+          <p><code>mv fp5*.linux.tar.Z /var/serverchameleon/frontpage/</code></p>
+          <p><code>cd /var/serverchameleon/frontpage/</code></p>
+          <p><code>tar -zxf fp*.linux.tar.Z</code></p>
+          <p><code>mv frontpage/version5.0/ ./</code></p>
+          <p><code>ln -s version5.0</code> <code>currentversion</code></p>
+          <p><code>rm /usr/local/frontpage -f</code></p>
+          <p><code>ln -s /var/serverchameleon/frontpage/ /usr/local</code></p>
+          <p><code>ln -s /usr/local/frontpage/currentversion/exes/_vti_bin /usr/local/frontpage/currentversion/</code></p>
+          <p><code>rm *tar.Z -f</code></p>
+          <p><code>echo "SendMailCommand:/usr/sbin/sendmail"</code> <code>&gt;&gt; /usr/local/frontpage/currentversion/frontpage.cnf</code></p>
+          <p><code>cd /root;rm frontpage -rf</code></p>
+          <p><code>/usr/local/frontpage/version5.0/set_default_perms.sh</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>ucspi</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/ucspi</code></p>
+          <p><code>cd /root/ucspi</code></p>
+          <p><code>wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz</code></p>
+          <p><code>tar -xzf ucspi-tcp-0.88.tar.gz</code></p>
+          <p><code>cd ucspi-tcp*</code></p>
+          <p><code>wget http://www.qmail.org/rpms/patches/ucspi-tcp-0.88.errno.patch</code></p>
+          <p><code>patch -p1 &lt; ucspi-tcp-0.88.errno.patch</code></p>
+          <p><code>make</code></p>
+          <p><code>make setup check</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rf /root/ucspi</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>daeamontools</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /usr/local/daemontools</code></p>
+          <p><code>cd /usr/local/daemontools</code></p>
+          <p><code>wget http://cr.yp.to/daemontools/daemontools-0.76.tar.gz</code></p>
+          <p><code>wget http://www.qmail.org/moni.csi.hu/pub/glibc-2.3.1/daemontools-0.76.errno.patch</code></p>
+          <p><code>tar -xzf daemontools-0.76.tar.gz</code></p>
+          <p><code>cd admin/daemontools-*/src</code></p>
+          <p><code>patch -p1 &lt; ../../../daemontools-0.76.errno.patch</code></p>
+          <p><code>&gt;&gt;&gt; /usr/local/daemontools/admin/daemontools-0.76/src/error.h</code></p>
+          <p><code>cd ..</code></p>
+          <p><code>package/install</code></p>
+          <p><code>echo "start on runlevel [123456]"</code> <code>&gt; /etc/event.d/svscanboot</code></p>
+          <p><code>echo "respawn"</code> <code>&gt;&gt; /etc/event.d/svscanboot</code></p>
+          <p><code>echo "exec /command/svscanboot "</code> <code>&gt;&gt; /etc/event.d/svscanboot</code></p>
+          <p><code>start svscanboot</code></p>
+          <p><code>ln -s /usr/local/bin/softlimit /usr/bin/softlimit</code></p>
+          <p><code>ln -s /usr/local/bin/tcpserver /usr//bin/tcpserver</code></p>
+          <p><code>ln -s /usr/local/bin/setuidgid /usr/bin/setuidgid</code></p>
+          <p><code>ln -s /usr/local/bin/multilog /usr/bin/multilog</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Qmail</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2478px;">
+          <p><code># If qmail is already installed, you can't delete the users or groups!</code></p>
+          <p><code>UID/GID will change and</code></p>
+          <p><code># that number is embedded in some qmail config files</code></p>
+          <p><code>userdel qmaild</code></p>
+          <p><code>userdel qmaill</code></p>
+          <p><code>userdel qmailp</code></p>
+          <p><code>userdel alias</code></p>
+          <p><code>userdel qmailq</code></p>
+          <p><code>userdel qmailr</code></p>
+          <p><code>userdel qmails</code></p>
+          <p><code>groupdel qmail</code></p>
+          <p><code>groupdel nofiles</code></p>
+          <p><code>userdel vpopmail</code></p>
+          <p><code>groupdel vpopmail</code></p>
+          <p><code># qmail phase 1</code></p>
+          <p><code>mkdir /root/qmail</code></p>
+          <p><code>cd /root/qmail</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-1.03.tar.gz ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-103.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmailqueue-patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-maildir++.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/big-concurrency.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-1.03.errno.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmailctl.txt ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/outgoingip.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-limit-bounce-size.patch.txt ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/ext_todo-20030105.patch ./</code></p>
+          <p><code>tar -zxf qmail-1.03.tar.gz</code></p>
+          <p><code># missing: big bounce patch</code></p>
+          <p><code>cd /root/qmail/qmail-*</code></p>
+          <p><code>patch -p1 &lt; ../qmail-103.patch</code></p>
+          <p><code>patch &lt; ../outgoingip.patch</code></p>
+          <p><code>patch -p1 &lt; ../qmailqueue-patch</code></p>
+          <p><code>patch &lt; ../qmail-maildir++.patch</code></p>
+          <p><code>patch &lt; ../qmail-1.03.errno.patch</code></p>
+          <p><code>patch &lt; ../ext_todo-20030105.patch</code></p>
+          <p><code>echo '100'</code> <code>&gt; conf-split</code></p>
+          <p><code>groupadd nofiles</code></p>
+          <p><code>mkdir /var/serverchameleon/qmail</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail qmaild</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail qmaill</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail qmailp</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail/alias alias</code></p>
+          <p><code>groupadd qmail</code></p>
+          <p><code>useradd -g qmail -d /var/serverchameleon/qmail qmailq</code></p>
+          <p><code>useradd -g qmail -d /var/serverchameleon/qmail qmailr</code></p>
+          <p><code>useradd -g qmail -d /var/serverchameleon/qmail qmails</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail /var/qmail</code></p>
+          <p><code>make setup check</code></p>
+          <p><code>./config</code></p>
+          <p><code># output:</code></p>
+          <p><code>#Your hostname is gentoo.</code></p>
+          <p><code>#Your host's fully qualified name in DNS is alecka.aplushosting.com.</code></p>
+          <p><code>#Putting alecka.aplushosting.com into control/me...</code></p>
+          <p><code>#Putting aplushosting.com into control/defaultdomain...</code></p>
+          <p><code>#Putting aplushosting.com into control/plusdomain...</code></p>
+          <p><code>#Checking local IP addresses:</code></p>
+          <p><code>#127.0.0.1: Adding localhost to control/locals...</code></p>
+          <p><code>#64.235.32.151: Adding aplushosting.com to control/locals...</code></p>
+          <p><code>#72.18.207.132: Adding alecka.aplushosting.com to control/locals...</code></p>
+          <p><code>#If there are any other domain names that point to you,</code></p>
+          <p><code>#you will have to add them to /var/qmail/control/locals.</code></p>
+          <p><code>#You don't have to worry about aliases, i.e., domains with CNAME records.</code></p>
+          <p><code>#Copying /var/qmail/control/locals to /var/qmail/control/rcpthosts...</code></p>
+          <p><code>#Now qmail will refuse to accept SMTP messages except to those hosts.</code></p>
+          <p><code>#Make sure to change rcpthosts if</code> <code>you add hosts to locals or virtualdomains!</code></p>
+          <p><code>cd ..</code></p>
+          <p><code>rm /usr/lib/sendmail -f</code></p>
+          <p><code>rm /usr/sbin/sendmail -f</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/bin/sendmail /usr/lib</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/bin/sendmail /usr/sbin</code></p>
+          <p><code>cp qmailctl.txt /var/serverchameleon/qmail/bin/qmailctl</code></p>
+          <p><code>chmod 755</code> <code>/var/serverchameleon/qmail/bin/qmailctl</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/bin/qmailctl /usr/bin</code></p>
+          <p><code>echo '127.0.0.1:allow,RELAYCLIENT="",RBLSMTPD=""'</code> <code>&gt; /etc/tcp.smtp</code></p>
+          <p><code>echo ':allow'</code> <code>&gt;&gt; /etc/tcp.smtp</code></p>
+          <p><code>echo ':allow'</code> <code>&gt; /etc/tcp.pop3</code></p>
+          <p><code>qmailctl cdb</code></p>
+          <p><code>#################### control settings will be set by the backend at startup</code></p>
+          <p><code>echo 'postmaster'</code> <code>&gt; /var/serverchameleon/qmail/control/bouncefrom</code></p>
+          <p><code>echo 'doublebounce'</code> <code>&gt; /var/serverchameleon/qmail/control/doublebounceto</code></p>
+          <p><code>echo `hostname` &gt; /var/serverchameleon/qmail/control/doublebouncehost</code></p>
+          <p><code>echo '20000000'</code> <code>&gt; /var/serverchameleon/qmail/control/databytes</code></p>
+          <p><code>echo '# reject containing invalid characters, brackets or multiple @'</code> <code>&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '[!%#:\*\^]'</code> <code>&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '[\(\)]'&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '[\{\}]'&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '@.*@'&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo `hostname` &gt; /var/serverchameleon/qmail/control/defaultdomain</code></p>
+          <p><code># (OPTIONAL) SEND ALL OUTBOUND MAIL VIA SMARTHOST</code></p>
+          <p><code>#echo ':yoursmarthost.yourdomain.com'</code> <code>&gt;</code></p>
+          <p><code>/var/serverchameleon/qmail/control/smtproutes</code></p>
+          <p><code>####################</code></p>
+          <p><code>echo '#'</code> <code>&gt; ~alias/.qmail-doublebounce</code></p>
+          <p><code>chmod 644</code> <code>~alias/.qmail-doublebounce</code></p>
+          <p><code>mkdir -p /var/serverchameleon/qmail/supervise/qmail-send/log</code></p>
+          <p><code>mkdir -p /var/serverchameleon/qmail/supervise/qmail-smtpd/log</code></p>
+          <p><code>mkdir -p /var/serverchameleon/qmail/supervise/qmail-pop3d/log</code></p>
+          <p><code>chmod +t /var/serverchameleon/qmail/supervise/qmail-send</code></p>
+          <p><code>chmod +t /var/serverchameleon/qmail/supervise/qmail-smtpd</code></p>
+          <p><code>chmod +t /var/serverchameleon/qmail/supervise/qmail-pop3d</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-send/log/run</code></p>
+          <p><code># Keep 30</code> <code>logs of max 10Mb each</code></p>
+          <p><code># They will get rotated when they reach 10Mb in size,</code></p>
+          <p><code># or at midnight when our crontab script fires (whichever event comes 1st)</code></p>
+          <p><code>echo 'exec /usr/bin/setuidgid qmaill /usr/bin/multilog t s10000000 n30 /var/log/qmail/send'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-send/log/run</code></p>
+          <p><code>####This was missing#############</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-smtpd/log/run</code></p>
+          <p><code>echo 'exec /usr/bin/setuidgid qmaill /usr/bin/multilog t s10000000 n30 /var/log/qmail/smtpd'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-smtpd/log/run</code></p>
+          <p><code>#/var/serverchameleon/qmail/supervise/qmail-send/run</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-send/run</code></p>
+          <p><code>echo 'exec env - PATH="/var/serverchameleon/qmail/bin:$PATH" qmail-start ./Maildir/'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-send/run</code></p>
+          <p><code>#################################</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo "VPOPMAILUID=`id -u vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo "VPOPMAILGUID=`id -g vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo 'exec /usr/bin/softlimit -m 4000000 /usr/bin/tcpserver -v -x /etc/tcp.smtp.cdb -c 20 -R -u "$VPOPMAILUID" -g "$VPOPMAILGUID" 0 smtp /var/qmail/bin/qmail-smtpd /var/serverchameleon/vpopmail/bin/vchkpw /bin/true 2&gt;&amp;1'</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/run</code></p>
+          <p><code>echo "exec /usr/bin/softlimit -m 4000000 /usr/bin/tcpserver -H -l `hostname` -v -x /etc/tcp.pop3.cdb -c 30 -R 0 pop3 /var/qmail/bin/qmail-popup `hostname` /var/serverchameleon/vpopmail/bin/vchkpw /var/serverchameleon/qmail/bin/qmail-pop3d Maildir 2&gt;&amp;1"</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/run</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/log/run</code></p>
+          <p><code>echo 'exec /usr/bin/setuidgid qmaill /usr/bin/multilog t s10000000 n30 /var/log/qmail/pop3d'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/log/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-send/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-send/log/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-smtpd/log/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-pop3d/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-pop3d/log/run</code></p>
+          <p><code>mkdir /var/log/qmail</code></p>
+          <p><code>mkdir /var/log/qmail/smtpd</code></p>
+          <p><code>mkdir /var/log/qmail/send</code></p>
+          <p><code>mkdir /var/log/qmail/pop3d</code></p>
+          <p><code>chown -R qmaill /var/log/qmail</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-send /service/</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-smtpd /service/</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-pop3d /service/</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm /root/qmail -rf</code></p>
+          <p><code>echo 172800</code> <code>&gt; /var/qmail/control/queuelifetime</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Vpopmail</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1214px;">
+          <p><code>mkdir /root/vpopmail</code></p>
+          <p><code>cd /root/vpopmail</code></p>
+          <p><code>rsync 72.18.207.142::sources/vpopmail-5.4.13.tar.gz ./</code></p>
+          <p><code>tar -xzf vpopmail-5.4.13.tar.gz</code></p>
+          <p><code>cd vpopmail*</code></p>
+          <p><code>groupadd -g 89</code> <code>vchkpw</code></p>
+          <p><code>useradd -g vchkpw -u 89</code> <code>vpopmail -d /var/serverchameleon/vpopmail</code></p>
+          <p><code>./configure --prefix=/var/serverchameleon/vpopmail --enable-qmaildir=/var/serverchameleon/qmail --enable-roaming-users --enable-relay-clear-minutes=10</code></p>
+          <p><code>make</code></p>
+          <p><code>make install-strip</code></p>
+          <p><code>#ln -s /var/serverchameleon/vpopmail /home/vpopmail</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm vpopmail -rf</code></p>
+          <p><code>#Add crontab</code></p>
+          <p><code>10</code> <code>* * * * /var/vpopmail/bin/clearopensmtp 2&gt;&amp;1</code> <code>&gt; /dev/null</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Magic-smtpd</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:870px;">
+          <p><code>mkdir /root/magic-smtpd</code></p>
+          <p><code>cd /root/magic-smtpd</code></p>
+          <p><code>rsync 72.18.207.142::sources/magic-smtpd-0.8.4-2.tar.gz ./</code></p>
+          <p><code>tar xzvf magic-smtpd-0.8.4-2.tar.gz</code></p>
+          <p><code>cd magicmail*</code></p>
+          <p><code>###############################################################</code></p>
+          <p><code>emacs spamrules/spamdir.c</code></p>
+          <p><code>AT line 106</code> <code>change below</code></p>
+          <p><code>if</code> <code>(cur-&gt;d_type == DT_REG) {</code></p>
+          <p><code>readFile(cur-&gt;d_name);</code></p>
+          <p><code>}</code></p>
+          <p><code>with this</code></p>
+          <p><code>if(strcmp(cur-&gt;d_name,".") != 0</code> <code>&amp;&amp; strcmp(cur-&gt;d_name,"..") != 0){</code></p>
+          <p><code>readFile(cur-&gt;d_name);</code></p>
+          <p><code>}</code></p>
+          <p><code>###At line 72</code> <code>Change below</code></p>
+          <p><code>if</code> <code>(asprintf(&amp;dir, "/etc/magic-mail/spam_rules/%s", argv[1]) &lt;= 0) {</code></p>
+          <p><code>// fprintf(stderr, "Fatal: unable to build directory string:%s\n", str\error(errno));</code></p>
+          <p><code>exit(1);</code></p>
+          <p><code>}</code></p>
+          <p><code>with this</code></p>
+          <p><code>char</code> <code>*user;</code></p>
+          <p><code>char</code> <code>*domain;</code></p>
+          <p><code>user = strtok (argv[1],"@");</code></p>
+          <p><code>domain = strtok (NULL, "@");</code></p>
+          <p><code>asprintf(&amp;dir, "/etc/magic-mail/spam_rules/%s", domain);</code></p>
+          <p><code>if(access(dir, F_OK ) != 0)</code></p>
+          <p><code>asprintf(&amp;dir, "/etc/magic-mail/spam_rules/0");</code></p>
+          <p><code>#################################################################</code></p>
+          <p><code>GCC4 error(http://www.linuxmagic.com/archives/magicmail-users/msg00668.html)</code></p>
+          <p><code>agic-smtpd.c:178: error: static</code> <code>declaration of âsmtp_from_addrâ follows</code></p>
+          <p><code>&gt;&gt;&gt; non-static</code> <code>declaration</code></p>
+          <p><code>########################</code></p>
+          <p><code>removing the following</code></p>
+          <p><code>line (line 42) from the magicmail-0.8.4-2/magic-smtpd/magic-smtpd.h</code></p>
+          <p><code>file:</code></p>
+          <p><code>extern lm_string_t smtp_from_addr;</code></p>
+          <p><code>########################</code></p>
+          <p><code>make</code></p>
+          <p><code>rm -rf /etc/magic-mail/</code></p>
+          <p><code>ln -s /var/serverchameleon/m-mail /etc/magic-mail</code></p>
+          <p><code>qmailctl stop</code></p>
+          <p><code>mkdir -p /var/serverchameleon/m-mail/bin</code></p>
+          <p><code>cp magic-smtpd/magic-smtpd /var/serverchameleon/m-mail/bin/</code></p>
+          <p><code>mv /var/qmail/bin/qmail-smtpd /var/qmail/bin/qmail-smtpd.bak</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/bin/magic-smtpd</code></p>
+          <p><code>ln -s /var/serverchameleon/m-mail/bin/magic-smtpd /var/qmail/bin/qmail-smtpd</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/bin/magic-smtpd</code></p>
+          <p><code>chown root:qmail /var/qmail/bin/qmail-smtpd</code></p>
+          <p><code>qmailctl start</code></p>
+          <p><code>##Enabling spamcheck#####################################</code></p>
+          <p><code>cp spamrules/spamdir /var/serverchameleon/m-mail/bin/spamdir</code></p>
+          <p><code>echo "/var/serverchameleon/m-mail/bin/spamdir"</code> <code>&gt; /var/serverchameleon/m-mail/control/ext_spam_rule_prog</code></p>
+          <p><code>echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/spam_check_enable</code></p>
+          <p><code>echo "0"</code> <code>&gt; /var/serverchameleon/m-mail/control/max_smtp_cmds</code></p>
+          <p><code>#A very basic spam rules set</code></p>
+          <p><code>mkdir -p /var/serverchameleon/m-mail/spam_rules/0</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/spam_check</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/smtp_check</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/smtp_blocking</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/require_helo</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/valid_from_domain</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/require_full_addr</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/block_ip_in_addr</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/valid_helo_domain</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/check_ip_reverse_dns</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>##Enableing valid "To:"</code> <code>user check #########################</code></p>
+          <p><code>echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/check_valid_users</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/check_valid_users</code></p>
+          <p><code>rsync 72.18.207.142::sources/vpopmail-check-user.pl ./</code></p>
+          <p><code>cp vpopmail-check-user.pl /var/qmail/bin/</code></p>
+          <p><code>chown root:qmail /var/qmail/bin/vpopmail-check-user.pl</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/bin/vpopmail-check-user.pl</code></p>
+          <p><code>echo "/var/qmail/bin/vpopmail-check-user.pl"</code> <code>&gt; /var/serverchameleon/m-mail/control/ext_check_user_prog</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/ext_check_user_prog</code></p>
+          <p><code>######################################################</code></p>
+          <p><code># not yet</code></p>
+          <p><code>##Enable TLS#################</code></p>
+          <p><code>#openssl genrsa 1024</code> <code>&gt; cert.key</code></p>
+          <p><code>#openssl req -new</code> <code>-x509 -nodes -sha1 -days 365</code> <code>-key cert.key &gt; cert.crt</code></p>
+          <p><code>#openssl gendh 1024</code> <code>&gt; cert.dh</code></p>
+          <p><code>#cat cert.crt cert.key cert.dh &gt;</code></p>
+          <p><code>/var/serverchameleon/m-mail/control/cert.pem</code></p>
+          <p><code>#echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/tls_enable</code></p>
+          <p><code>#chown root:qmail /var/serverchameleon/m-mail/control/cert.pem</code></p>
+          <p><code>#chown root:qmail /var/serverchameleon/m-mail/control/tls_enable</code></p>
+          <p><code>############################</code></p>
+          <p><code>##Enabling smtp authentication########################</code></p>
+          <p><code>echo "/var/serverchameleon/vpopmail/bin/vchkpw"</code> <code>&gt; /var/serverchameleon/m-mail/control/ext_check_passwd_prog</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/ext_check_passwd_prog</code></p>
+          <p><code>echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/auth_enable</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/auth_enable</code></p>
+          <p><code>qmailctl restart</code></p>
+          <p><code>######################################################</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rf /root/magic-smtpd</code></p>
+          <p><code>#ADDEd to hid magic-smtp default</code> <code>greeting</code></p>
+          <p><code>echo 'Helo'</code> <code>&gt; /var/qmail/control/smtpgreeting</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Starting smtpd on port 26</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2086px;">
+          <p><code>cp /var/serverchameleon/qmail/supervise/qmail-smtpd /var/serverchameleon/qmail/supervise/qmail-smtpd2 -R</code></p>
+          <p><code>cd /var/serverchameleon/qmail/supervise/qmail-smtpd2</code></p>
+          <p><code>rm -rf log</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>echo "VPOPMAILUID=`id -u vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>echo "VPOPMAILGUID=`id -g vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>echo 'exec /usr/bin/softlimit -m 4000000 /usr/bin/tcpserver -v -x /etc/tcp.smtp.cdb -c 20 -R -u "$VPOPMAILUID" -g "$VPOPMAILGUID" 0 26 /var/qmail/bin/qmail-smtpd /var/serverchameleon/vpopmail/bin/vchkpw /bin/true 2&gt;&amp;1'</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-smtpd2 /service/qmail-smtpd2</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Creating ssl certificate for use with imap</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:790px;">
+          <p><code>cd /var/serverchameleon/conf/certs/</code></p>
+          <p><code>openssl genrsa -out private_emailserver 2048</code></p>
+          <p><code>openssl req -new</code> <code>-key private_emailserver -out csr_emailserver</code></p>
+          <p><code>openssl x509 -req -days 365</code> <code>-in csr_emailserver -signkey private_emailserver -out crt_emailserver</code></p>
+          <p><code>cat private_emailserver csr_emailserver &gt; /var/serverchameleon/conf/certspem_emailserver</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Courier-imap Authentication library</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:830px;">
+          <p><code>mkdir /root/imap-auth</code></p>
+          <p><code>cd /root/imap-auth</code></p>
+          <p><code>wget http://softlayer.dl.sourceforge.net/project/courier/authlib/0.62.4/courier-authlib-0.62.4.tar.bz2</code></p>
+          <p><code>bunzip2 courier-authlib-0.62.4.tar.bz2</code></p>
+          <p><code>tar xf courier-authlib-0.62.4.tar</code></p>
+          <p><code>cd courier-authlib-0.62.4</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--prefix=/var/serverchameleon/courier-imap \</code></p>
+          <p><code>--without-authpam \</code></p>
+          <p><code>--without-authldap \</code></p>
+          <p><code>--without-authpwd \</code></p>
+          <p><code>--without-authmysql \</code></p>
+          <p><code>--without-authpgsql \</code></p>
+          <p><code>--without-authshadow \</code></p>
+          <p><code>--without-authuserdb \</code></p>
+          <p><code>--without-authcustom \</code></p>
+          <p><code>--without-authcram \</code></p>
+          <p><code>--without-authpipe \</code></p>
+          <p><code>--with-authvchkpw</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>make install-configure</code></p>
+          <p><code>cp courier-authlib.sysvinit /var/serverchameleon/courier-imap/courier-authlib</code></p>
+          <p><code>chmod 700</code> <code>/var/serverchameleon/courier-imap/courier-authlib</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/imap-auth</code></p>
+          <p><code>mkdir /var/lock/subsys/</code></p>
+          <p><code>/var/serverchameleon/courier-imap/courier-authlib start</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Courier IMAP</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2006px;">
+          <p><code>mkdir /root/imap</code></p>
+          <p><code>cd /root/imap</code></p>
+          <p><code>wget http://softlayer.dl.sourceforge.net/project/courier/imap/4.6.0/courier-imap-4.6.0.tar.bz2</code></p>
+          <p><code>tar xf courier-imap-4.6.0.tar.bz2</code></p>
+          <p><code>cd courier-imap-4.6.0</code></p>
+          <p><code>COURIERAUTHCONFIG=/var/serverchameleon/courier-imap/bin/courierauthconfig \</code></p>
+          <p><code>CPPFLAGS=-I/var/serverchameleon/courier-imap/include \</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--prefix=/var/serverchameleon/courier-imap \</code></p>
+          <p><code>--disable-root-check \</code></p>
+          <p><code>--with-ssl</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>make install-configure</code></p>
+          <p><code>cp courier-imap.sysvinit /var/serverchameleon/courier-imap/courier-imap</code></p>
+          <p><code>chmod 744</code> <code>/var/serverchameleon/courier-imap/courier-imap</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd /var/serverchameleon/courier-imap/etc/imapd.orignal -f</code></p>
+          <p><code>sed 's/IMAPDSTART=NO/IMAPDSTART=YES/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd-ssl /var/serverchameleon/courier-imap/etc/imapd-ssl.orignal -f</code></p>
+          <p><code>sed 's/IMAPDSSLSTART=NO/IMAPDSSLSTART=YES/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd-ssl /var/serverchameleon/courier-imap/etc/imapd-ssl.orignal -f</code></p>
+          <p><code>sed 's/TLS_CERTFILE=\/var\/serverchameleon\/courier-imap\/share\/imapd.pem/TLS_CERTFILE=\/var\/serverchameleon\/conf\/certs\/pem_emailserver /'</code> <code>/var/serverchameleon/courier-imap/etc/imapd-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>chown vpopmail:vchkpw /var/serverchameleon/qmail/control/servercert.pem</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/pop3d-ssl /var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal -f</code></p>
+          <p><code>sed 's/POP3DSSLSTART=NO/POP3DSSLSTART=YES/'</code> <code>/var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/pop3d-ssl</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/pop3d-ssl /var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal -f</code></p>
+          <p><code>sed 's/TLS_CERTFILE=\/var\/serverchameleon\/courier-imap\/share\/imapd.pem/TLS_CERTFILE=\/var\/serverchameleon\/conf\/certs\/pem_emailserver /'</code> <code>/var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/pop3d-ssl</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd /var/serverchameleon/courier-imap/etc/imapd.orignal -f</code></p>
+          <p><code>sed 's/MAXDAEMONS=0/MAXDAEMONS=400/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd /var/serverchameleon/courier-imap/etc/imapd.orignal -f</code></p>
+          <p><code>sed 's/MAXPERIP=4/MAXPERIP=100/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd</code></p>
+          <p><code>echo "MAXDAEMONS=400"</code> <code>&gt;&gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>echo "MAXPERIP=100"</code> <code>&gt;&gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/imap</code></p>
+          <p><code>/var/serverchameleon/courier-imap/courier-imap start</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Autoresponder</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:750px;">
+          <p><code>cd /root</code></p>
+          <p><code>mkdir autoresp</code></p>
+          <p><code>cd autoresp</code></p>
+          <p><code>rsync 72.18.207.142::sources/autorespond-2.0.4.tar.gz ./</code></p>
+          <p><code>tar -zxf autorespond-2.0.4.tar.gz</code></p>
+          <p><code>cd autorespond-2.0.4</code></p>
+          <p><code>make</code></p>
+          <p><code>mkdir /var/serverchameleon/autorespond</code></p>
+          <p><code>cp autorespond /var/serverchameleon/autorespond</code></p>
+          <p><code>chown vpopmail:vchkpw /var/serverchameleon/autorespond/autorespond</code></p>
+          <p><code>chmod 700</code> <code>/var/serverchameleon/autorespond/autorespond</code></p>
+          <p><code>ln -s /var/serverchameleon/autorespond/autorespond /var/serverchameleon/vpopmail/autorespond</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rf /root/autoresp</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Spamassassin</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/spamassassin</code></p>
+          <p><code>cd /root/spamassassin</code></p>
+          <p><code>rsync 72.18.207.142::sources/Mail-SpamAssassin-3.2.1.tar.gz ./</code></p>
+          <p><code>tar xzvf Mail-SpamAssassin-3.2.1.tar.gz</code></p>
+          <p><code>cd Mail-SpamAssassin-3.*</code></p>
+          <p><code>perl Makefile.PL PREFIX=/var/serverchameleon/spamassassin</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/spamassassin</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Simscan</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2686px;">
+          <p><code>mkdir /root/simscan</code></p>
+          <p><code>cd /root/simscan</code></p>
+          <p><code>rsync 72.18.207.142::sources/simscan-1.4.0.tar.gz ./</code></p>
+          <p><code>tar xzvf simscan-1.4.0.tar.gz</code></p>
+          <p><code>cd simscan-1.*</code></p>
+          <p><code>groupadd simscan</code></p>
+          <p><code>useradd simscan -g simscan</code></p>
+          <p><code>./configure --enable-spam-hits=100</code> <code>--enable-clamav=n --enable-user=simscan --enable-per-domain=y --enable-attach=n --enable-spam=y --enable-spamc-user=n --enable-spam-passthru=y --enable-spamassassin-path=/var/serverchameleon/spamassassin/bin/spamassassin --enable-spamc=/var/serverchameleon/spamassassin/bin/spamc --enable-received=y</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>echo ':clam=no,spam=yes,spam_hits=15'</code> <code>&gt; /var/qmail/control/simcontrol</code></p>
+          <p><code>/var/qmail/bin/simscanmk -g</code></p>
+          <p><code>/var/qmail/bin/simscanmk</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rdf simscan</code></p>
+          <p><code>chown simscan:root /var/qmail/bin/simscan</code></p>
+          <p><code>chmod 4711</code> <code>/var/qmail/bin/simscan</code></p>
+          <p><code>chown simscan:qmail /var/qmail/simscan</code></p>
+          <p><code>#####Enabling simscan</code></p>
+          <p><code>echo '127.0.0.:allow,RELAYCLIENT=""'</code> <code>&gt; /etc/tcp.smtp</code></p>
+          <p><code>echo ':allow,QMAILQUEUE="/var/qmail/bin/simscan",NOP0FCHECK="1"'</code> <code>&gt;&gt; /etc/tcp.smtp</code></p>
+          <p><code>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</code></p>
+          <p><code>#####Disabling simscan</code></p>
+          <p><code>#echo '127.0.0.:allow,RELAYCLIENT=""'</code> <code>&gt; /etc/tcp.smtp</code></p>
+          <p><code>#tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</code></p>
+          <p><code>###Important</code></p>
+          <p><code>#If spamc is deleted then emails will start comming as blank</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Backend</strong></h3>
+<p>Let's now install the backend and scripts</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>cd /var/serverchameleon/bin/scb</code></p>
+          <p><code>mv /home/pcruz/devbackup*.tar.gz ./</code></p>
+          <p><code>tar -zxf dev*tar.gz</code></p>
+          <p><code>chmod 700</code> <code>/var/serverchameleon/bin/scb/* -R</code></p>
+          <p><code>chown serverch:serverch /var/serverchameleon/bin/scb/* -R</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>3ware CLI</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/cli</code></p>
+          <p><code>cd /root/cli</code></p>
+          <p><code>rsync 72.18.207.142::sources/tw_cli-linux-x86-9.3.0.4.tgz ./</code></p>
+          <p><code>tar xzf tw_cli-linux-x86-9.3.0.4.tgz</code></p>
+          <p><code>rm tw_cli-linux-x86-9.3.0.4.tgz -f</code></p>
+          <p><code>mkdir /var/serverchameleon/3ware_cli</code></p>
+          <p><code>mv * /var/serverchameleon/3ware_cli/</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rf /root/cli</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
