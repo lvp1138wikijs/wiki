@@ -1,0 +1,82 @@
+<!--
+title: Alecka Cluster  (High Availability)
+description: 
+published: true
+date: 2021-04-10T06:54:37.942Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T06:54:37.942Z
+-->
+
+<h2><strong>HeartBeat H/A (Alecka1/Alecka2)</strong></h2>
+<h3><strong>Servers Used in Setup</strong></h3>
+<p>alecka1.serverpoint.com 72.18.207.200
+  alecka2.serverpoint.com 72.18.207.201</p>
+<h3><strong>IPs To Heart Beat&nbsp;</strong></h3>
+<p>alecka1.serverpoint.com 72.18.207.204
+  alecka2.serverpoint.com 72.18.207.205</p>
+<h3><strong>IMPORTANT</strong></h3>
+<p>The /etc/hosts files should be configured to resolve both of below hostnames to proper IPs. And both servers should have hostname configured in /etc/hostname and with command hostname.&nbsp;</p>
+<p>alecka1.serverpoint.com 72.18.207.204
+  alecka2.serverpoint.com 72.18.207.205</p>
+<h3><strong>Package Installation&nbsp;</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>apt-get install libheartbeat2 heartbeat heartbeat-common</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Configuration Files</strong></h3>
+<p>All of these files must be SAME on both servers. alecka1 is the main server and alecka2 will take over if alecka1 will go down.</p>
+<h6><strong>'/etc/ha.d/authkeys'&nbsp;</strong></h6>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>auth 2</code></p>
+          <p><code>2</code> <code>sha1 test-ha</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>'/etc/ha.d/ha.cf'</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:934px;">
+          <p><code>autojoin none</code></p>
+          <p><code>node alecka1.serverpoint.com alecka2.serverpoint.com # List of cluster servers</code></p>
+          <p><code>keepalive 1</code> <code># Send one heartbeat each second</code></p>
+          <p><code>deadtime 10</code> <code># Declare node dead after 10</code> <code>seconds</code></p>
+          <p><code>bcast eth0 # Broadcast heartbeats on the eth0 interface</code></p>
+          <p><code>ping 192.168.10.1</code> <code># Ping the default</code> <code>gateway to monitor ethernet</code></p>
+          <p><code>auto_failback yes # fail back to server1 automatically</code></p>
+          <p><code>respawn hacluster /usr/lib/heartbeat/ipfail # Failover on network failures Refer to the man pages for</code> <code>more options.</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h6><strong>'/etc/ha.d/haresources'</strong></h6>
+<p>alecka1.serverpoint.com 72.18.207.204 72.18.207.205</p>
+<h3><strong>Start heartbeat on both servers</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>/etc/init.d/heartbeat start</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>How to test after installation</strong></h3>
+<p>After starting heartbeat on both servers check ifconfig output.</p>
+<p>alecka1 should show heart beated ips on eth0:0 and eth0:1</p>
+<p>Now stop heartbeat on alecka1 and check ifconfig output on alecka2, after few seconds those ips will be activated on alecka2.</p>
+<p>Now start heartbeat on alecka1 and ips will move back automatically to alecka1</p>
