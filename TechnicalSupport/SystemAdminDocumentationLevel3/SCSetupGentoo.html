@@ -1,0 +1,2206 @@
+<!--
+title: SC Setup(Gentoo)
+description: 
+published: true
+date: 2021-04-10T05:58:10.753Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-10T05:58:10.753Z
+-->
+
+<h2>ServerChameleon Installation on a Gentoo Server</h2>
+<h3><strong>Pre-Requisition</strong></h3>
+<p>These OS packages must be installed otherwise compilation of SC packages will fail.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>emerge -u sablotron expat whois dos2unix zip expect dev-perl/Crypt-Rijndael clamav</code></p>
+          <p><code>emerge -u gnupg daemontools zip daemontools-scripts ucspi-tcp supervise-scripts</code></p>
+          <p><code>emerge -u BerkeleyDB rsync stunnel proftpd bind bind-tools mcrypt gd curl mrtg</code></p>
+          <p><code>emerge -u ffmpeg ripmime razor imagemagick netpbm libxslt gnupg stunnel</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Note:</strong> The init scripts of some services, such as bind, should be eliminated, as they will be started by serverchameleon</p>
+<h3><strong>Fix the missing shells entry</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>echo "/bin/true"</code> <code>&gt;&gt; /etc/shells</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Serverchameleon user/group</strong></h3>
+<p>Create the SC user and group</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>useradd serverch -d /var/serverchameleon/</code></p>
+          <p><code>groupadd serverch -f</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Serverchameleon Directory Structure</strong></h3>
+<p>Create the necessary directory structure for SC applications.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /var/serverchameleon</code></p>
+          <p><code>mkdir /var/serverchameleon/bin</code></p>
+          <p><code>mkdir /var/serverchameleon/bin/scb</code></p>
+          <p><code>mkdir /var/serverchameleon/frontpage/</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel/sbin</code></p>
+          <p><code>mkdir /var/serverchameleon/conf</code></p>
+          <p><code>mkdir /var/serverchameleon/tmp</code></p>
+          <p><code>mkdir /var/serverchameleon/tmp/stunnel</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/internal</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/mysql5</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/mysql4</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/http/</code></p>
+          <p><code>mkdir /var/serverchameleon/bind/</code></p>
+          <p><code>mkdir /var/serverchameleon/bind/sbin</code></p>
+          <p><code>mkdir /var/serverchameleon/openssl</code></p>
+          <p><code>mkdir /var/serverchameleon/openssl/bin</code></p>
+          <p><code>mkdir /var/serverchameleon/rsync/</code></p>
+          <p><code>mkdir /var/serverchameleon/rsync/bin</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel/</code></p>
+          <p><code>mkdir /var/serverchameleon/stunnel/sbin</code></p>
+          <p><code>mkdir /var/serverchameleon/logs</code></p>
+          <p><code>mkdir /var/serverchameleon/logs/smtp</code></p>
+          <p><code>mkdir /var/serverchameleon/logs/smtp/magic</code></p>
+          <p><code>mkdir /usr/sbin/zeus</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/mysql5</code></p>
+          <p><code>mkdir -p /var/serverchameleon/m-mail/control</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/http/apache</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/php4</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/php5</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/dns</code></p>
+          <p><code>mkdir /var/serverchameleon/conf/dns/named</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Serverchameleon Symlinks</strong></h3>
+<p>These symlinks are required because these applications will be used from the OS default packages.</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>rm /var/serverchameleon/bind/sbin/named -f</code></p>
+          <p><code>ln -s /usr/sbin/named /var/serverchameleon/bind/sbin/</code></p>
+          <p><code>rm /var/serverchameleon/openssl/bin/openssl -f</code></p>
+          <p><code>ln -s /usr/bin/openssl /var/serverchameleon/openssl/bin/</code></p>
+          <p><code>rm /var/serverchameleon/rsync/bin/rsync -f</code></p>
+          <p><code>ln -s /usr/bin/rsync /var/serverchameleon/rsync/bin</code></p>
+          <p><code>rm /var/serverchameleon/stunnel/sbin/stunnel -f</code></p>
+          <p><code>ln -s /usr/sbin/stunnel /var/serverchameleon/stunnel/sbin</code></p>
+          <p><code>ln -s /usr/sbin/zeus /var/serverchameleon</code></p>
+          <p><code>ln -s /var/serverchameleon/frontpage /usr/local/frontpage</code></p>
+          <p><code>cp /usr/lib/libssl.so.0.9.8</code> <code>/var/serverchameleon/openssl/lib/libssl.so</code></p>
+          <p><code>cp /usr/lib/libcrypto.so.0.9.8</code> <code>/var/serverchameleon/openssl/lib/libcrypto.so</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Unmerge packages</strong></h3>
+<p>Unmerge some packages as we will compile and install them manually.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>emerge --unmerge php apache fontconfig</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Block unwanted packages</strong></h3>
+<p>Some packages must be blocked otherwise they will get installed and conflict with our installation during the gentoo upgrade. To block unwanted packages below lines can be executed before running upgrade</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>echo 'dev-db/mysql'</code> <code>&gt; /etc/portage/package.mask</code></p>
+          <p><code>echo 'dev-perl/DBD-mysql'</code> <code>&gt;&gt; /etc/portage/package.mask</code></p>
+          <p><code>echo 'mail-mta/ssmtp'</code> <code>&gt;&gt; /etc/portage/package.mask</code></p>
+          <p><code>mkdir /etc/portage/profile</code></p>
+          <p><code>echo 'dev-db/mysql-5'</code> <code>&gt; /etc/portage/profile/package.provided</code></p>
+          <p><code>echo 'dev-db/mysql'</code> <code>&gt;&gt; /etc/portage/profile/package.provided</code></p>
+          <p><code>echo 'dev-perl/DBD-mysql-3.0007'</code> <code>&gt;&gt; /etc/portage/profile/package.provided</code></p>
+          <p><code>echo 'mail-mta/ssmtp-2.61'</code> <code>&gt;&gt; /etc/portage/profile/package.provided</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Required perl packages</strong></h3>
+<p>Lets install required perl packages</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>emerge -u dev-perl/DBI</code></p>
+          <p><code>emerge -u dev-perl/Class-DBI-mysql</code></p>
+          <p><code>emerge -u dev-perl/Net-Telnet</code></p>
+          <p><code>emerge -u dev-perl/Digest-SHA</code></p>
+          <p><code>emerge -u dev-perl/Module-Signature</code></p>
+          <p><code>emerge -u dev-perl/Crypt-DES</code></p>
+          <p><code>emerge -u dev-perl/IO-Socket-SSL</code></p>
+          <p><code>emerge -u dev-perl/Crypt-Rijndael</code></p>
+          <p><code>emerge -u dev-perl/File-HomeDir</code></p>
+          <p><code>emerge -u dev-perl/Compress-Zlib</code></p>
+          <p><code>emerge -u dev-perl/Compress-Bzip2</code></p>
+          <p><code>emerge -u dev-perl/Archive-Tar</code></p>
+          <p><code>emerge -u dev-perl/Archive-Zip</code></p>
+          <p><code>emerge -u dev-perl/Net-Telnet</code></p>
+          <p><code>emerge -u dev-perl/TermReadKey</code></p>
+          <p><code>emerge -u dev-perl/Term-ReadLine-Perl</code></p>
+          <p><code>emerge -u dev-perl/Text-Glob</code></p>
+          <p><code>emerge -u dev-perl/HTML-Parser</code></p>
+          <p><code>emerge -u dev-perl/Net-CIDR</code></p>
+          <p><code>emerge -u dev-perl/Net-CIDR-Lite</code></p>
+          <p><code>emerge -u dev-perl/Sys-Hostname-Long</code></p>
+          <p><code>emerge -u dev-perl/Mail-SPF-Query</code></p>
+          <p><code>emerge -u dev-perl/IP-Country</code></p>
+          <p><code>emerge -u dev-perl/Net-Ident</code></p>
+          <p><code>emerge -u dev-perl/IO-Socket-INET6</code></p>
+          <p><code>emerge -u dev-perl/IO-Socket-SSL</code></p>
+          <p><code>emerge -u dev-perl/Archive-Tar</code></p>
+          <p><code>emerge -u dev-perl/Net-SSLeay</code></p>
+          <p><code>emerge -u dev-perl/IO-Zlib</code></p>
+          <p><code>emerge -u dev-perl/IO-Socket-SSL</code></p>
+          <p><code>emerge -u dev-perl/IO-Socket-INET6</code></p>
+          <p><code>energe -u app-dicts/aspell-af</code></p>
+          <p><code>emerge -u app-dicts/aspell-be</code></p>
+          <p><code>emerge -u app-dicts/aspell-bg</code></p>
+          <p><code>emerge -u app-dicts/aspell-br</code></p>
+          <p><code>emerge -u app-dicts/aspell-ca</code></p>
+          <p><code>emerge -u app-dicts/aspell-cs</code></p>
+          <p><code>emerge -u app-dicts/aspell-cy</code></p>
+          <p><code>emerge -u app-dicts/aspell-da</code></p>
+          <p><code>emerge -u app-dicts/aspell-de</code></p>
+          <p><code>emerge -u app-dicts/aspell-el</code></p>
+          <p><code>emerge -u app-dicts/aspell-en</code></p>
+          <p><code>emerge -u app-dicts/aspell-eo</code></p>
+          <p><code>emerge -u app-dicts/aspell-es</code></p>
+          <p><code>emerge -u app-dicts/aspell-et</code></p>
+          <p><code>emerge -u app-dicts/aspell-fi</code></p>
+          <p><code>emerge -u app-dicts/aspell-fo</code></p>
+          <p><code>emerge -u app-dicts/aspell-fr</code></p>
+          <p><code>emerge -u app-dicts/aspell-ga</code></p>
+          <p><code>emerge -u app-dicts/aspell-gl</code></p>
+          <p><code>emerge -u app-dicts/aspell-he</code></p>
+          <p><code>emerge -u app-dicts/aspell-hr</code></p>
+          <p><code>emerge -u app-dicts/aspell-is</code></p>
+          <p><code>emerge -u app-dicts/aspell-it</code></p>
+          <p><code>emerge -u app-dicts/aspell-nl</code></p>
+          <p><code>emerge -u app-dicts/aspell-no</code></p>
+          <p><code>emerge -u app-dicts/aspell-pl</code></p>
+          <p><code>emerge -u app-dicts/aspell-pt</code></p>
+          <p><code>emerge -u app-dicts/aspell-ro</code></p>
+          <p><code>emerge -u app-dicts/aspell-ru</code></p>
+          <p><code>emerge -u app-dicts/aspell-sk</code></p>
+          <p><code>emerge -u app-dicts/aspell-sl</code></p>
+          <p><code>emerge -u app-dicts/aspell-sr</code></p>
+          <p><code>emerge -u app-dicts/aspell-sv</code></p>
+          <p><code>emerge -u app-dicts/aspell-uk</code></p>
+          <p><code>emerge -u app-dicts/aspell-vi</code></p>
+          <p><code>perl -MCPAN -e 'install Bundle::CPAN'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest::MD5'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::FTP'</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Confirm cron permissions</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>chmod 751</code> <code>/var/spool/cron</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Emacs setup</strong></h3>
+<p>Emacs editor on gentoo by default miss some features. Lets customize and install those features so emaics works as we want it to work.</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1030px;">
+          <p><code>emerge -u emacs</code></p>
+          <p><code>echo '(load "/usr/share/emacs/site-lisp/site-gentoo")'</code> <code>&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; Macros to detect if we are under X."</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(defmacro Xlaunch (&amp;rest x) (list 'if (eq window-system 'x)(cons 'progn x)))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "; Under X to get the suppr key working."</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo '(Xlaunch (define-key global-map [(delete)] "\C-d"))'</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";;; XEmacs compatibility"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(control tab)] \`other-window)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta g)] \`goto-line)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(defun switch-to-other-buffer () (interactive) (switch-to-buffer "</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(other-buffer)))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta control ?l)] \`switch-to-other-buffer)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta O) ?H] 'beginning-of-line)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(meta O) ?F] 'end-of-line)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "; Don't add lines on the end of lines unless we want."</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(setq next-line-add-newlines nil)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "; X selection manipulation"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(defun x-own-selection (s) (x-set-selection \`PRIMARY s))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(shift insert)] '(lambda () (interactive) (insert "</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(x-get-selection))))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(global-set-key [(control insert)] '(lambda () (interactive)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(x-own-selection (buffer-substring "</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(point) (mark)))))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "; Shift-arrows a la windows..."</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(custom-set-variables"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "'(pc-select-meta-moves-sexps t)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "'(pc-select-selection-keys-only t)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "'(pc-selection-mode t))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; Show parenthesis mode"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(show-paren-mode t)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; By default start in text mode."</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(setq initial-major-mode (lambda () (text-mode) (turn-on-auto-fill) "</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(font-lock-mode)))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "; Don't ask to revert for TAGS"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo '(setq revert-without-query (cons "TAGS" revert-without-query))'</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; Use the following for i18n"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";(standard-display-european t)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";(set-language-environment "latin-1")"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; Color and Fonts."</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(require 'font-lock)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(setq font-lock-mode-maximum-decoration t)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; turn on colorization."</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(if (fboundp 'global-font-lock-mode) (global-font-lock-mode t))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; turn on auto (de)compression"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(if (fboundp 'auto-compression-mode) (auto-compression-mode t))"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; Turn on selection and change the default color"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(setq transient-mark-mode 't highlight-nonselected-windows 't)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; Save positions in files between sessions"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(require 'saveplace)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(setq-default save-place t)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo ";; Visualize long lines"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>echo "(require 'auto-show)"</code> <code>&gt;&gt; /usr/share/emacs/site-lisp/site-start.el</code></p>
+          <p><code>emerge -u app-emacs/color-theme</code></p>
+          <p><code>emerge -u app-emacs/php-mode</code></p>
+          <p><code>emerge -u app-emacs/color-browser</code></p>
+          <p><code>emerge -u app-emacs/dircolors</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Openldap</strong></h3>
+<p>We need openldap to compile php.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/openldap</code></p>
+          <p><code>cd /root/openldap</code></p>
+          <p><code>rsync 72.18.207.142::sources/openldap-2.4.10.tgz ./</code></p>
+          <p><code>tar -zxf openldap-2.4.10.tgz</code></p>
+          <p><code>cd openldap*</code></p>
+          <p><code>./configure --prefix=/var/serverchameleon/openldap --with-ssl</code></p>
+          <p><code>make depend</code></p>
+          <p><code>make</code></p>
+          <p><code>make test</code></p>
+          <p><code>make install</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm /root/openldap -rf</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>MySQL 5</strong></h3>
+<p>Lets install the latest version of Mysql 5.</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2294px;">
+          <p><code>mkdir /root/mysql</code></p>
+          <p><code>cd /root/mysql</code></p>
+          <p><code>wget http://dev.mysql.com/get/Downloads/MySQL-5.1/mysql-5.1.50.tar.gz/from/</code><a href="http://mysql.mirrors.hoobly.com/"><code>http://mysql.mirrors.hoobly.com/</code></a></p>
+          <p><code>tar xzf mysql-5.1.38.tar.gz</code></p>
+          <p><code>cd mysql-5.1.38</code></p>
+          <p><code>./configure --prefix=/var/serverchameleon/mysql5 --with-ssl --with-mysqlfs --with-isam --with-mysqld-user=mysql --enable-thread-safe-client --enable-local-infile --with-plugins=innobase</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>groupadd mysql</code></p>
+          <p><code>useradd -g mysql mysql -d /var/serverchameleon/mysql5</code></p>
+          <p><code>/var/serverchameleon/mysql5/bin/mysql_install_db</code></p>
+          <p><code>mkdir /var/serverchameleon/mysql5/tmp</code></p>
+          <p><code>chown mysql:mysql /var/serverchameleon/mysql5/tmp</code></p>
+          <p><code># ADDITION</code></p>
+          <p><code># These files should be on /conf</code></p>
+          <p><code>########my.cnf file for</code> <code>users mysql</code></p>
+          <p><code>echo "[mysqld]"</code> <code>&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "port = 3306"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "socket = /tmp/mysql.sock"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "skip-locking"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "key_buffer = 16M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "max_allowed_packet = 100M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "table_cache = 64"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 512K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "net_buffer_length = 8K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_buffer_size = 256K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_rnd_buffer_size = 512K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "myisam_sort_buffer_size = 8M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "max_connections = 500"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "MAX_USER_CONNECTIONS = 20"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "query-cache-type = 1"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "query-cache-size = 128M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "query_cache_limit = 8M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[mysql]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "no-auto-rehash"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[isamchk]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "key_buffer = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "write_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[myisamchk]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "key_buffer = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "read_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "write_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "[mysqlhotcopy]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>echo "interactive-timeout"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql5/my.cnf</code></p>
+          <p><code>#*******My.cnf file for</code> <code>mysql client***********************</code></p>
+          <p><code>echo "[client]"</code> <code>&gt; /etc/my.cnf</code></p>
+          <p><code>echo "port = 3306"</code> <code>&gt;&gt; /etc/my.cnf</code></p>
+          <p><code>echo "socket = /tmp/mysql.sock"</code> <code>&gt;&gt; /etc/my.cnf</code></p>
+          <p><code>chown -R mysql:mysql /var/serverchameleon/mysql5/</code></p>
+          <p><code>rm /usr/bin/mysql -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql /usr/bin/mysql</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/mysql</code></p>
+          <p><code>rm /usr/bin/mysql_config -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql_config /usr/bin/mysql_config</code></p>
+          <p><code>rm /usr/lib/libmysqlclient.so.15</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so.15</code> <code>/usr/lib/libmysqlclient.so.15</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so.15</code> <code>/usr/lib/libmysqlclient.so</code></p>
+          <p><code>rm /usr/bin/mysqladmin -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqladmin /usr/bin/mysqladmin</code></p>
+          <p><code>rm /usr/bin/mysql -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql /usr/bin/mysql</code></p>
+          <p><code>rm /usr/bin/mysqldump -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqldump /usr/bin/mysqldump</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/ /var/serverchameleon/mysql</code></p>
+          <p><code>rm /usr/lib/libmysqlclient.so -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so /usr/lib/libmysqlclient.so</code></p>
+          <p><code>rm -rf /usr/lib/mysql</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql /usr/lib/mysql</code></p>
+          <p><code>rm /etc/mysql/my.cnf</code></p>
+          <p><code>rm /etc/my.cnf</code></p>
+          <p><code>ln -s /var/serverchameleon/conf/mysql5/my.cnf /etc</code></p>
+          <p><code>################Start script for</code> <code>mysql#########################</code></p>
+          <p><code>echo "echo \"Initializing temporary directories for mysql5....\""</code> <code>&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "TMPDIR=/var/serverchameleon/mysql5/tmp"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "export TMPDIR"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "TMP=/var/serverchameleon/mysql5/tmp"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "export TMP"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "echo \"Starting mysql at port 3306 ....\""</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>echo "/var/serverchameleon/mysql5/bin/mysqld_safe --defaults-file=/var/serverchameleon/conf/mysql5/my.cnf --user=mysql --datadir=/var/serverchameleon/mysql5/var --pid-file=/var/serverchameleon/mysql5/var/dev1.aplushosting.com.pid &gt;/dev/null 2&gt;&amp;1 &amp;"</code> <code>&gt;&gt; /var/serverchameleon/mysql5/start</code></p>
+          <p><code>rm /usr/bin/mysqladmin -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqladmin /usr/bin/mysqladmin</code></p>
+          <p><code>rm /usr/bin/mysql -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql /usr/bin/mysql</code></p>
+          <p><code>rm /usr/bin/mysqldump -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysqldump /usr/bin/mysqldump</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/ /var/serverchameleon/mysql</code></p>
+          <p><code>rm /usr/lib/libmysqlclient.so -f</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql/libmysqlclient.so /usr/lib/libmysqlclient.so</code></p>
+          <p><code>rm -rf /usr/lib/mysql</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/lib/mysql /usr/lib/mysql</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>MySQL 4</strong></h3>
+<p>Lets install the latest version of Mysql 4.</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2302px;">
+          <p><code>mkdir /root/mysql</code></p>
+          <p><code>cd /root/mysql</code></p>
+          <p><code>rsync 72.18.207.142::sources/mysql-4.1.22.tar.gz ./</code></p>
+          <p><code>tar xzf mysql-4.1.22.tar.gz</code></p>
+          <p><code>cd mysql-4.1.22</code></p>
+          <p><code>./configure --prefix=/var/serverchameleon/mysql4 --with-openssl --with-mysqlfs --with-isam --with-mysqld-user=mysql --with-example-storage-engine --with-archive-storage-engine --with-csv-storage-engine --enable-thread-safe-client --enable-local-infile</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>/var/serverchameleon/mysql4/bin/mysql_install_db</code></p>
+          <p><code>mkdir /var/serverchameleon/mysql4/tmp</code></p>
+          <p><code>chown mysql:mysql /var/serverchameleon/mysql4/tmp</code></p>
+          <p><code># ADDITION</code></p>
+          <p><code># These files should be on /conf</code></p>
+          <p><code>########my.cnf file for</code> <code>users mysql</code></p>
+          <p><code>echo "[mysqld]"</code> <code>&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "port = 3305"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "socket = /tmp/mysql4.sock"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "skip-locking"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "key_buffer = 16M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "max_allowed_packet = 1M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "table_cache = 64"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 512K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "net_buffer_length = 8K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "read_buffer_size = 256K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "read_rnd_buffer_size = 512K"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "myisam_sort_buffer_size = 8M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "max_connections = 500"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "MAX_USER_CONNECTIONS = 20"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "query-cache-type = 1"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "query-cache-size = 128M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "query_cache_limit = 8M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "[mysql]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "no-auto-rehash"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "[isamchk]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "key_buffer = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "read_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "write_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "[myisamchk]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "key_buffer = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "sort_buffer_size = 20M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "read_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "write_buffer = 2M"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "[mysqlhotcopy]"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>echo "interactive-timeout"</code> <code>&gt;&gt; /var/serverchameleon/conf/mysql4/my.cnf</code></p>
+          <p><code>chown -R mysql:mysql /var/serverchameleon/mysql4/</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>################Start script for</code> <code>mysql#########################</code></p>
+          <p><code>echo "echo \"Initializing temporary directories for mysql4....\""</code> <code>&gt; /var/serverchameleon/mysql4/start</code></p>
+          <p><code>echo "TMPDIR=/var/serverchameleon/mysql4/tmp"</code> <code>&gt;&gt; /var/serverchameleon/mysql4/start</code></p>
+          <p><code>echo "export TMPDIR"</code> <code>&gt;&gt; /var/serverchameleon/mysql4/start</code></p>
+          <p><code>echo "TMP=/var/serverchameleon/mysql4/tmp"</code> <code>&gt;&gt; /var/serverchameleon/mysql4/start</code></p>
+          <p><code>echo "export TMP"</code> <code>&gt;&gt; /var/serverchameleon/mysql4/start</code></p>
+          <p><code>echo "echo \"Starting mysql at port 3305 ....\""</code> <code>&gt;&gt; /var/serverchameleon/mysql4/start</code></p>
+          <p><code>echo "/var/serverchameleon/mysql4/bin/mysqld_safe --defaults-file=/var/serverchameleon/conf/mysql4/my.cnf --user=mysql --datadir=/var/serverchameleon/mysql4/var --pid-file=/var/serverchameleon/mysql4/var/mysql.aplushosting.com.pid &gt;/dev/null 2&gt;&amp;1 &amp;"</code> <code>&gt;&gt; /var/serverchameleon/mysql4/start</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rdf mysql</code></p>
+          <p><code>##This is required to use the /var/ser*/mysql4/bin/mysql client to connect with mysql4 at command line</code></p>
+          <p><code>echo "[client]"</code> <code>&gt; /var/serverchameleon/mysql4/var/my.cnf</code></p>
+          <p><code>echo "port = 3305"</code> <code>&gt;&gt; /var/serverchameleon/mysql4/var/my.cnf</code></p>
+          <p><code>echo "socket = /tmp/mysql4.sock"</code> <code>&gt;&gt; /var/serverchameleon/mysql4/var/my.cnf</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>IMAP client library</strong></h3>
+<p>This library is required to compile IMAP support in php.</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /var/serverchameleon/imp</code></p>
+          <p><code>cd /var/serverchameleon/imp</code></p>
+          <p><code>rsync 72.18.207.142::sources/imap.tar.Z ./</code></p>
+          <p><code>zcat imap.tar.Z | tar -xvof -</code></p>
+          <p><code>cd imap-2007e</code></p>
+          <p><code>make ldb</code></p>
+          <p><code>#Make sure you answer YES to ipv6 support</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>PHP 4</strong></h3>
+<p>Lets compile and install php 4</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:990px;">
+          <p><code>mkdir /root/php4</code></p>
+          <p><code>cd /root/php4</code></p>
+          <p><code>rsync 72.18.207.142::sources/php-4.4.8.tar.gz ./</code></p>
+          <p><code>tar xzf php-4.4*.tar.gz</code></p>
+          <p><code>cd php-4.4*</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--with-xsl \</code></p>
+          <p><code>--with-dom-xslt \</code></p>
+          <p><code>--with-dom \</code></p>
+          <p><code>--enable-xslt \</code></p>
+          <p><code>--with-xslt-sablot \</code></p>
+          <p><code>--enable-mbstring \</code></p>
+          <p><code>--with-config-file-path=/var/serverchameleon/conf/php4 \</code></p>
+          <p><code>--with-mysql=/var/serverchameleon/mysql5 \</code></p>
+          <p><code>--with-imap-ssl=/var/serverchameleon/imp/imap-2006g \</code></p>
+          <p><code>--with-imap=/var/serverchameleon/imp/imap-2007b \</code></p>
+          <p><code>--prefix=/var/serverchameleon/php4 \</code></p>
+          <p><code>--enable-memcache \</code></p>
+          <p><code>--enable-fastcgi \</code></p>
+          <p><code>--with-openssl \</code></p>
+          <p><code>--with-zlib \</code></p>
+          <p><code>--with-curl \</code></p>
+          <p><code>--with-ldap=/var/serverchameleon/openldap \</code></p>
+          <p><code>--with-curlwrappers \</code></p>
+          <p><code>--enable-bcmath \</code></p>
+          <p><code>--with-gettext \</code></p>
+          <p><code>--with-bz2 \</code></p>
+          <p><code>--enable-calendar \</code></p>
+          <p><code>--enable-dio \</code></p>
+          <p><code>--enable-exif \</code></p>
+          <p><code>--enable-ftp \</code></p>
+          <p><code>--with-gd \</code></p>
+          <p><code>--enable-force-cgi-redirect \</code></p>
+          <p><code>--with-mcrypt \</code></p>
+          <p><code>--with-mhash \</code></p>
+          <p><code>--with-ncurses \</code></p>
+          <p><code>--with-xslt-sablot \</code></p>
+          <p><code>--enable-soap \</code></p>
+          <p><code>--enable-sockets \</code></p>
+          <p><code>--enable-maintainer-zts \</code></p>
+          <p><code>--enable-memory-limit \</code></p>
+          <p><code>--enable-zend-multibyte \</code></p>
+          <p><code>--with-tsrm-pthreads \</code></p>
+          <p><code>--with-tiff-dir \</code></p>
+          <p><code>--with-jpeg-dir \</code></p>
+          <p><code>--with-png-dir \</code></p>
+          <p><code>--with-zlib-dir \</code></p>
+          <p><code>--with-xpm-dir \</code></p>
+          <p><code>--with-ttf \</code></p>
+          <p><code>--with-freetype-dir \</code></p>
+          <p><code>--enable-gd-native-ttf \</code></p>
+          <p><code>--with-sqlite=shared \</code></p>
+          <p><code>--enable-safe-mode \</code></p>
+          <p><code>--enable-gd-jis-conv</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>#cp php.ini-recommended /var/serverchameleon/php4/lib/php.ini</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/php4</code></p>
+          <p><code>ln -s /var/serverchameleon/php4/bin/php /usr/bin</code></p>
+          <p><code>/var/serverchameleon/php4/bin/pecl install sqlite</code></p>
+          <p><code>cp /var/serverchameleon/php4/lib/php/extensions/no-debug*/sqlite.so /var/serverchameleon/php4/lib/php/extensions/sqlite.so</code></p>
+          <p><code>rm -rf /var/serverchameleon/php5/lib/php/extensions/no-debug*</code></p>
+          <p><code>cp /var/serverchameleon/php5/bin/php-cgi /var/serverchameleon/php5/bin/php -apf</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>PHP 5</strong></h3>
+<p>Lets compile and install php 5</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1102px;">
+          <p><code>mkdir /root/php5</code></p>
+          <p><code>cd /root/php5</code></p>
+          <p><code>wget http://www.php.net/get/php-5.2.12.tar.gz/from/us.php.net/mirror</code></p>
+          <p><code>tar xzf php-5.2.12.tar.gz</code></p>
+          <p><code>cd php-5.*</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--with-xsl \</code></p>
+          <p><code>--enable-mbstring \</code></p>
+          <p><code>--with-config-file-path=/var/serverchameleon/conf/php5 \</code></p>
+          <p><code>--with-mysql=/var/serverchameleon/mysql5 \</code></p>
+          <p><code>--with-imap-ssl=/var/serverchameleon/imp/imap-2007e \</code></p>
+          <p><code>--with-imap=/var/serverchameleon/imp/imap-2007e \</code></p>
+          <p><code>--prefix=/var/serverchameleon/php5 \</code></p>
+          <p><code>--with-openssl \</code></p>
+          <p><code>--with-zlib \</code></p>
+          <p><code>--with-pdo-mysql \</code></p>
+          <p><code>--with-curl \</code></p>
+          <p><code>--with-ldap=/var/serverchameleon/openldap \</code></p>
+          <p><code>--with-curlwrappers \</code></p>
+          <p><code>--enable-bcmath \</code></p>
+          <p><code>--with-gettext \</code></p>
+          <p><code>--with-bz2 \</code></p>
+          <p><code>--enable-calendar \</code></p>
+          <p><code>--enable-exif \</code></p>
+          <p><code>--enable-ftp \</code></p>
+          <p><code>--with-gd \</code></p>
+          <p><code>--with-mcrypt \</code></p>
+          <p><code>--with-mhash \</code></p>
+          <p><code>--enable-soap \</code></p>
+          <p><code>--enable-sockets \</code></p>
+          <p><code>--enable-maintainer-zts \</code></p>
+          <p><code>--enable-zend-multibyte \</code></p>
+          <p><code>--with-tsrm-pthreads \</code></p>
+          <p><code>--with-jpeg-dir \</code></p>
+          <p><code>--with-png-dir \</code></p>
+          <p><code>--with-zlib-dir \</code></p>
+          <p><code>--with-xpm-dir \</code></p>
+          <p><code>--with-ttf \</code></p>
+          <p><code>--with-freetype-dir \</code></p>
+          <p><code>--enable-gd-native-ttf \</code></p>
+          <p><code>--enable-safe-mode \</code></p>
+          <p><code>--with-sqlite=shared \</code></p>
+          <p><code>--enable-sqlite-utf8 \</code></p>
+          <p><code>--enable-gd-jis-conv \</code></p>
+          <p><code>--enable-zip</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cp /var/serverchameleon/php5/bin/php-cgi /var/serverchameleon/php5/bin/php</code></p>
+          <p><code>/var/serverchameleon/php4/bin/pecl install imagick</code></p>
+          <p><code>cp /var/serverchameleon/php5/lib/php/extensions/no-debug-zts-20060613/imagick.so /var/serverchameleon/php5/lib/php/extensions/imagick.so</code></p>
+          <p><code>#cp php.ini-recommended /var/serverchameleon/php5/lib/php.ini</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/php5</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>ffmpeg</strong></h3>
+<p>Install ffmpeg and ffmpeg-php</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1046px;">
+          <p><code>emerge ffmpeg</code></p>
+          <p><code>mkdir /root/ffmpeg-php</code></p>
+          <p><code>cd /root/ffmpeg-php</code></p>
+          <p><code>wget http://downloads.sourceforge.net/ffmpeg-php/ffmpeg-php-0.6.0.tbz2?download</code></p>
+          <p><code>bunzip2 ffmpeg-php-0.6.0.tbz2</code></p>
+          <p><code>tar xf ffmpeg-php-0.6.0.tar</code></p>
+          <p><code>cd ffmpeg*</code></p>
+          <p><code>/var/serverchameleon/php5/bin/phpize</code></p>
+          <p><code>./configure --with-php-config=/var/serverchameleon/php5/bin/php-config</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cp /var/serverchameleon/php5/lib/php/extensions/no-debug-non-zts-20060613/ffmpeg.so /var/serverchameleon/php5/lib/php/extensions/</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/ffmpeg-php</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Zend Optimizor</p>
+<p>Install Zend optimizor for php</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/zend</code></p>
+          <p><code>cd /root/zend</code></p>
+          <p><code>rsync 72.18.207.142::sources/ZendOptimizer-3.2.0-linux-glibc21-i386.tar.gz ./</code></p>
+          <p><code>tar xzvf ZendOptimizer-3.2.0-linux-glibc21-i386.tar.gz</code></p>
+          <p><code>cd ZendOptimizer-*</code></p>
+          <p><code>./install.sh</code></p>
+          <p><code># Provide location to install zend /var/serverchameleon/zend</code></p>
+          <p><code># Provide location of php.in /var/serverchameleon/php4/lib</code></p>
+          <p><code># Are you using apache ? NO</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rf /root/zend</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Ioncube loader</strong></h3>
+<p>Install Ioncube for php</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/ioncube</code></p>
+          <p><code>cd /root/ioncube</code></p>
+          <p><code>wget http://downloads2.ioncube.com/loader_downloads/ioncube_loaders_lin_x86.tar.gz</code></p>
+          <p><code>tar xzf ioncube_loaders_lin_x86.tar.gz</code></p>
+          <p><code>cd ioncube</code></p>
+          <p><code>mkdir /var/serverchameleon/ioncube</code></p>
+          <p><code>cp * /var/serverchameleon/ioncube/</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rf /root/ioncube</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Apache</strong></h3>
+<p>Install Apache. Currently Zeus is used for shared hosting but apache is installed for future compatibility</p>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:8358px;">
+          <p><code>mkdir /root/apache</code></p>
+          <p><code>cd /root/apache</code></p>
+          <p><code>rsync 72.18.207.142::sources/httpd-2.2.11.tar.gz ./</code></p>
+          <p><code>tar -xzf httpd-2.2.*.tar.gz</code></p>
+          <p><code>rsync 72.18.207.142::sources/apache2-suexec-fp.patch ./</code></p>
+          <p><code>sed 's/\/usr\/local\/frontpage\/version5.0\/apache-fp\/_vti_bin/\/var\/serverchameleon\/frontpage\/version5.0\/apache-fp\/_vti_bin/'</code> <code>apache2-suexec-fp.patch &gt; apache2-suexec-fp.patch.old</code></p>
+          <p><code>mv apache2-suexec-fp.patch.old apache2-suexec-fp.patch -f</code></p>
+          <p><code>cd httpd*</code></p>
+          <p><code>patch -p1 &lt; ../apache2-suexec-fp.patch</code></p>
+          <p><code>./configure --enable-proxy --sysconfdir=/var/serverchameleon/apache/conf --prefix=/var/serverchameleon/apache --enable-auth-digest --enable-cache --enable-cern-meta --enable-charset-lite --enable-dav --enable-dav-fs --enable-disk-cache --enable-expires --enable-ext-filter --enable-file-cache --enable-headers --enable-info --enable-logio --enable-mem-cache --enable-mime-magic --enable-rewrite --enable-so --enable-speling --enable-ssl --with-ssl --enable-unique-id --enable-usertrack --enable-vhost-alias --enable-maintainer-mode --enable-v4-mapped --with-program-name=httpd --enable-static-support --enable-suexec --enable-static-ab --enable-static-htdigest --enable-static-htpasswd --enable-static-logresolve --enable-deflate --enable-static-rotatelogs --with-suexec-caller=nobody --with-mpm=worker --with-suexec-docroot=/ --enable-mods-shared='auth-digest cache cern-meta charset-lite deflate dav dav-fs disk-cache expires ext-filter file-cache headers info logio mem-cache rewrite speling unique-id usertrack vhost-alias maintainer-mode'</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm /root/apache -rf</code></p>
+          <p><code>rm /usr/bin/apachectl</code></p>
+          <p><code>rm /usr/sbin/apache</code></p>
+          <p><code>rm /usr/sbin/httpd</code></p>
+          <p><code>ln -s /var/serverchameleon/apache/bin/apachectl /usr/bin</code></p>
+          <p><code>ln -s /var/serverchameleon/apache /usr/sbin/apache</code></p>
+          <p><code>ln -s /var/serverchameleon/apache /usr/sbin/httpd</code></p>
+          <p><code># no need to link. Apache will be started by SC with the right location</code></p>
+          <p><code>for</code> <code>the httpd.conf file</code></p>
+          <p><code>#ln -s /var/serverchameleon/apache/conf/httpd.conf /var/serverchameleon/conf/http/apache/httpd.conf</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>FrontPage Extensions</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:766px;">
+          <p><code>mkdir /root/frontpage</code></p>
+          <p><code>cd /root/frontpage</code></p>
+          <p><code>rsync 72.18.207.142::sources/fp_install.sh.gz ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/fp50.linux.tar.Z ./</code></p>
+          <p><code>mkdir /var/serverchameleon/frontpage/</code></p>
+          <p><code>mv fp5*.linux.tar.Z /var/serverchameleon/frontpage/</code></p>
+          <p><code>cd /var/serverchameleon/frontpage/</code></p>
+          <p><code>tar -zxf fp*.linux.tar.Z</code></p>
+          <p><code>mv frontpage/version5.0/ ./</code></p>
+          <p><code>ln -s version5.0</code> <code>currentversion</code></p>
+          <p><code>rm /usr/local/frontpage -f</code></p>
+          <p><code>ln -s /var/serverchameleon/frontpage/ /usr/local</code></p>
+          <p><code>ln -s /usr/local/frontpage/currentversion/exes/_vti_bin /usr/local/frontpage/currentversion/</code></p>
+          <p><code>rm *tar.Z -f</code></p>
+          <p><code>echo "SendMailCommand:/usr/sbin/sendmail"</code> <code>&gt;&gt; /usr/local/frontpage/currentversion/frontpage.cnf</code></p>
+          <p><code>cd /root;rm frontpage -rf</code></p>
+          <p><code>/usr/local/frontpage/version5.0/set_default_perms.sh</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Qmail</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2486px;">
+          <p><code># If qmail is already installed, you can't delete the users or groups!</code></p>
+          <p><code>UID/GID will change and</code></p>
+          <p><code># that number is embedded in some qmail config files</code></p>
+          <p><code>userdel qmaild</code></p>
+          <p><code>userdel qmaill</code></p>
+          <p><code>userdel qmailp</code></p>
+          <p><code>userdel alias</code></p>
+          <p><code>userdel qmailq</code></p>
+          <p><code>userdel qmailr</code></p>
+          <p><code>userdel qmails</code></p>
+          <p><code>groupdel qmail</code></p>
+          <p><code>groupdel nofiles</code></p>
+          <p><code>userdel vpopmail</code></p>
+          <p><code>groupdel vpopmail</code></p>
+          <p><code>#svscan-add-to-inittab</code></p>
+          <p><code>echo "SV:2345:respawn:/usr/bin/svscan-start /service"</code> <code>&gt;&gt; /etc/inittab</code></p>
+          <p><code>echo "SX:S016:wait:/usr/bin/svscan-stopall /service"</code> <code>&gt;&gt; /etc/inittab</code></p>
+          <p><code>telinit q</code></p>
+          <p><code># qmail phase 1</code></p>
+          <p><code>mkdir /root/qmail</code></p>
+          <p><code>cd /root/qmail</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-1.03.tar.gz ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-103.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmailqueue-patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-maildir++.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/big-concurrency.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-1.03.errno.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmailctl.txt ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/outgoingip.patch ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/qmail-limit-bounce-size.patch.txt ./</code></p>
+          <p><code>rsync 72.18.207.142::sources/ext_todo-20030105.patch ./</code></p>
+          <p><code>tar -zxf qmail-1.03.tar.gz</code></p>
+          <p><code># missing: big bounce patch</code></p>
+          <p><code>cd /root/qmail/qmail-*</code></p>
+          <p><code>patch -p1 &lt; ../qmail-103.patch</code></p>
+          <p><code>patch &lt; ../outgoingip.patch</code></p>
+          <p><code>patch -p1 &lt; ../qmailqueue-patch</code></p>
+          <p><code>patch &lt; ../qmail-maildir++.patch</code></p>
+          <p><code>patch &lt; ../qmail-1.03.errno.patch</code></p>
+          <p><code>patch &lt; ../ext_todo-20030105.patch</code></p>
+          <p><code>echo '100'</code> <code>&gt; conf-split</code></p>
+          <p><code>groupadd nofiles</code></p>
+          <p><code>mkdir /var/serverchameleon/qmail</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail qmaild</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail qmaill</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail qmailp</code></p>
+          <p><code>useradd -g nofiles -d /var/serverchameleon/qmail/alias alias</code></p>
+          <p><code>groupadd qmail</code></p>
+          <p><code>useradd -g qmail -d /var/serverchameleon/qmail qmailq</code></p>
+          <p><code>useradd -g qmail -d /var/serverchameleon/qmail qmailr</code></p>
+          <p><code>useradd -g qmail -d /var/serverchameleon/qmail qmails</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail /var/qmail</code></p>
+          <p><code>make setup check</code></p>
+          <p><code>./config</code></p>
+          <p><code># output:</code></p>
+          <p><code>#Your hostname is gentoo.</code></p>
+          <p><code>#Your host's fully qualified name in DNS is alecka.aplushosting.com.</code></p>
+          <p><code>#Putting alecka.aplushosting.com into control/me...</code></p>
+          <p><code>#Putting aplushosting.com into control/defaultdomain...</code></p>
+          <p><code>#Putting aplushosting.com into control/plusdomain...</code></p>
+          <p><code>#Checking local IP addresses:</code></p>
+          <p><code>#127.0.0.1: Adding localhost to control/locals...</code></p>
+          <p><code>#64.235.32.151: Adding aplushosting.com to control/locals...</code></p>
+          <p><code>#72.18.207.132: Adding alecka.aplushosting.com to control/locals...</code></p>
+          <p><code>#If there are any other domain names that point to you,</code></p>
+          <p><code>#you will have to add them to /var/qmail/control/locals.</code></p>
+          <p><code>#You don't have to worry about aliases, i.e., domains with CNAME records.</code></p>
+          <p><code>#Copying /var/qmail/control/locals to /var/qmail/control/rcpthosts...</code></p>
+          <p><code>#Now qmail will refuse to accept SMTP messages except to those hosts.</code></p>
+          <p><code>#Make sure to change rcpthosts if</code> <code>you add hosts to locals or virtualdomains!</code></p>
+          <p><code>cd ..</code></p>
+          <p><code>rm /usr/lib/sendmail -f</code></p>
+          <p><code>rm /usr/sbin/sendmail -f</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/bin/sendmail /usr/lib</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/bin/sendmail /usr/sbin</code></p>
+          <p><code>cp qmailctl.txt /var/serverchameleon/qmail/bin/qmailctl</code></p>
+          <p><code>chmod 755</code> <code>/var/serverchameleon/qmail/bin/qmailctl</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/bin/qmailctl /usr/bin</code></p>
+          <p><code>echo '127.0.0.1:allow,RELAYCLIENT="",RBLSMTPD=""'</code> <code>&gt; /etc/tcp.smtp</code></p>
+          <p><code>echo ':allow'</code> <code>&gt;&gt; /etc/tcp.smtp</code></p>
+          <p><code>echo ':allow'</code> <code>&gt; /etc/tcp.pop3</code></p>
+          <p><code>qmailctl cdb</code></p>
+          <p><code>#################### control settings will be set by the backend at startup</code></p>
+          <p><code>echo 'postmaster'</code> <code>&gt; /var/serverchameleon/qmail/control/bouncefrom</code></p>
+          <p><code>echo 'doublebounce'</code> <code>&gt; /var/serverchameleon/qmail/control/doublebounceto</code></p>
+          <p><code>echo `hostname` &gt; /var/serverchameleon/qmail/control/doublebouncehost</code></p>
+          <p><code>echo '20000000'</code> <code>&gt; /var/serverchameleon/qmail/control/databytes</code></p>
+          <p><code>echo '# reject containing invalid characters, brackets or multiple @'</code> <code>&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '[!%#:\*\^]'</code> <code>&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '[\(\)]'&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '[\{\}]'&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo '@.*@'&gt;&gt; /var/serverchameleon/qmail/control/badmailto</code></p>
+          <p><code>echo `hostname` &gt; /var/serverchameleon/qmail/control/defaultdomain</code></p>
+          <p><code># (OPTIONAL) SEND ALL OUTBOUND MAIL VIA SMARTHOST</code></p>
+          <p><code>#echo ':yoursmarthost.yourdomain.com'</code> <code>&gt;</code></p>
+          <p><code>/var/serverchameleon/qmail/control/smtproutes</code></p>
+          <p><code>####################</code></p>
+          <p><code>echo '#'</code> <code>&gt; ~alias/.qmail-doublebounce</code></p>
+          <p><code>chmod 644</code> <code>~alias/.qmail-doublebounce</code></p>
+          <p><code>mkdir -p /var/serverchameleon/qmail/supervise/qmail-send/log</code></p>
+          <p><code>mkdir -p /var/serverchameleon/qmail/supervise/qmail-smtpd/log</code></p>
+          <p><code>mkdir -p /var/serverchameleon/qmail/supervise/qmail-pop3d/log</code></p>
+          <p><code>chmod +t /var/serverchameleon/qmail/supervise/qmail-send</code></p>
+          <p><code>chmod +t /var/serverchameleon/qmail/supervise/qmail-smtpd</code></p>
+          <p><code>chmod +t /var/serverchameleon/qmail/supervise/qmail-pop3d</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-send/log/run</code></p>
+          <p><code># Keep 30</code> <code>logs of max 10Mb each</code></p>
+          <p><code># They will get rotated when they reach 10Mb in size,</code></p>
+          <p><code># or at midnight when our crontab script fires (whichever event comes 1st)</code></p>
+          <p><code>echo 'exec /usr/bin/setuidgid qmaill /usr/bin/multilog t s10000000 n30 /var/log/qmail/send'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-send/log/run</code></p>
+          <p><code>####This was missing#############</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-smtpd/log/run</code></p>
+          <p><code>echo 'exec /usr/bin/setuidgid qmaill /usr/bin/multilog t s10000000 n30 /var/log/qmail/smtpd'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-smtpd/log/run</code></p>
+          <p><code>#/var/serverchameleon/qmail/supervise/qmail-send/run</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-send/run</code></p>
+          <p><code>echo 'exec env - PATH="/var/serverchameleon/qmail/bin:$PATH" qmail-start ./Maildir/'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-send/run</code></p>
+          <p><code>#################################</code></p>
+          <p><code>####NOTE################</code></p>
+          <p><code>##If emails are getting skiped by spamassassin then increase the -m parameter in below script</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo "VPOPMAILUID=`id -u vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo "VPOPMAILGUID=`id -g vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo 'exec /usr/bin/softlimit -m 40000000 /usr/bin/tcpserver -v -x /etc/tcp.smtp.cdb -c 20 -R -u "$VPOPMAILUID" -g "$VPOPMAILGUID" 0 smtp /var/qmail/bin/qmail-smtpd /var/serverchameleon/vpopmail/bin/vchkpw /bin/true 2&gt;&amp;1'</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/run</code></p>
+          <p><code>echo "exec /usr/bin/softlimit -m 40000000 /usr/bin/tcpserver -H -l `hostname` -v -x /etc/tcp.pop3.cdb -c 30 -R 0 pop3 /var/qmail/bin/qmail-popup `hostname` /var/serverchameleon/vpopmail/bin/vchkpw /var/serverchameleon/qmail/bin/qmail-pop3d Maildir 2&gt;&amp;1"</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/run</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/log/run</code></p>
+          <p><code>echo 'exec /usr/bin/setuidgid qmaill /usr/bin/multilog t s10000000 n30 /var/log/qmail/pop3d'</code> <code>&gt;&gt; /var/serverchameleon/qmail/supervise/qmail-pop3d/log/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-send/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-send/log/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-smtpd/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-smtpd/log/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-pop3d/run</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/supervise/qmail-pop3d/log/run</code></p>
+          <p><code>mkdir /var/log/qmail</code></p>
+          <p><code>mkdir /var/log/qmail/smtpd</code></p>
+          <p><code>mkdir /var/log/qmail/send</code></p>
+          <p><code>mkdir /var/log/qmail/pop3d</code></p>
+          <p><code>chown -R qmaill /var/log/qmail</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-send /service/</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-smtpd /service/</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-pop3d /service/</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm /root/qmail -rf</code></p>
+          <p><code>echo 172800</code> <code>&gt; /var/qmail/control/queuelifetime</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Vpopmail</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:1214px;">
+          <p><code>mkdir /root/vpopmail</code></p>
+          <p><code>cd /root/vpopmail</code></p>
+          <p><code>rsync 72.18.207.142::sources/vpopmail-5.4.13.tar.gz ./</code></p>
+          <p><code>tar -xzf vpopmail-5.4.13.tar.gz</code></p>
+          <p><code>cd vpopmail*</code></p>
+          <p><code>groupadd -g 89</code> <code>vchkpw</code></p>
+          <p><code>useradd -g vchkpw -u 89</code> <code>vpopmail -d /var/serverchameleon/vpopmail</code></p>
+          <p><code>./configure --prefix=/var/serverchameleon/vpopmail --enable-qmaildir=/var/serverchameleon/qmail --enable-roaming-users --enable-relay-clear-minutes=10</code></p>
+          <p><code>make</code></p>
+          <p><code>make install-strip</code></p>
+          <p><code>#ln -s /var/serverchameleon/vpopmail /home/vpopmail</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm vpopmail -rf</code></p>
+          <p><code>#Add crontab</code></p>
+          <p><code>10</code> <code>* * * * /var/vpopmail/bin/clearopensmtp 2&gt;&amp;1</code> <code>&gt; /dev/null</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Magic-smtpd</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:870px;">
+          <p><code>mkdir /root/magic-smtpd</code></p>
+          <p><code>cd /root/magic-smtpd</code></p>
+          <p><code>rsync 72.18.207.142::sources/magic-smtpd-0.8.4-2.tar.gz ./</code></p>
+          <p><code>tar xzvf magic-smtpd-0.8.4-2.tar.gz</code></p>
+          <p><code>cd magicmail*</code></p>
+          <p><code>###############################################################</code></p>
+          <p><code>emacs spamrules/spamdir.c</code></p>
+          <p><code>AT line 106</code> <code>change below</code></p>
+          <p><code>if</code> <code>(cur-&gt;d_type == DT_REG) {</code></p>
+          <p><code>readFile(cur-&gt;d_name);</code></p>
+          <p><code>}</code></p>
+          <p><code>with this</code></p>
+          <p><code>if(strcmp(cur-&gt;d_name,".") != 0</code> <code>&amp;&amp; strcmp(cur-&gt;d_name,"..") != 0){</code></p>
+          <p><code>readFile(cur-&gt;d_name);</code></p>
+          <p><code>}</code></p>
+          <p><code>###At line 72</code> <code>Change below</code></p>
+          <p><code>if</code> <code>(asprintf(&amp;dir, "/etc/magic-mail/spam_rules/%s", argv[1]) &lt;= 0) {</code></p>
+          <p><code>// fprintf(stderr, "Fatal: unable to build directory string:%s\n", str\error(errno));</code></p>
+          <p><code>exit(1);</code></p>
+          <p><code>}</code></p>
+          <p><code>with this</code></p>
+          <p><code>char</code> <code>*user;</code></p>
+          <p><code>char</code> <code>*domain;</code></p>
+          <p><code>user = strtok (argv[1],"@");</code></p>
+          <p><code>domain = strtok (NULL, "@");</code></p>
+          <p><code>asprintf(&amp;dir, "/etc/magic-mail/spam_rules/%s", domain);</code></p>
+          <p><code>if(access(dir, F_OK ) != 0)</code></p>
+          <p><code>asprintf(&amp;dir, "/etc/magic-mail/spam_rules/0");</code></p>
+          <p><code>#################################################################</code></p>
+          <p><code>GCC4 error(http://www.linuxmagic.com/archives/magicmail-users/msg00668.html)</code></p>
+          <p><code>agic-smtpd.c:178: error: static</code> <code>declaration of âsmtp_from_addrâ follows</code></p>
+          <p><code>&gt;&gt;&gt; non-static</code> <code>declaration</code></p>
+          <p><code>########################</code></p>
+          <p><code>removing the following</code></p>
+          <p><code>line (line 42) from the magicmail-0.8.4-2/magic-smtpd/magic-smtpd.h</code></p>
+          <p><code>file:</code></p>
+          <p><code>extern lm_string_t smtp_from_addr;</code></p>
+          <p><code>########################</code></p>
+          <p><code>make</code></p>
+          <p><code>rm -rf /etc/magic-mail/</code></p>
+          <p><code>ln -s /var/serverchameleon/m-mail /etc/magic-mail</code></p>
+          <p><code>qmailctl stop</code></p>
+          <p><code>mkdir -p /var/serverchameleon/m-mail/bin</code></p>
+          <p><code>cp magic-smtpd/magic-smtpd /var/serverchameleon/m-mail/bin/</code></p>
+          <p><code>mv /var/qmail/bin/qmail-smtpd /var/qmail/bin/qmail-smtpd.bak</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/bin/magic-smtpd</code></p>
+          <p><code>ln -s /var/serverchameleon/m-mail/bin/magic-smtpd /var/qmail/bin/qmail-smtpd</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/bin/magic-smtpd</code></p>
+          <p><code>chown root:qmail /var/qmail/bin/qmail-smtpd</code></p>
+          <p><code>qmailctl start</code></p>
+          <p><code>##Enabling spamcheck#####################################</code></p>
+          <p><code>cp spamrules/spamdir /var/serverchameleon/m-mail/bin/spamdir</code></p>
+          <p><code>echo "/var/serverchameleon/m-mail/bin/spamdir"</code> <code>&gt; /var/serverchameleon/m-mail/control/ext_spam_rule_prog</code></p>
+          <p><code>echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/spam_check_enable</code></p>
+          <p><code>echo "0"</code> <code>&gt; /var/serverchameleon/m-mail/control/max_smtp_cmds</code></p>
+          <p><code>#A very basic spam rules set</code></p>
+          <p><code>mkdir -p /var/serverchameleon/m-mail/spam_rules/0</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/spam_check</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/smtp_check</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/smtp_blocking</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/require_helo</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/valid_from_domain</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/require_full_addr</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/block_ip_in_addr</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/valid_helo_domain</code></p>
+          <p><code>echo "true"</code> <code>&gt; /var/serverchameleon/m-mail/spam_rules/0/check_ip_reverse_dns</code></p>
+          <p><code>&nbsp;</code></p>
+          <p><code>##Enableing valid "To:"</code> <code>user check #########################</code></p>
+          <p><code>echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/check_valid_users</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/check_valid_users</code></p>
+          <p><code>rsync 72.18.207.142::sources/vpopmail-check-user.pl ./</code></p>
+          <p><code>cp vpopmail-check-user.pl /var/qmail/bin/</code></p>
+          <p><code>chown root:qmail /var/qmail/bin/vpopmail-check-user.pl</code></p>
+          <p><code>chmod 755</code> <code>/var/qmail/bin/vpopmail-check-user.pl</code></p>
+          <p><code>echo "/var/qmail/bin/vpopmail-check-user.pl"</code> <code>&gt; /var/serverchameleon/m-mail/control/ext_check_user_prog</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/ext_check_user_prog</code></p>
+          <p><code>######################################################</code></p>
+          <p><code># not yet</code></p>
+          <p><code>##Enable TLS#################</code></p>
+          <p><code>#openssl genrsa 1024</code> <code>&gt; cert.key</code></p>
+          <p><code>#openssl req -new</code> <code>-x509 -nodes -sha1 -days 365</code> <code>-key cert.key &gt; cert.crt</code></p>
+          <p><code>#openssl gendh 1024</code> <code>&gt; cert.dh</code></p>
+          <p><code>#cat cert.crt cert.key cert.dh &gt;</code></p>
+          <p><code>/var/serverchameleon/m-mail/control/cert.pem</code></p>
+          <p><code>#echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/tls_enable</code></p>
+          <p><code>#chown root:qmail /var/serverchameleon/m-mail/control/cert.pem</code></p>
+          <p><code>#chown root:qmail /var/serverchameleon/m-mail/control/tls_enable</code></p>
+          <p><code>############################</code></p>
+          <p><code>##Enabling smtp authentication########################</code></p>
+          <p><code>echo "/var/serverchameleon/vpopmail/bin/vchkpw"</code> <code>&gt; /var/serverchameleon/m-mail/control/ext_check_passwd_prog</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/ext_check_passwd_prog</code></p>
+          <p><code>echo "1"</code> <code>&gt; /var/serverchameleon/m-mail/control/auth_enable</code></p>
+          <p><code>chown root:qmail /var/serverchameleon/m-mail/control/auth_enable</code></p>
+          <p><code>qmailctl restart</code></p>
+          <p><code>######################################################</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rf /root/magic-smtpd</code></p>
+          <p><code>#ADDEd to hid magic-smtp default</code> <code>greeting</code></p>
+          <p><code>echo 'Helo'</code> <code>&gt; /var/qmail/control/smtpgreeting</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Starting smtpd on port 26</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2086px;">
+          <p><code>cp /var/serverchameleon/qmail/supervise/qmail-smtpd /var/serverchameleon/qmail/supervise/qmail-smtpd2 -R</code></p>
+          <p><code>cd /var/serverchameleon/qmail/supervise/qmail-smtpd2</code></p>
+          <p><code>rm -rf log</code></p>
+          <p><code>echo '#!/bin/sh'</code> <code>&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>echo "VPOPMAILUID=`id -u vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>echo "VPOPMAILGUID=`id -g vpopmail`"</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>echo 'exec /usr/bin/softlimit -m 4000000 /usr/bin/tcpserver -v -x /etc/tcp.smtp.cdb -c 20 -R -u "$VPOPMAILUID" -g "$VPOPMAILGUID" 0 26 /var/qmail/bin/qmail-smtpd /var/serverchameleon/vpopmail/bin/vchkpw /bin/true 2&gt;&amp;1'</code> <code>&gt;&gt; /var/qmail/supervise/qmail-smtpd2/run</code></p>
+          <p><code>ln -s /var/serverchameleon/qmail/supervise/qmail-smtpd2 /service/qmail-smtpd2</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Creating ssl certificate for use with imap</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:790px;">
+          <p><code>cd /var/serverchameleon/conf/certs/</code></p>
+          <p><code>openssl genrsa -out private_emailserver 2048</code></p>
+          <p><code>openssl req -new</code> <code>-key private_emailserver -out csr_emailserver</code></p>
+          <p><code>openssl x509 -req -days 365</code> <code>-in csr_emailserver -signkey private_emailserver -out crt_emailserver</code></p>
+          <p><code>cat private_emailserver crt_emailserver &gt; pem_emailserver</code></p>
+          <p><code>/var/serverchameleon/conf/certs/pem_emailserver</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Courier-imap Authentication library</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/imap-auth</code></p>
+          <p><code>cd /root/imap-auth</code></p>
+          <p><code>wget http://prdownloads.sourceforge.net/courier/courier-authlib-0.60.2.tar.bz2</code></p>
+          <p><code>bunzip2 courier-authlib-0.60.2.tar.bz2</code></p>
+          <p><code>tar xf courier-authlib-0.60.2.tar</code></p>
+          <p><code>cd courier-authlib-0.60.2</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--prefix=/var/serverchameleon/courier-imap \</code></p>
+          <p><code>--without-authpam \</code></p>
+          <p><code>--without-authldap \</code></p>
+          <p><code>--without-authpwd \</code></p>
+          <p><code>--without-authmysql \</code></p>
+          <p><code>--without-authpgsql \</code></p>
+          <p><code>--without-authshadow \</code></p>
+          <p><code>--without-authuserdb \</code></p>
+          <p><code>--without-authcustom \</code></p>
+          <p><code>--without-authcram \</code></p>
+          <p><code>--without-authpipe \</code></p>
+          <p><code>--with-authvchkpw</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>make install-configure</code></p>
+          <p><code>cp courier-authlib.sysvinit /var/serverchameleon/courier-imap/courier-authlib</code></p>
+          <p><code>chmod 700</code> <code>/var/serverchameleon/courier-imap/courier-authlib</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/imap-auth</code></p>
+          <p><code>/var/serverchameleon/courier-imap/courier-authlib start</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Courier IMAP</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2006px;">
+          <p><code>mkdir /root/imap</code></p>
+          <p><code>cd /root/imap</code></p>
+          <p><code>wget http://prdownloads.sourceforge.net/courier/courier-imap-4.3.0.tar.bz2</code></p>
+          <p><code>bunzip2 courier-imap-4.3.0.tar.bz2</code></p>
+          <p><code>tar xf courier-imap-4.3.0.tar</code></p>
+          <p><code>cd courier-imap-4.3.0</code></p>
+          <p><code>COURIERAUTHCONFIG=/var/serverchameleon/courier-imap/bin/courierauthconfig \</code></p>
+          <p><code>CPPFLAGS=-I/var/serverchameleon/courier-imap/include \</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--prefix=/var/serverchameleon/courier-imap \</code></p>
+          <p><code>--disable-root-check \</code></p>
+          <p><code>--with-ssl</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>make install-configure</code></p>
+          <p><code>cp courier-imap.sysvinit /var/serverchameleon/courier-imap/courier-imap</code></p>
+          <p><code>chmod 744</code> <code>/var/serverchameleon/courier-imap/courier-imap</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd /var/serverchameleon/courier-imap/etc/imapd.orignal -f</code></p>
+          <p><code>sed 's/IMAPDSTART=NO/IMAPDSTART=YES/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd-ssl /var/serverchameleon/courier-imap/etc/imapd-ssl.orignal -f</code></p>
+          <p><code>sed 's/IMAPDSSLSTART=NO/IMAPDSSLSTART=YES/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd-ssl /var/serverchameleon/courier-imap/etc/imapd-ssl.orignal -f</code></p>
+          <p><code>sed 's/TLS_CERTFILE=\/var\/serverchameleon\/courier-imap\/share\/imapd.pem/TLS_CERTFILE=\/var\/serverchameleon\/conf\/certs\/pem_emailserver /'</code> <code>/var/serverchameleon/courier-imap/etc/imapd-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>chown vpopmail:vchkpw /var/serverchameleon/qmail/control/servercert.pem</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/pop3d-ssl /var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal -f</code></p>
+          <p><code>sed 's/POP3DSSLSTART=NO/POP3DSSLSTART=YES/'</code> <code>/var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/pop3d-ssl</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/pop3d-ssl /var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal -f</code></p>
+          <p><code>sed 's/TLS_CERTFILE=\/var\/serverchameleon\/courier-imap\/share\/imapd.pem/TLS_CERTFILE=\/var\/serverchameleon\/conf\/certs\/pem_emailserver /'</code> <code>/var/serverchameleon/courier-imap/etc/pop3d-ssl.orignal &gt; /var/serverchameleon/courier-imap/etc/pop3d-ssl</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd /var/serverchameleon/courier-imap/etc/imapd.orignal -f</code></p>
+          <p><code>sed 's/MAXDAEMONS=0/MAXDAEMONS=400/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd</code></p>
+          <p><code>mv /var/serverchameleon/courier-imap/etc/imapd /var/serverchameleon/courier-imap/etc/imapd.orignal -f</code></p>
+          <p><code>sed 's/MAXPERIP=4/MAXPERIP=100/'</code> <code>/var/serverchameleon/courier-imap/etc/imapd.orignal &gt; /var/serverchameleon/courier-imap/etc/imapd</code></p>
+          <p><code>echo "MAXDAEMONS=400"</code> <code>&gt;&gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>echo "MAXPERIP=100"</code> <code>&gt;&gt; /var/serverchameleon/courier-imap/etc/imapd-ssl</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/imap</code></p>
+          <p><code>/var/serverchameleon/courier-imap/courier-imap start</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Autoresponder</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:750px;">
+          <p><code>cd /root</code></p>
+          <p><code>mkdir autoresp</code></p>
+          <p><code>cd autoresp</code></p>
+          <p><code>rsync 72.18.207.142::sources/autorespond-2.0.4.tar.gz ./</code></p>
+          <p><code>tar -zxf autorespond-2.0.4.tar.gz</code></p>
+          <p><code>cd autorespond-2.0.4</code></p>
+          <p><code>make</code></p>
+          <p><code>mkdir /var/serverchameleon/autorespond</code></p>
+          <p><code>cp autorespond /var/serverchameleon/autorespond</code></p>
+          <p><code>chown vpopmail:vchkpw /var/serverchameleon/autorespond/autorespond</code></p>
+          <p><code>chmod 700</code> <code>/var/serverchameleon/autorespond/autorespond</code></p>
+          <p><code>ln -s /var/serverchameleon/autorespond/autorespond /var/serverchameleon/vpopmail/autorespond</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rf /root/autoresp</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Spamassassin</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/spamassassin</code></p>
+          <p><code>cd /root/spamassassin</code></p>
+          <p><code>rsync 72.18.207.142::sources/Mail-SpamAssassin-3.2.1.tar.gz ./</code></p>
+          <p><code>tar xzvf Mail-SpamAssassin-3.2.1.tar.gz</code></p>
+          <p><code>cd Mail-SpamAssassin-3.*</code></p>
+          <p><code>perl Makefile.PL PREFIX=/var/serverchameleon/spamassassin</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rdf /root/spamassassin</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Simscan</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:2686px;">
+          <p><code>mkdir /root/simscan</code></p>
+          <p><code>cd /root/simscan</code></p>
+          <p><code>rsync 72.18.207.142::sources/simscan-1.4.0.tar.gz ./</code></p>
+          <p><code>tar xzvf simscan-1.4.0.tar.gz</code></p>
+          <p><code>cd simscan-1.*</code></p>
+          <p><code>groupadd simscan</code></p>
+          <p><code>useradd simscan -g simscan</code></p>
+          <p><code>./configure --enable-spam-hits=100</code> <code>--enable-clamav=n --enable-user=simscan --enable-per-domain=y --enable-attach=n --enable-spam=y --enable-spamc-user=n --enable-spam-passthru=y --enable-spamassassin-path=/var/serverchameleon/spamassassin/bin/spamassassin --enable-spamc=/var/serverchameleon/spamassassin/bin/spamc --enable-received=y</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>echo ':clam=no,spam=yes,spam_hits=15'</code> <code>&gt; /var/qmail/control/simcontrol</code></p>
+          <p><code>/var/qmail/bin/simscanmk -g</code></p>
+          <p><code>/var/qmail/bin/simscanmk</code></p>
+          <p><code>cd /root</code></p>
+          <p><code>rm -rdf simscan</code></p>
+          <p><code>chown simscan:root /var/qmail/bin/simscan</code></p>
+          <p><code>chmod 4711</code> <code>/var/qmail/bin/simscan</code></p>
+          <p><code>chown simscan:qmail /var/qmail/simscan</code></p>
+          <p><code>#####Enabling simscan</code></p>
+          <p><code>echo '127.0.0.:allow,RELAYCLIENT=""'</code> <code>&gt; /etc/tcp.smtp</code></p>
+          <p><code>echo ':allow,QMAILQUEUE="/var/qmail/bin/simscan"',NOP0FCHECK="1"</code> <code>&gt;&gt; /etc/tcp.smtp</code></p>
+          <p><code>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</code></p>
+          <p><code>#####Disabling simscan</code></p>
+          <p><code>#echo '127.0.0.:allow,RELAYCLIENT=""'</code> <code>&gt; /etc/tcp.smtp</code></p>
+          <p><code>#tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</code></p>
+          <p><code>###Important</code></p>
+          <p><code>#If spamc is deleted then emails will start comming as blank</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Backend</strong></h3>
+<p>Let's now install the backend and scripts</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>cd /var/serverchameleon/bin/scb</code></p>
+          <p><code>mv /home/pcruz/devbackup*.tar.gz ./</code></p>
+          <p><code>tar -zxf dev*tar.gz</code></p>
+          <p><code>chmod 700</code> <code>/var/serverchameleon/bin/scb/* -R</code></p>
+          <p><code>chown serverch:serverch /var/serverchameleon/bin/scb/* -R</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>3ware CLI</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>mkdir /root/cli</code></p>
+          <p><code>cd /root/cli</code></p>
+          <p><code>rsync 72.18.207.142::sources/tw_cli-linux-x86-9.3.0.4.tgz ./</code></p>
+          <p><code>tar xzf tw_cli-linux-x86-9.3.0.4.tgz</code></p>
+          <p><code>rm tw_cli-linux-x86-9.3.0.4.tgz -f</code></p>
+          <p><code>mkdir /var/serverchameleon/3ware_cli</code></p>
+          <p><code>mv * /var/serverchameleon/3ware_cli/</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rm -rf /root/cli</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Syslog-ng.conf</strong></h3>
+<p>Lets configure syslog</p>
+<h3><strong>Syslog-ng Max_connections</strong></h3>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:766px;">
+          <p><code>#Add max connection to this</code> <code>file to avoid connection errors in log files</code></p>
+          <p><code>source src { unix-stream("/dev/log"</code> <code>max_connections(1000)); internal(); pipe("/proc/kmsg"); };</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Syslog-ng maillog</strong></h3>
+<p>Put this in syslog-ng.conf to specify location of maillog.</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>destination mail { file("/var/serverchameleon/logs/smtp/magic/maillog"); };</code></p>
+          <p><code>log { source(src); destination(mail); };</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h2>Perl modules/libs</h2>
+<p>These perl modules might not be necessary but they are already installed on shared hosting servers and might be in use of customers.</p>
+<p><strong>Note:</strong> Sometimes force only work on cpan shell</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>emerge -u DBI</code></p>
+          <p><code>rm /usr/bin/mysql_config</code></p>
+          <p><code>ln -s /var/serverchameleon/mysql5/bin/mysql_config /usr/bin/mysql_config</code></p>
+          <p><code>perl -MCPAN -e 'force install DBI::DBD'</code></p>
+          <p><code>perl -MCPAN -e 'force install DBD::mysql'</code></p>
+          <p><code>perl -MCPAN -e 'force install CGI::SSI'</code> <code>*</code></p>
+          <p><code>perl -MCPAN -e 'force install CGI::SpeedyCGI'</code></p>
+          <p><code>perl -MCPAN -e 'install Unicode::String'</code></p>
+          <p><code>emerge -u DBD-Pg</code></p>
+          <p><code>emerge -u DBD-SQLite</code></p>
+          <p><code>emerge -u DBD-SQLite2</code></p>
+          <p><code>emerge -u Archive-Tar</code></p>
+          <p><code>emerge -u Archive-Zip</code></p>
+          <p><code>emerge -u CGI</code></p>
+          <p><code>emerge -u libwww-perl</code></p>
+          <p><code>emerge -u libxml-perl</code></p>
+          <p><code>emerge -u TimeDate</code></p>
+          <p><code>emerge -u Filter</code></p>
+          <p><code>emerge -u Filter</code></p>
+          <p><code>emerge -u URI</code></p>
+          <p><code>emerge -u Mon</code></p>
+          <p><code>emerge -u MD5</code></p>
+          <p><code>emerge -u DBI</code></p>
+          <p><code>emerge -u PDL</code></p>
+          <p><code>emerge -u perl</code></p>
+          <p><code>***************emerge -u Msql-Mysql-modules</code></p>
+          <p><code>emerge -u CDDB_get</code></p>
+          <p><code>emerge -u XML-DOM</code></p>
+          <p><code>emerge -u XML-Parser</code></p>
+          <p><code>emerge -u XML-SAX</code></p>
+          <p><code>emerge -u XML-XQL</code></p>
+          <p><code>emerge -u XML-XPath</code></p>
+          <p><code>emerge -u XML-Twig</code></p>
+          <p><code>emerge -u XML-Stream</code></p>
+          <p><code>emerge -u XML-NamespaceSupport</code></p>
+          <p><code>emerge -u XML-Simple</code></p>
+          <p><code>emerge -u XML-Generator</code></p>
+          <p><code>emerge -u XML-Driver</code></p>
+          <p><code>perl -MCPAN -e 'install XML::Smart'</code></p>
+          <p><code>perl -MCPAN -e 'install LWP::UserAgent'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::TreeBuilder'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::Driver::HTML'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::Dumper'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::EasyOBJ'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::Handler::YAWriter'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::Schematron'</code></p>
+          <p><code>perl -MCPAN -e 'install XML::SemanticDiff'</code></p>
+          <p><code>emerge -u Net-CIDR</code></p>
+          <p><code>emerge -u Net-DNS</code></p>
+          <p><code>emerge -u Net-SNMP</code></p>
+          <p><code>emerge -u Net-SSLeay</code></p>
+          <p><code>emerge -u Net-Telnet</code></p>
+          <p><code>perl -MCPAN -e 'install String::ShellQuote'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::Daemon'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::Ping'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::SSH'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::SCP'</code></p>
+          <p><code>perl -MCPAN -e 'install Mail::POP3Client'</code></p>
+          <p><code>perl -MCPAN -e 'install Mail::QmailQueue'</code></p>
+          <p><code>perl -MCPAN -e 'install Mail::Sender'</code></p>
+          <p><code>perl -MCPAN -e 'install Mail::SpamAssassin'</code></p>
+          <p><code>perl -MCPAN -e 'install Math::Round'</code></p>
+          <p><code>perl -MCPAN -e 'install Module::CoreList'</code></p>
+          <p><code>perl -MCPAN -e 'install Module::Info'</code></p>
+          <p><code>perl -MCPAN -e 'install Image::Info'</code></p>
+          <p><code>perl -MCPAN -e 'install Image::Magick'</code></p>
+          <p><code>perl -MCPAN -e 'install Image::Magick::Thumbnail'</code></p>
+          <p><code>perl -MCPAN -e 'install Image::Size'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest::HMAC'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest::MD5'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest::Nilsimsa'</code></p>
+          <p><code>perl -MCPAN -e 'install Digest::SHA1'</code></p>
+          <p><code>emerge -u Inline</code></p>
+          <p><code>emerge -u Lingua-EN-Inflect</code></p>
+          <p><code>emerge -u MLDBM</code></p>
+          <p><code>emerge -u MIME-Lite</code></p>
+          <p><code>emerge -u MIME-Types</code></p>
+          <p><code>emerge -u MP3-Info</code></p>
+          <p><code>emerge -u Number-Compare</code></p>
+          <p><code>perl -MCPAN -e 'install CGI::Minimal'</code></p>
+          <p><code>perl -MCPAN -e 'install CPAN'</code></p>
+          <p><code>perl -MCPAN -e 'install CPAN::WAIT'</code></p>
+          <p><code>perl -MCPAN -e 'install Class::MakeMethods'</code></p>
+          <p><code>perl -MCPAN -e 'install Class::MakeMethods::Emulator'</code></p>
+          <p><code>perl -MCPAN -e 'install Class::MakeMethods::Template'</code></p>
+          <p><code>emerge -u Compress-Zlib</code></p>
+          <p><code>emerge -u Convert-ASN1</code></p>
+          <p><code>emerge -u Convert-BER</code></p>
+          <p><code>emerge -u Crypt-DES</code></p>
+          <p><code>emerge -u Crypt-SSLeay</code></p>
+          <p><code>emerge -u DB_File</code></p>
+          <p><code>emerge -u Data-DumpXML</code></p>
+          <p><code>emerge -u Devel-Symdump</code></p>
+          <p><code>emerge -u FreezeThaw</code></p>
+          <p><code>emerge -u ExtUtils-MakeMaker</code></p>
+          <p><code>emerge -u File-Find-Rule</code></p>
+          <p><code>emerge -u File-MMagic</code></p>
+          <p><code>emerge -u File-MMagic</code></p>
+          <p><code>emerge -u File-NCopy</code></p>
+          <p><code>emerge -u File-Spec</code></p>
+          <p><code>emerge -u File-Temp</code></p>
+          <p><code>emerge -u HTML-Tree</code></p>
+          <p><code>emerge -u HTML-Parser</code></p>
+          <p><code>emerge -u HTML-Template</code></p>
+          <p><code>emerge -u IO-Tty</code></p>
+          <p><code>emerge -u IO-Zlib</code></p>
+          <p><code>emerge -u Params-Validate</code></p>
+          <p><code>emerge -u Pod-Escapes</code></p>
+          <p><code>emerge -u RPC-XML</code></p>
+          <p><code>emerge -u SOAP-Lite</code></p>
+          <p><code>emerge -u Test-Builder-Tester</code></p>
+          <p><code>emerge -u Test-Harness</code></p>
+          <p><code>emerge -u Test-Manifest</code></p>
+          <p><code>perl -MCPAN -e 'install Text::CSV'</code></p>
+          <p><code>perl -MCPAN -e 'install Text::Glob'</code></p>
+          <p><code>perl -MCPAN -e 'install Text::Template'</code></p>
+          <p><code>perl -MCPAN -e 'install Tie::Cache'</code></p>
+          <p><code>perl -MCPAN -e 'install Tie::File'</code></p>
+          <p><code>perl -MCPAN -e 'install Tie::IxHash'</code></p>
+          <p><code>perl -MCPAN -e 'install Tie::Watch'</code></p>
+          <p><code>perl -MCPAN -e 'install Time::HiRes'</code></p>
+          <p><code>perl -MCPAN -e 'install Time::Period'</code></p>
+          <p><code>perl -MCPAN -e 'install Unicode::Map'</code></p>
+          <p><code>perl -MCPAN -e 'install Video::Info'</code></p>
+          <p><code>perl -MCPAN -e 'install ExtUtils::ParseXS'</code></p>
+          <p><code>perl -MCPAN -e 'install Geo::WeatherNOAA'</code></p>
+          <p><code>perl -MCPAN -e 'install ExtUtils::CBuilder'</code></p>
+          <p><code>perl -MCPAN -e 'install OLE::Storage_Lite'</code></p>
+          <p><code>perl -MCPAN -e 'install Spreadsheet::ParseExcel'</code></p>
+          <p><code>perl -MCPAN -e 'install Spreadsheet::WriteExcel'</code></p>
+          <p><code>perl -MCPAN -e 'install CDB_File'</code></p>
+          <p><code>perl -MCPAN -e 'install Crypt::CBC'</code></p>
+          <p><code>perl -MCPAN -e 'install Text::CSV_XS'</code></p>
+          <p><code>perl -MCPAN -e 'install SQL::Statement'</code></p>
+          <p><code>perl -MCPAN -e 'install DBD::CSV'</code></p>
+          <p><code>perl -MCPAN -e 'install Expect'</code></p>
+          <p><code>perl -MCPAN -e 'install Getopt::ArgvFile'</code></p>
+          <p><code>perl -MCPAN -e 'install Getopt::Long'</code></p>
+          <p><code>perl -MCPAN -e 'install Getopt::Long'</code></p>
+          <p><code>perl -MCPAN -e 'AudioCD'</code></p>
+          <p><code>perl -MCPAN -e 'install Crypt::Rijndael'</code></p>
+          <p><code>perl -MCPAN -e 'install Test::More'</code></p>
+          <p><code>perl -MCPAN -e 'install Pod::Simple'</code></p>
+          <p><code>perl -MCPAN -e 'install Test::Builder::Tester'</code></p>
+          <p><code>perl -MCPAN -e 'install Test::Pod'</code></p>
+          <p><code>perl -MCPAN -e 'install Test::Prereq'</code></p>
+          <p><code>perl -MCPAN -e 'install Test::Simple'</code></p>
+          <p><code>perl -MCPAN -e 'install PDF::Reuse'</code></p>
+          <p><code>perl -MCPAN -e 'install OLE::Storage_Lite'</code></p>
+          <p><code>perl -MCPAN -e 'install Pod::Escapes'</code></p>
+          <p><code>perl -MCPAN -e 'install Pod::Simple'</code></p>
+          <p><code>perl -MCPAN -e 'install SQL::Statement'</code></p>
+          <p><code>perl -MCPAN -e 'install ExtUtils::configPL'</code></p>
+          <p><code>perl -MCPAN -e 'install Class::MethodMaker'</code></p>
+          <p><code>perl -MCPAN -e 'install Data::Dumper'</code></p>
+          <p><code>perl -MCPAN -e 'install MLDBM::Sync'</code></p>
+          <p><code>perl -MCPAN -e 'install Term::ReadKey'</code></p>
+          <p><code>perl -MCPAN -e 'install Term::Prompt'</code></p>
+          <p><code>perl -MCPAN -e 'install Term::ReadLine'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::SimpleParse'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::Element'</code></p>
+          <p><code>perl -MCPAN -e 'install Class::Accessor'</code></p>
+          <p><code>perl -MCPAN -e 'install DateTime::Locale'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::ElementTable'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::CalendarMonth'</code></p>
+          <p><code>perl -MCPAN -e 'install Module::Build'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::FillInForm'</code></p>
+          <p><code>perl -MCPAN -e 'install HTML::TextToHTML'</code></p>
+          <p><code>perl -MCPAN -e 'install WWW::Curl'</code></p>
+          <p><code>perl -MCPAN -e 'install LWP::Parallel'</code></p>
+          <p><code>perl -MCPAN -e 'install MPEG::Info'</code></p>
+          <p><code>perl -MCPAN -e 'install Net::Nslookup'</code></p>
+          <p><code>perl -MCPAN -e 'install LWP::attic'*********</code></p>
+          <p><code>perl -MCPAN -e 'install razor::agents'</code></p>
+          <p><code>perl -MCPAN -e 'install Mail'</code> <code>***</code></p>
+          <p><code>emerge -u dev-perl/Algorithm-Annotate</code></p>
+          <p><code>emerge -u dev-perl/Algorithm-Dependency</code></p>
+          <p><code>emerge -u dev-perl/Algorithm-Diff</code></p>
+          <p><code>emerge -u dev-perl/AnyEvent</code></p>
+          <p><code>emerge -u dev-perl/Apache-AuthCookie</code></p>
+          <p><code>emerge -u dev-perl/Apache-AuthTicket</code></p>
+          <p><code>emerge -u dev-perl/Apache-DBI</code></p>
+          <p><code>emerge -u dev-perl/Apache-Session</code></p>
+          <p><code>emerge -u dev-perl/Apache-SessionX</code></p>
+          <p><code>emerge -u dev-perl/Apache-Test</code></p>
+          <p><code>emerge -u dev-perl/AppConfig</code></p>
+          <p><code>emerge -u dev-perl/Archive-Rar</code></p>
+          <p><code>emerge -u dev-perl/Archive-Tar</code></p>
+          <p><code>emerge -u dev-perl/Archive-Zip</code></p>
+          <p><code>emerge -u dev-perl/Array-Compare</code></p>
+          <p><code>emerge -u dev-perl/Array-RefElem</code></p>
+          <p><code>emerge -u dev-perl/Array-Window</code></p>
+          <p><code>emerge -u dev-perl/Astro-SunTime</code></p>
+          <p><code>emerge -u dev-perl/AtExit</code></p>
+          <p><code>emerge -u dev-perl/Audio-CD-disc-cover</code></p>
+          <p><code>emerge -u dev-perl/Audio-Mixer</code></p>
+          <p><code>emerge -u dev-perl/Audio-Tools</code></p>
+          <p><code>emerge -u dev-perl/Audio-Wav</code></p>
+          <p><code>emerge -u dev-perl/Authen-DigestMD5</code></p>
+          <p><code>emerge -u dev-perl/Authen-NTLM</code></p>
+          <p><code>emerge -u dev-perl/Authen-PAM</code></p>
+          <p><code>emerge -u dev-perl/Authen-SASL</code></p>
+          <p><code>emerge -u dev-perl/AxKit</code></p>
+          <p><code>emerge -u dev-perl/BSD-Resource</code></p>
+          <p><code>emerge -u dev-perl/BerkeleyDB</code></p>
+          <p><code>emerge -u dev-perl/Bio-Das</code></p>
+          <p><code>emerge -u dev-perl/Bit-Vector</code></p>
+          <p><code>emerge -u dev-perl/Bit-Vector-Minimal</code></p>
+          <p><code>emerge -u dev-perl/Boulder</code></p>
+          <p><code>emerge -u dev-perl/Business-FedEx-DirectConnect</code></p>
+          <p><code>emerge -u dev-perl/Business-UPS</code></p>
+          <p><code>emerge -u dev-perl/CDDB</code></p>
+          <p><code>emerge -u dev-perl/CDDB-File</code></p>
+          <p><code>emerge -u dev-perl/CDDB_get</code></p>
+          <p><code>emerge -u dev-perl/CGI-FastTemplate</code></p>
+          <p><code>emerge -u dev-perl/CGI-Session</code></p>
+          <p><code>emerge -u dev-perl/CORBA-ORBit</code></p>
+          <p><code>emerge -u dev-perl/CPAN-Checksums</code></p>
+          <p><code>emerge -u dev-perl/CPAN-Mini</code></p>
+          <p><code>emerge -u dev-perl/CPAN-Mini-Inject</code></p>
+          <p><code>emerge -u dev-perl/CPAN-Mini-Phalanx</code></p>
+          <p><code>emerge -u dev-perl/CUFlow</code></p>
+          <p><code>emerge -u dev-perl/Cache</code></p>
+          <p><code>emerge -u dev-perl/Cache-Cache</code></p>
+          <p><code>emerge -u dev-perl/Cache-Memcached</code></p>
+          <p><code>emerge -u dev-perl/Cache-Simple-TimedExpiry</code></p>
+          <p><code>emerge -u dev-perl/Carp-Assert</code></p>
+          <p><code>emerge -u dev-perl/Carp-Assert-More</code></p>
+          <p><code>emerge -u dev-perl/Carp-Clan</code></p>
+          <p><code>emerge -u dev-perl/Cflow</code></p>
+          <p><code>emerge -u dev-perl/Cgi-Simple</code></p>
+          <p><code>emerge -u dev-perl/Chart</code></p>
+          <p><code>emerge -u dev-perl/Chart-Math-Axis</code></p>
+          <p><code>emerge -u dev-perl/Class-Accessor</code></p>
+          <p><code>emerge -u dev-perl/Class-Autouse</code></p>
+          <p><code>emerge -u dev-perl/Class-Container</code></p>
+          <p><code>emerge -u dev-perl/Class-DBI</code></p>
+          <p><code>emerge -u dev-perl/Class-DBI-mysql</code></p>
+          <p><code>emerge -u dev-perl/Class-Data-Inheritable</code></p>
+          <p><code>emerge -u dev-perl/Class-Default</code></p>
+          <p><code>emerge -u dev-perl/Class-ErrorHandler</code></p>
+          <p><code>emerge -u dev-perl/Class-Factory-Util</code></p>
+          <p><code>emerge -u dev-perl/Class-Inspector</code></p>
+          <p><code>emerge -u dev-perl/Class-MakeMethods</code></p>
+          <p><code>emerge -u dev-perl/Class-MethodMaker</code></p>
+          <p><code>emerge -u dev-perl/Class-Singleton</code></p>
+          <p><code>emerge -u dev-perl/Class-Spiffy</code></p>
+          <p><code>emerge -u dev-perl/Class-Trigger</code></p>
+          <p><code>emerge -u dev-perl/Class-Virtual</code></p>
+          <p><code>emerge -u dev-perl/Class-WhiteHole</code></p>
+          <p><code>emerge -u dev-perl/Class-XPath</code></p>
+          <p><code>emerge -u dev-perl/Clone</code></p>
+          <p><code>emerge -u dev-perl/Compress-Bzip2</code></p>
+          <p><code>emerge -u dev-perl/Compress-Zlib</code></p>
+          <p><code>emerge -u dev-perl/Config-ApacheFormat</code></p>
+          <p><code>emerge -u dev-perl/Config-Crontab</code></p>
+          <p><code>emerge -u dev-perl/Config-IniFiles</code></p>
+          <p><code>emerge -u dev-perl/Config-Simple</code></p>
+          <p><code>emerge -u dev-perl/Config-Tiny</code></p>
+          <p><code>emerge -u dev-perl/ConfigReader</code></p>
+          <p><code>emerge -u dev-perl/Convert-ASN1</code></p>
+          <p><code>emerge -u dev-perl/Convert-BER</code></p>
+          <p><code>emerge -u dev-perl/Convert-BinHex</code></p>
+          <p><code>emerge -u dev-perl/Convert-TNEF</code></p>
+          <p><code>emerge -u dev-perl/Convert-UUlib</code></p>
+          <p><code>emerge -u dev-perl/Crypt-Blowfish</code></p>
+          <p><code>emerge -u dev-perl/Crypt-CAST5_PP</code></p>
+          <p><code>emerge -u dev-perl/Crypt-Cracklib</code></p>
+          <p><code>emerge -u dev-perl/Crypt-OpenPGP</code></p>
+          <p><code>emerge -u dev-perl/Crypt-OpenSSL-Bignum</code></p>
+          <p><code>emerge -u dev-perl/Crypt-OpenSSL-RSA</code></p>
+          <p><code>emerge -u dev-perl/Crypt-OpenSSL-Random</code></p>
+          <p><code>emerge -u dev-perl/Crypt-RIPEMD160</code></p>
+          <p><code>emerge -u dev-perl/Crypt-SSLeay</code></p>
+          <p><code>emerge -u dev-perl/Crypt-SmbHash</code></p>
+          <p><code>emerge -u dev-perl/Crypt-Twofish</code></p>
+          <p><code>emerge -u dev-perl/Curses</code></p>
+          <p><code>emerge -u dev-perl/Curses-UI</code></p>
+          <p><code>emerge -u dev-perl/CursesWidgets</code></p>
+          <p><code>emerge -u dev-perl/DBD-Pg</code></p>
+          <p><code>emerge -u dev-perl/DBD-SQLite</code></p>
+          <p><code>emerge -u dev-perl/DBD-SQLite2</code></p>
+          <p><code>emerge -u dev-perl/DBD-mysql</code></p>
+          <p><code>emerge -u dev-perl/DBI</code></p>
+          <p><code>emerge -u dev-perl/DBI-Shell</code></p>
+          <p><code>emerge -u dev-perl/DBIx-ContextualFetch</code></p>
+          <p><code>emerge -u dev-perl/DBIx-DBSchema</code></p>
+          <p><code>emerge -u dev-perl/Data-Compare</code></p>
+          <p><code>emerge -u dev-perl/Data-DumpXML</code></p>
+          <p><code>emerge -u dev-perl/Data-Hierarchy</code></p>
+          <p><code>emerge -u dev-perl/Data-ShowTable</code></p>
+          <p><code>emerge -u dev-perl/Data-UUID</code></p>
+          <p><code>emerge -u dev-perl/Date-Calc</code></p>
+          <p><code>emerge -u dev-perl/Date-ICal</code></p>
+          <p><code>emerge -u dev-perl/Date-ISO</code></p>
+          <p><code>emerge -u dev-perl/Date-Leapyear</code></p>
+          <p><code>emerge -u dev-perl/Date-Pcalc</code></p>
+          <p><code>emerge -u dev-perl/DateManip</code></p>
+          <p><code>emerge -u dev-perl/DateTime</code></p>
+          <p><code>emerge -u dev-perl/DateTime-Locale</code></p>
+          <p><code>emerge -u dev-perl/DateTime-TimeZone</code></p>
+          <p><code>emerge -u dev-perl/DelimMatch</code></p>
+          <p><code>emerge -u dev-perl/Devel-Cycle</code></p>
+          <p><code>emerge -u dev-perl/Devel-Profiler</code></p>
+          <p><code>emerge -u dev-perl/Devel-Size</code></p>
+          <p><code>emerge -u dev-perl/Devel-Size-Report</code></p>
+          <p><code>emerge -u dev-perl/Devel-SmallProf</code></p>
+          <p><code>emerge -u dev-perl/Devel-StackTrace</code></p>
+          <p><code>emerge -u dev-perl/Devel-Symdump</code></p>
+          <p><code>emerge -u dev-perl/Device-SerialPort</code></p>
+          <p><code>emerge -u dev-perl/Digest-HMAC</code></p>
+          <p><code>emerge -u dev-perl/Digest-MD4</code></p>
+          <p><code>emerge -u dev-perl/Digest-Nilsimsa</code></p>
+          <p><code>emerge -u dev-perl/Digest-SHA</code></p>
+          <p><code>emerge -u dev-perl/Digest-SHA1</code></p>
+          <p><code>emerge -u dev-perl/Eidetic</code></p>
+          <p><code>emerge -u dev-perl/Email-Find</code></p>
+          <p><code>emerge -u dev-perl/Email-Valid</code></p>
+          <p><code>emerge -u dev-perl/Encode-HanConvert</code></p>
+          <p><code>emerge -u dev-perl/Encode-compat</code></p>
+          <p><code>emerge -u dev-perl/Error</code></p>
+          <p><code>emerge -u dev-perl/Event</code></p>
+          <p><code>emerge -u dev-perl/Event-ExecFlow</code></p>
+          <p><code>emerge -u dev-perl/Event-RPC</code></p>
+          <p><code>emerge -u dev-perl/Exception-Class</code></p>
+          <p><code>emerge -u dev-perl/Expect</code></p>
+          <p><code>emerge -u dev-perl/Exporter-Cluster</code></p>
+          <p><code>emerge -u dev-perl/Exporter-Lite</code></p>
+          <p><code>emerge -u dev-perl/ExtUtils-AutoInstall</code></p>
+          <p><code>emerge -u dev-perl/ExtUtils-CBuilder</code></p>
+          <p><code>emerge -u dev-perl/ExtUtils-F77</code></p>
+          <p><code>emerge -u dev-perl/ExtUtils-XSBuilder</code></p>
+          <p><code>emerge -u dev-perl/FCGI</code></p>
+          <p><code>emerge -u dev-perl/Festival-Client-Async</code></p>
+          <p><code>emerge -u dev-perl/File-BaseDir</code></p>
+          <p><code>emerge -u dev-perl/File-DesktopEntry</code></p>
+          <p><code>emerge -u dev-perl/File-DirWalk</code></p>
+          <p><code>emerge -u dev-perl/File-Find-Rule</code></p>
+          <p><code>emerge -u dev-perl/File-Flat</code></p>
+          <p><code>emerge -u dev-perl/File-HomeDir</code></p>
+          <p><code>emerge -u dev-perl/File-MMagic</code></p>
+          <p><code>emerge -u dev-perl/File-MimeInfo</code></p>
+          <p><code>emerge -u dev-perl/File-NCopy</code></p>
+          <p><code>emerge -u dev-perl/File-NFSLock</code></p>
+          <p><code>emerge -u dev-perl/File-ReadBackwards</code></p>
+          <p><code>emerge -u dev-perl/File-Remove</code></p>
+          <p><code>emerge -u dev-perl/File-RsyncP</code></p>
+          <p><code>emerge -u dev-perl/File-Slurp</code></p>
+          <p><code>emerge -u dev-perl/File-Sync</code></p>
+          <p><code>emerge -u dev-perl/File-Tail</code></p>
+          <p><code>emerge -u dev-perl/File-Type</code></p>
+          <p><code>emerge -u dev-perl/File-Which</code></p>
+          <p><code>emerge -u dev-perl/File-chdir</code></p>
+          <p><code>emerge -u dev-perl/FileHandle-Deluxe</code></p>
+          <p><code>emerge -u dev-perl/FileHandle-Rollback</code></p>
+          <p><code>emerge -u dev-perl/FileHandle-Unget</code></p>
+          <p><code>emerge -u dev-perl/Filesys-DiskSpace</code></p>
+          <p><code>emerge -u dev-perl/Finance-Quote</code></p>
+          <p><code>emerge -u dev-perl/Finance-YahooQuote</code></p>
+          <p><code>emerge -u dev-perl/Font-AFM</code></p>
+          <p><code>emerge -u dev-perl/FreezeThaw</code></p>
+          <p><code>emerge -u dev-perl/Fuse</code></p>
+          <p><code>emerge -u dev-perl/GD</code></p>
+          <p><code>emerge -u dev-perl/GD-Graph3d</code></p>
+          <p><code>emerge -u dev-perl/GD-SVG</code></p>
+          <p><code>emerge -u dev-perl/GDGraph</code></p>
+          <p><code>emerge -u dev-perl/GDTextUtil</code></p>
+          <p><code>emerge -u dev-perl/Geo-IP</code></p>
+          <p><code>emerge -u dev-perl/Geography-Countries</code></p>
+          <p><code>emerge -u dev-perl/Getopt-ArgvFile</code></p>
+          <p><code>emerge -u dev-perl/Getopt-Mixed</code></p>
+          <p><code>emerge -u dev-perl/GnuPG-Interface</code></p>
+          <p><code>emerge -u dev-perl/Graph</code></p>
+          <p><code>emerge -u dev-perl/Gtk2-Ex-PodViewer</code></p>
+          <p><code>emerge -u dev-perl/Gtk2-Ex-PrintDialog</code></p>
+          <p><code>emerge -u dev-perl/Gtk2-Ex-Simple-List</code></p>
+          <p><code>emerge -u dev-perl/Gtk2-Html2</code></p>
+          <p><code>emerge -u dev-perl/Gtk2-PodViewer</code></p>
+          <p><code>emerge -u dev-perl/HTML-Clean</code></p>
+          <p><code>emerge -u dev-perl/HTML-Element-Extended</code></p>
+          <p><code>emerge -u dev-perl/HTML-FillInForm</code></p>
+          <p><code>emerge -u dev-perl/HTML-Format</code></p>
+          <p><code>emerge -u dev-perl/HTML-FromText</code></p>
+          <p><code>emerge -u dev-perl/HTML-HTMLDoc</code></p>
+          <p><code>emerge -u dev-perl/HTML-LinkExtractor</code></p>
+          <p><code>emerge -u dev-perl/HTML-Mason</code></p>
+          <p><code>emerge -u dev-perl/HTML-Object</code></p>
+          <p><code>emerge -u dev-perl/HTML-Parser</code></p>
+          <p><code>emerge -u dev-perl/HTML-Scrubber</code></p>
+          <p><code>emerge -u dev-perl/HTML-SimpleParse</code></p>
+          <p><code>emerge -u dev-perl/HTML-Strip</code></p>
+          <p><code>emerge -u dev-perl/HTML-Table</code></p>
+          <p><code>emerge -u dev-perl/HTML-TableExtract</code></p>
+          <p><code>emerge -u dev-perl/HTML-Tagset</code></p>
+          <p><code>emerge -u dev-perl/HTML-Template</code></p>
+          <p><code>emerge -u dev-perl/HTML-Template-Expr</code></p>
+          <p><code>emerge -u dev-perl/HTML-Template-JIT</code></p>
+          <p><code>emerge -u dev-perl/HTML-TokeParser-Simple</code></p>
+          <p><code>emerge -u dev-perl/HTML-Tree</code></p>
+          <p><code>emerge -u dev-perl/HTTP-BrowserDetect</code></p>
+          <p><code>emerge -u dev-perl/HTTP-Cache-Transparent</code></p>
+          <p><code>emerge -u dev-perl/HTTP-DAV</code></p>
+          <p><code>emerge -u dev-perl/HTTP-GHTTP</code></p>
+          <p><code>emerge -u dev-perl/HTTP-Server-Simple</code></p>
+          <p><code>emerge -u dev-perl/HTTP-Server-Simple-Mason</code></p>
+          <p><code>emerge -u dev-perl/HTTPD-User-Manage</code></p>
+          <p><code>emerge -u dev-perl/Heap</code></p>
+          <p><code>emerge -u dev-perl/Hook-LexWrap</code></p>
+          <p><code>emerge -u dev-perl/IO-Digest</code></p>
+          <p><code>emerge -u dev-perl/IO-Multiplex</code></p>
+          <p><code>emerge -u dev-perl/IO-Pager</code></p>
+          <p><code>emerge -u dev-perl/IO-Socket-INET6</code></p>
+          <p><code>emerge -u dev-perl/IO-String</code></p>
+          <p><code>emerge -u dev-perl/IO-Tee</code></p>
+          <p><code>emerge -u dev-perl/IO-Tty</code></p>
+          <p><code>emerge -u dev-perl/IO-Zlib</code></p>
+          <p><code>emerge -u dev-perl/IO-stringy</code></p>
+          <p><code>emerge -u dev-perl/IP-Country</code></p>
+          <p><code>emerge -u dev-perl/IPC-Run</code></p>
+          <p><code>emerge -u dev-perl/IPC-Run3</code></p>
+          <p><code>emerge -u dev-perl/IPC-ShareLite</code></p>
+          <p><code>emerge -u dev-perl/IPC-Signal</code></p>
+          <p><code>emerge -u dev-perl/Ima-DBI</code></p>
+          <p><code>emerge -u dev-perl/Image-Imlib2</code></p>
+          <p><code>emerge -u dev-perl/ImageInfo</code></p>
+          <p><code>emerge -u dev-perl/ImageSize</code></p>
+          <p><code>emerge -u dev-perl/IniConf</code></p>
+          <p><code>emerge -u dev-perl/Inline</code></p>
+          <p><code>emerge -u dev-perl/Inline-Java</code></p>
+          <p><code>emerge -u dev-perl/JKFlow</code></p>
+          <p><code>emerge -u dev-perl/Jcode</code></p>
+          <p><code>emerge -u dev-perl/Lingua-EN-Inflect</code></p>
+          <p><code>emerge -u dev-perl/Lingua-EN-NameParse</code></p>
+          <p><code>emerge -u dev-perl/Lingua-EN-Numbers-Ordinate</code></p>
+          <p><code>emerge -u dev-perl/Lingua-PT-Stemmer</code></p>
+          <p><code>emerge -u dev-perl/Lingua-Preferred</code></p>
+          <p><code>emerge -u dev-perl/Lingua-Stem</code></p>
+          <p><code>emerge -u dev-perl/Lingua-Stem-Fr</code></p>
+          <p><code>emerge -u dev-perl/Lingua-Stem-It</code></p>
+          <p><code>emerge -u dev-perl/Lingua-Stem-Ru</code></p>
+          <p><code>emerge -u dev-perl/Lingua-Stem-Snowball-Da</code></p>
+          <p><code>emerge -u dev-perl/List-MoreUtils</code></p>
+          <p><code>emerge -u dev-perl/Locale-Maketext-Simple</code></p>
+          <p><code>emerge -u dev-perl/Locale-PO</code></p>
+          <p><code>emerge -u dev-perl/Locale-gettext</code></p>
+          <p><code>emerge -u dev-perl/LockFile-Simple</code></p>
+          <p><code>emerge -u dev-perl/Log-Agent</code></p>
+          <p><code>emerge -u dev-perl/Log-Log4perl</code></p>
+          <p><code>emerge -u dev-perl/Log-TraceMessages</code></p>
+          <p><code>emerge -u dev-perl/MD5</code></p>
+          <p><code>emerge -u dev-perl/MIME-Lite</code></p>
+          <p><code>emerge -u dev-perl/MIME-Types</code></p>
+          <p><code>emerge -u dev-perl/MIME-tools</code></p>
+          <p><code>emerge -u dev-perl/MLDBM</code></p>
+          <p><code>emerge -u dev-perl/MP3-Info</code></p>
+          <p><code>emerge -u dev-perl/MP3-Tag</code></p>
+          <p><code>emerge -u dev-perl/Mail-Audit</code></p>
+          <p><code>emerge -u dev-perl/Mail-ClamAV</code></p>
+          <p><code>emerge -u dev-perl/Mail-DomainKeys</code></p>
+          <p><code>emerge -u dev-perl/Mail-IMAPClient</code></p>
+          <p><code>emerge -u dev-perl/Mail-Mbox-MessageParser</code></p>
+          <p><code>emerge -u dev-perl/Mail-POP3Client</code></p>
+          <p><code>emerge -u dev-perl/Mail-Procmail</code></p>
+          <p><code>emerge -u dev-perl/Mail-SPF-Query</code></p>
+          <p><code>emerge -u dev-perl/Mail-Sender</code></p>
+          <p><code>emerge -u dev-perl/Mail-Sendmail</code></p>
+          <p><code>emerge -u dev-perl/MailTools</code></p>
+          <p><code>emerge -u dev-perl/Math-GMP</code></p>
+          <p><code>emerge -u dev-perl/Math-VecStat</code></p>
+          <p><code>emerge -u dev-perl/Module-Pluggable</code></p>
+          <p><code>emerge -u dev-perl/Module-Refresh</code></p>
+          <p><code>emerge -u dev-perl/Module-Signature</code></p>
+          <p><code>emerge -u dev-perl/Module-Versions-Report</code></p>
+          <p><code>emerge -u dev-perl/Mon</code></p>
+          <p><code>emerge -u dev-perl/Msql-Mysql-modules</code></p>
+          <p><code>emerge -u dev-perl/Net-CIDR</code></p>
+          <p><code>emerge -u dev-perl/Net-CIDR-Lite</code></p>
+          <p><code>emerge -u dev-perl/Net-CUPS</code></p>
+          <p><code>emerge -u dev-perl/Net-DNS</code></p>
+          <p><code>emerge -u dev-perl/Net-Daemon</code></p>
+          <p><code>emerge -u dev-perl/Net-Domain-TLD</code></p>
+          <p><code>emerge -u dev-perl/Net-FTPServer</code></p>
+          <p><code>emerge -u dev-perl/Net-IP</code></p>
+          <p><code>emerge -u dev-perl/Net-IRC</code></p>
+          <p><code>emerge -u dev-perl/Net-Ident</code></p>
+          <p><code>emerge -u dev-perl/Net-Jabber</code></p>
+          <p><code>emerge -u dev-perl/Net-Kismet</code></p>
+          <p><code>emerge -u dev-perl/Net-Netmask</code></p>
+          <p><code>emerge -u dev-perl/Net-Patricia</code></p>
+          <p><code>emerge -u dev-perl/Net-Pcap</code></p>
+          <p><code>emerge -u dev-perl/Net-PcapUtils</code></p>
+          <p><code>emerge -u dev-perl/Net-RawIP</code></p>
+          <p><code>emerge -u dev-perl/Net-SNMP</code></p>
+          <p><code>emerge -u dev-perl/Net-SNPP</code></p>
+          <p><code>emerge -u dev-perl/Net-SSLeay</code></p>
+          <p><code>emerge -u dev-perl/Net-Telnet-Cisco</code></p>
+          <p><code>emerge -u dev-perl/Net-XMPP</code></p>
+          <p><code>emerge -u dev-perl/Net-XWhois</code></p>
+          <p><code>emerge -u dev-perl/NetPacket</code></p>
+          <p><code>emerge -u dev-perl/News-Newsrc</code></p>
+          <p><code>emerge -u dev-perl/Newt</code></p>
+          <p><code>emerge -u dev-perl/Number-Compare</code></p>
+          <p><code>emerge -u dev-perl/Number-Format</code></p>
+          <p><code>emerge -u dev-perl/OLE-StorageLite</code></p>
+          <p><code>emerge -u dev-perl/Ogg-Vorbis-Header-PurePerl</code></p>
+          <p><code>emerge -u dev-perl/OpenCA-CRL</code></p>
+          <p><code>emerge -u dev-perl/OpenCA-OpenSSL</code></p>
+          <p><code>emerge -u dev-perl/OpenCA-REQ</code></p>
+          <p><code>emerge -u dev-perl/OpenCA-X509</code></p>
+          <p><code>emerge -u dev-perl/PAR-Dist</code></p>
+          <p><code>emerge -u dev-perl/PDF-Create</code></p>
+          <p><code>emerge -u dev-perl/PDL</code></p>
+          <p><code>emerge -u dev-perl/PGPLOT</code></p>
+          <p><code>emerge -u dev-perl/POE</code></p>
+          <p><code>emerge -u dev-perl/PPI</code></p>
+          <p><code>emerge -u dev-perl/Parallel-ForkManager</code></p>
+          <p><code>emerge -u dev-perl/Params-Util</code></p>
+          <p><code>emerge -u dev-perl/Params-Validate</code></p>
+          <p><code>emerge -u dev-perl/Parse-RecDescent</code></p>
+          <p><code>emerge -u dev-perl/Parse-Yapp</code></p>
+          <p><code>emerge -u dev-perl/PatchReader</code></p>
+          <p><code>emerge -u dev-perl/Period</code></p>
+          <p><code>emerge -u dev-perl/Perl-Critic</code></p>
+          <p><code>emerge -u dev-perl/PerlIO-eol</code></p>
+          <p><code>emerge -u dev-perl/PerlIO-via-dynamic</code></p>
+          <p><code>emerge -u dev-perl/PerlIO-via-symlink</code></p>
+          <p><code>emerge -u dev-perl/PerlQt</code></p>
+          <p><code>emerge -u dev-perl/PlRPC</code></p>
+          <p><code>emerge -u dev-perl/Plucene</code></p>
+          <p><code>emerge -u dev-perl/Pod-Coverage</code></p>
+          <p><code>emerge -u dev-perl/Pod-Escapes</code></p>
+          <p><code>emerge -u dev-perl/Pod-Simple</code></p>
+          <p><code>emerge -u dev-perl/Pod-Tests</code></p>
+          <p><code>emerge -u dev-perl/PodToHTML</code></p>
+          <p><code>emerge -u dev-perl/PostScript-Simple</code></p>
+          <p><code>emerge -u dev-perl/Proc-Daemon</code></p>
+          <p><code>emerge -u dev-perl/Proc-ProcessTable</code></p>
+          <p><code>emerge -u dev-perl/Proc-Simple</code></p>
+          <p><code>emerge -u dev-perl/Proc-WaitStat</code></p>
+          <p><code>emerge -u dev-perl/RPC-XML</code></p>
+          <p><code>emerge -u dev-perl/RPM</code></p>
+          <p><code>emerge -u dev-perl/Regexp-Shellish</code></p>
+          <p><code>emerge -u dev-perl/SGMLSpm</code></p>
+          <p><code>emerge -u dev-perl/SNMP_Session</code></p>
+          <p><code>emerge -u dev-perl/SOAP</code></p>
+          <p><code>emerge -u dev-perl/SOAP-Lite</code></p>
+          <p><code>emerge -u dev-perl/SQL-Abstract</code></p>
+          <p><code>emerge -u dev-perl/SQL-Statement</code></p>
+          <p><code>emerge -u dev-perl/SVG</code></p>
+          <p><code>emerge -u dev-perl/SVN-Mirror</code></p>
+          <p><code>emerge -u dev-perl/SVN-Simple</code></p>
+          <p><code>emerge -u dev-perl/Safe-Hole</code></p>
+          <p><code>emerge -u dev-perl/Scalar-Properties</code></p>
+          <p><code>emerge -u dev-perl/Schedule-At</code></p>
+          <p><code>emerge -u dev-perl/Set-IntSpan</code></p>
+          <p><code>emerge -u dev-perl/ShadowHash</code></p>
+          <p><code>emerge -u dev-perl/Snowball-Norwegian</code></p>
+          <p><code>emerge -u dev-perl/Snowball-Swedish</code></p>
+          <p><code>emerge -u dev-perl/Socket6</code></p>
+          <p><code>emerge -u dev-perl/Sort-Tree</code></p>
+          <p><code>emerge -u dev-perl/Sort-Versions</code></p>
+          <p><code>emerge -u dev-perl/Spiffy</code></p>
+          <p><code>emerge -u dev-perl/Spreadsheet-ParseExcel</code></p>
+          <p><code>emerge -u dev-perl/Spreadsheet-WriteExcel</code></p>
+          <p><code>emerge -u dev-perl/Stat-lsMode</code></p>
+          <p><code>emerge -u dev-perl/Statistics-Descriptive</code></p>
+          <p><code>emerge -u dev-perl/Statistics-Descriptive-Discrete</code></p>
+          <p><code>emerge -u dev-perl/String-Ediff</code></p>
+          <p><code>emerge -u dev-perl/String-Format</code></p>
+          <p><code>emerge -u dev-perl/String-ShellQuote</code></p>
+          <p><code>emerge -u dev-perl/Sub-Override</code></p>
+          <p><code>emerge -u dev-perl/Sub-Uplevel</code></p>
+          <p><code>emerge -u dev-perl/Sys-Hostname-Long</code></p>
+          <p><code>emerge -u dev-perl/Template-Toolkit</code></p>
+          <p><code>emerge -u dev-perl/Term-ANSIColor</code></p>
+          <p><code>emerge -u dev-perl/Term-ANSIScreen</code></p>
+          <p><code>emerge -u dev-perl/Term-ProgressBar</code></p>
+          <p><code>emerge -u dev-perl/Term-ReadLine-Perl</code></p>
+          <p><code>emerge -u dev-perl/TermReadKey</code></p>
+          <p><code>emerge -u dev-perl/Test-Base</code></p>
+          <p><code>emerge -u dev-perl/Test-Builder-Tester</code></p>
+          <p><code>emerge -u dev-perl/Test-Class</code></p>
+          <p><code>emerge -u dev-perl/Test-ClassAPI</code></p>
+          <p><code>emerge -u dev-perl/Test-Differences</code></p>
+          <p><code>emerge -u dev-perl/Test-Exception</code></p>
+          <p><code>emerge -u dev-perl/Test-Inline</code></p>
+          <p><code>emerge -u dev-perl/Test-LongString</code></p>
+          <p><code>emerge -u dev-perl/Test-Manifest</code></p>
+          <p><code>emerge -u dev-perl/Test-Memory-Cycle</code></p>
+          <p><code>emerge -u dev-perl/Test-Pod</code></p>
+          <p><code>emerge -u dev-perl/Test-Pod-Coverage</code></p>
+          <p><code>emerge -u dev-perl/Test-SimpleUnit</code></p>
+          <p><code>emerge -u dev-perl/Test-SubCalls</code></p>
+          <p><code>emerge -u dev-perl/Test-Taint</code></p>
+          <p><code>emerge -u dev-perl/Test-WWW-Mechanize</code></p>
+          <p><code>emerge -u dev-perl/Test-Warn</code></p>
+          <p><code>emerge -u dev-perl/Text-Aspell</code></p>
+          <p><code>emerge -u dev-perl/Text-CSV_XS</code></p>
+          <p><code>emerge -u dev-perl/Text-ChaSen</code></p>
+          <p><code>emerge -u dev-perl/Text-CharWidth</code></p>
+          <p><code>emerge -u dev-perl/Text-Diff</code></p>
+          <p><code>emerge -u dev-perl/Text-German</code></p>
+          <p><code>emerge -u dev-perl/Text-Glob</code></p>
+          <p><code>emerge -u dev-perl/Text-Iconv</code></p>
+          <p><code>emerge -u dev-perl/Text-Kakasi</code></p>
+          <p><code>emerge -u dev-perl/Text-Levenshtein</code></p>
+          <p><code>emerge -u dev-perl/Text-LevenshteinXS</code></p>
+          <p><code>emerge -u dev-perl/Text-Quoted</code></p>
+          <p><code>emerge -u dev-perl/Text-Shellwords</code></p>
+          <p><code>emerge -u dev-perl/Text-Tabs+Wrap</code></p>
+          <p><code>emerge -u dev-perl/Text-Unaccent</code></p>
+          <p><code>emerge -u dev-perl/Text-WikiFormat</code></p>
+          <p><code>emerge -u dev-perl/Text-WrapI18N</code></p>
+          <p><code>emerge -u dev-perl/Tie-Array-Sorted</code></p>
+          <p><code>emerge -u dev-perl/Tie-IxHash</code></p>
+          <p><code>emerge -u dev-perl/Tie-StrictHash</code></p>
+          <p><code>emerge -u dev-perl/Time-Duration</code></p>
+          <p><code>emerge -u dev-perl/Time-Piece</code></p>
+          <p><code>emerge -u dev-perl/Time-modules</code></p>
+          <p><code>emerge -u dev-perl/TimeDate</code></p>
+          <p><code>emerge -u dev-perl/Tk-CursorControl</code></p>
+          <p><code>emerge -u dev-perl/Tk-JPEG-Lite</code></p>
+          <p><code>emerge -u dev-perl/Tk-TableMatrix</code></p>
+          <p><code>emerge -u dev-perl/Tree-DAG_Node</code></p>
+          <p><code>emerge -u dev-perl/Tree-Simple</code></p>
+          <p><code>emerge -u dev-perl/UNIVERSAL-moniker</code></p>
+          <p><code>emerge -u dev-perl/URI</code></p>
+          <p><code>emerge -u dev-perl/Unicode-Map</code></p>
+          <p><code>emerge -u dev-perl/Unicode-Map8</code></p>
+          <p><code>emerge -u dev-perl/Unicode-MapUTF8</code></p>
+          <p><code>emerge -u dev-perl/Unicode-String</code></p>
+          <p><code>emerge -u dev-perl/Unix-Syslog</code></p>
+          <p><code>emerge -u dev-perl/VCP-autrijus</code></p>
+          <p><code>emerge -u dev-perl/Validate-Net</code></p>
+          <p><code>emerge -u dev-perl/Video-Frequencies</code></p>
+          <p><code>emerge -u dev-perl/Video-Info</code></p>
+          <p><code>emerge -u dev-perl/Video-ivtv</code></p>
+          <p><code>emerge -u dev-perl/WWW-Bugzilla</code></p>
+          <p><code>emerge -u dev-perl/WWW-Mechanize</code></p>
+          <p><code>emerge -u dev-perl/Want</code></p>
+          <p><code>emerge -u dev-perl/WeakRef</code></p>
+          <p><code>emerge -u dev-perl/X10</code></p>
+          <p><code>emerge -u dev-perl/X11-FreeDesktop-DesktopEntry</code></p>
+          <p><code>emerge -u dev-perl/X11-Protocol</code></p>
+          <p><code>emerge -u dev-perl/X500-DN</code></p>
+          <p><code>emerge -u dev-perl/XML-AutoWriter</code></p>
+          <p><code>emerge -u dev-perl/XML-Catalog</code></p>
+          <p><code>emerge -u dev-perl/XML-DOM</code></p>
+          <p><code>emerge -u dev-perl/XML-DT</code></p>
+          <p><code>emerge -u dev-perl/XML-DTDParser</code></p>
+          <p><code>emerge -u dev-perl/XML-Dumper</code></p>
+          <p><code>emerge -u dev-perl/XML-Elemental</code></p>
+          <p><code>emerge -u dev-perl/XML-Encoding</code></p>
+          <p><code>emerge -u dev-perl/XML-Filter-BufferText</code></p>
+          <p><code>emerge -u dev-perl/XML-Filter-DOMFilter-LibXML</code></p>
+          <p><code>emerge -u dev-perl/XML-GDOME</code></p>
+          <p><code>emerge -u dev-perl/XML-Generator</code></p>
+          <p><code>emerge -u dev-perl/XML-Grove</code></p>
+          <p><code>emerge -u dev-perl/XML-Handler-YAWriter</code></p>
+          <p><code>emerge -u dev-perl/XML-LibXML</code></p>
+          <p><code>emerge -u dev-perl/XML-LibXML-Common</code></p>
+          <p><code>emerge -u dev-perl/XML-LibXML-Iterator</code></p>
+          <p><code>emerge -u dev-perl/XML-LibXML-XPathContext</code></p>
+          <p><code>emerge -u dev-perl/XML-LibXSLT</code></p>
+          <p><code>emerge -u dev-perl/XML-NamespaceSupport</code></p>
+          <p><code>emerge -u dev-perl/XML-NodeFilter</code></p>
+          <p><code>emerge -u dev-perl/XML-Parser</code></p>
+          <p><code>emerge -u dev-perl/XML-RAI</code></p>
+          <p><code>emerge -u dev-perl/XML-RSS</code></p>
+          <p><code>emerge -u dev-perl/XML-RSS-Feed</code></p>
+          <p><code>emerge -u dev-perl/XML-RSS-Parser</code></p>
+          <p><code>emerge -u dev-perl/XML-RegExp</code></p>
+          <p><code>emerge -u dev-perl/XML-SAX</code></p>
+          <p><code>emerge -u dev-perl/XML-SAX-Writer</code></p>
+          <p><code>emerge -u dev-perl/XML-Sablot</code></p>
+          <p><code>emerge -u dev-perl/XML-Simple</code></p>
+          <p><code>emerge -u dev-perl/XML-SimpleObject</code></p>
+          <p><code>emerge -u dev-perl/XML-Stream</code></p>
+          <p><code>emerge -u dev-perl/XML-Twig</code></p>
+          <p><code>emerge -u dev-perl/XML-Writer</code></p>
+          <p><code>emerge -u dev-perl/XML-XPath</code></p>
+          <p><code>emerge -u dev-perl/XML-XQL</code></p>
+          <p><code>emerge -u dev-perl/XML-XSLT</code></p>
+          <p><code>emerge -u dev-perl/XML-XUpdate-LibXML</code></p>
+          <p><code>emerge -u dev-perl/Xmms-Perl</code></p>
+          <p><code>emerge -u dev-perl/YAML-Parser-Syck</code></p>
+          <p><code>emerge -u dev-perl/adocman</code></p>
+          <p><code>emerge -u dev-perl/aww</code></p>
+          <p><code>emerge -u dev-perl/cache-mmap</code></p>
+          <p><code>emerge -u dev-perl/capitalization</code></p>
+          <p><code>emerge -u dev-perl/cdk-perl</code></p>
+          <p><code>emerge -u dev-perl/class-loader</code></p>
+          <p><code>emerge -u dev-perl/class-returnvalue</code></p>
+          <p><code>emerge -u dev-perl/config-general</code></p>
+          <p><code>emerge -u dev-perl/convert-ascii-armour</code></p>
+          <p><code>emerge -u dev-perl/convert-pem</code></p>
+          <p><code>emerge -u dev-perl/crypt-cbc</code></p>
+          <p><code>emerge -u dev-perl/crypt-des-ede3</code></p>
+          <p><code>emerge -u dev-perl/crypt-dh</code></p>
+          <p><code>emerge -u dev-perl/crypt-dsa</code></p>
+          <p><code>emerge -u dev-perl/crypt-idea</code></p>
+          <p><code>emerge -u dev-perl/crypt-primes</code></p>
+          <p><code>emerge -u dev-perl/crypt-random</code></p>
+          <p><code>emerge -u dev-perl/crypt-rsa</code></p>
+          <p><code>emerge -u dev-perl/data-buffer</code></p>
+          <p><code>emerge -u dev-perl/dbix-searchbuilder</code></p>
+          <p><code>emerge -u dev-perl/digest-bubblebabble</code></p>
+          <p><code>emerge -u dev-perl/digest-md2</code></p>
+          <p><code>emerge -u dev-perl/extutils-depends</code></p>
+          <p><code>emerge -u dev-perl/extutils-parsexs</code></p>
+          <p><code>emerge -u dev-perl/extutils-pkgconfig</code></p>
+          <p><code>emerge -u dev-perl/frontier-rpc</code></p>
+          <p><code>emerge -u dev-perl/gimp-perl</code></p>
+          <p><code>emerge -u dev-perl/glade-perl</code></p>
+          <p><code>emerge -u dev-perl/glib-perl</code></p>
+          <p><code>emerge -u dev-perl/gnome2-canvas</code></p>
+          <p><code>emerge -u dev-perl/gnome2-gconf</code></p>
+          <p><code>emerge -u dev-perl/gnome2-perl</code></p>
+          <p><code>emerge -u dev-perl/gnome2-print</code></p>
+          <p><code>emerge -u dev-perl/gnome2-vfs-perl</code></p>
+          <p><code>emerge -u dev-perl/gnome2-wnck</code></p>
+          <p><code>emerge -u dev-perl/gtk-perl</code></p>
+          <p><code>emerge -u dev-perl/gtk-perl-glade</code></p>
+          <p><code>emerge -u dev-perl/gtk2-ex-formfactory</code></p>
+          <p><code>emerge -u dev-perl/gtk2-fu</code></p>
+          <p><code>emerge -u dev-perl/gtk2-gladexml</code></p>
+          <p><code>emerge -u dev-perl/gtk2-perl</code></p>
+          <p><code>emerge -u dev-perl/gtk2-spell</code></p>
+          <p><code>emerge -u dev-perl/gtk2-trayicon</code></p>
+          <p><code>emerge -u dev-perl/gtk2-traymanager</code></p>
+          <p><code>emerge -u dev-perl/inline-files</code></p>
+          <p><code>emerge -u dev-perl/jcode_pl</code></p>
+          <p><code>emerge -u dev-perl/libintl-perl</code></p>
+          <p><code>emerge -u dev-perl/libvorbis-perl</code></p>
+          <p><code>emerge -u dev-perl/libwww-perl</code></p>
+          <p><code>emerge -u dev-perl/libxml-perl</code></p>
+          <p><code>emerge -u dev-perl/locale-maketext-fuzzy</code></p>
+          <p><code>emerge -u dev-perl/locale-maketext-lexicon</code></p>
+          <p><code>emerge -u dev-perl/log-dispatch</code></p>
+          <p><code>emerge -u dev-perl/math-pari</code></p>
+          <p><code>emerge -u dev-perl/metadata.xml</code></p>
+          <p><code>emerge -u dev-perl/mime-construct</code></p>
+          <p><code>emerge -u dev-perl/module-build</code></p>
+          <p><code>emerge -u dev-perl/module-info</code></p>
+          <p><code>emerge -u dev-perl/net-server</code></p>
+          <p><code>emerge -u dev-perl/net-sftp</code></p>
+          <p><code>emerge -u dev-perl/net-ssh-perl</code></p>
+          <p><code>emerge -u dev-perl/ogg-vorbis-header</code></p>
+          <p><code>emerge -u dev-perl/p5-Palm</code></p>
+          <p><code>emerge -u dev-perl/perl-PBS</code></p>
+          <p><code>emerge -u dev-perl/perl-ldap</code></p>
+          <p><code>emerge -u dev-perl/perl-tk</code></p>
+          <p><code>emerge -u dev-perl/perlrapi</code></p>
+          <p><code>emerge -u dev-perl/perlsieve</code></p>
+          <p><code>emerge -u dev-perl/perltidy</code></p>
+          <p><code>emerge -u dev-perl/pgperl</code></p>
+          <p><code>emerge -u dev-perl/prefork</code></p>
+          <p><code>emerge -u dev-perl/regexp-common</code></p>
+          <p><code>emerge -u dev-perl/sdl-perl</code></p>
+          <p><code>emerge -u dev-perl/set-scalar</code></p>
+          <p><code>emerge -u dev-perl/string-crc32</code></p>
+          <p><code>emerge -u dev-perl/tagged</code></p>
+          <p><code>emerge -u dev-perl/text-autoformat</code></p>
+          <p><code>emerge -u dev-perl/text-reform</code></p>
+          <p><code>emerge -u dev-perl/text-template</code></p>
+          <p><code>emerge -u dev-perl/text-wrapper</code></p>
+          <p><code>emerge -u dev-perl/tie-encryptedhash</code></p>
+          <p><code>emerge -u dev-perl/version</code></p>
+          <p><code>emerge -u dev-perl/wxperl</code></p>
+          <p><code>emerge -u dev-perl/yaml</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Syslog-ng configuration</strong></h3>
+<p>&nbsp;</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>options {</code></p>
+          <p><code>chain_hostnames(off);</code></p>
+          <p><code>sync(0);</code></p>
+          <p><code>stats(43200);</code></p>
+          <p><code>};</code></p>
+          <p><code>source src {</code></p>
+          <p><code>unix-stream("/dev/log"</code> <code>max-connections(256));</code></p>
+          <p><code>internal();</code></p>
+          <p><code>file("/proc/kmsg");</code></p>
+          <p><code>};</code></p>
+          <p><code>destination mail { file("/var/serverchameleon/logs/smtp/magic/maillog"); };</code></p>
+          <p><code>destination messages { file("/var/log/messages"); };</code></p>
+          <p><code># By default</code> <code>messages are logged to tty12...</code></p>
+          <p><code>destination console_all { file("/dev/tty12"); };</code></p>
+          <p><code>filter f_mail { facility(mail); };</code></p>
+          <p><code>filter f_messages { level(info .. warn)</code></p>
+          <p><code>and not facility(mail); };</code></p>
+          <p><code>log { source(src); filter(f_mail); destination(mail); };</code></p>
+          <p><code>log { source(src); filter(f_messages); destination(messages); };</code></p>
+          <p><code>log { source(src); destination(console_all); };</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
