@@ -2,7 +2,7 @@
 title: Management Servers 4
 description: 
 published: true
-date: 2021-04-26T23:46:48.613Z
+date: 2021-04-26T23:53:52.741Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T23:37:50.467Z
@@ -12,11 +12,9 @@ dateCreated: 2021-04-26T23:37:50.467Z
 <p>Now we have 3 monitors ready to install ceph and create the cluster. In order to do this, we need an admin server.&nbsp;</p>
 <p>OS installed: CentOS 7. It is installed through our installation portal. Login to the server and set the proper hostname. Then do the following</p>
 <h4>Install the Packages</h4>
-<pre><code class="language-plaintext">yum install epel-release -y
-yum update -y 
-yum install lldpd python-setuptools -y
-systemctl enable lldpd</code></pre>
-<h4>Add the Ceph Repository</h4>
+<p><code>yum install epel-release -y</code><br><code>yum update -y</code><br><code>yum install lldpd python-setuptools -y</code><br><code>systemctl enable lldpd</code></p>
+<p>&nbsp;</p>
+<h5>Add the Ceph Repository</h5>
 <pre><code class="language-plaintext">cat &gt;&gt; /etc/yum.repos.d/ceph.repo &lt;&lt;END
 [Ceph]
 name=Ceph packages for $basearch
@@ -86,20 +84,10 @@ NETMASK=255.255.240.0
   <p>The IPaddress and Gateway will be different on each zone.</p>
 </blockquote>
 <h5>Create Ceph User</h5>
-<pre><code class="language-plaintext">useradd -d /home/cephuser -m cephuser
-passwd cephuser
-echo "cephuser  ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephuser
-chmod 0440 /etc/sudoers.d/cephuser
-</code></pre>
+<p><code>useradd -d /home/cephuser -m cephuser</code><br><code>passwd cephuser</code><br><code>echo "cephuser &nbsp;ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephuser</code><br><code>chmod 0440 /etc/sudoers.d/cephuser</code></p>
 <h5>LLDP configuration</h5>
 <p>We have installed the package already. Just configure it. <mark class="marker-yellow">Replace the system_name.</mark></p>
-<pre><code class="language-plaintext">echo 'configure system description _system_name_' &gt; /etc/lldpd.d/lldpcli.conf
-echo 'configure system hostname _system_name_' &gt;&gt; /etc/lldpd.d/lldpcli.conf
-	
-systemctl start lldpd
-systemctl enable lldpd
-systemctl status lldpd
-</code></pre>
+<p><code>echo 'configure system description _system_name_' &gt; /etc/lldpd.d/lldpcli.conf</code><br><code>echo 'configure system hostname _system_name_' &gt;&gt; /etc/lldpd.d/lldpcli.conf</code><br><code>systemctl start lldpd ; systemctl enable lldpd ; systemctl status lldpd</code><br>&nbsp;</p>
 <h5><strong>Configure hostnames in /etc/hosts &amp;&nbsp; /etc/ssh/ssh_config</strong></h5>
 <p>Ceph nodes must be able to resolve short hostnames, not just fully qualified domain names. We can edit it in /etc/hosts. Modify the /etc/ssh/ssh_config and /etc/hosts file of your ceph-deploy admin node so that ceph-deploy can log in to Ceph nodes as the user you created without requiring you to specify --username each time you execute ceph-deploy.</p>
 <pre><code class="language-plaintext"># Sample /etc/hosts -  Add like this - ceph internal IP hostname
@@ -145,10 +133,7 @@ Host ceph-dal-a2-osd
 <h5>Copy the SSH Keys</h5>
 <p>Since ceph-deploy will not prompt for a password, you must generate SSH keys on the admin node and distribute the public key to each Ceph node.</p>
 <p>Run this from the admin node</p>
-<p>&nbsp;</p>
-<pre><code class="language-plaintext">su cephuser
-ssh-keygen
-ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )</code></pre>
+<p><code>su cephuser</code><br><code>ssh-keygen</code><br><code>ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )</code></p>
 <p>All set and now the admin, mons &amp; osds hosts are ready to make ceph cluster</p>
 <h2>Ceph Cluster Installation</h2>
 <p>First, we have to install the “ceph-deploy” utility in the <strong>Admin node</strong>. We are using this utility to install, create and control the cluster in all other VMs</p>
