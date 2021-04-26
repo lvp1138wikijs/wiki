@@ -2,7 +2,7 @@
 title: Management Servers 4
 description: 
 published: true
-date: 2021-04-26T23:42:38.467Z
+date: 2021-04-26T23:46:48.613Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T23:37:50.467Z
@@ -145,6 +145,15 @@ Host ceph-dal-a2-osd
 <h5>Copy the SSH Keys</h5>
 <p>Since ceph-deploy will not prompt for a password, you must generate SSH keys on the admin node and distribute the public key to each Ceph node.</p>
 <p>Run this from the admin node</p>
-<h2>su cephuser<br>ssh-keygen<br>ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )<br><br>&nbsp;</h2>
-<p>All set and now the admin, mons &amp; osds hosts are ready to make ceph cluster</p>
 <p>&nbsp;</p>
+<pre><code class="language-plaintext">su cephuser
+ssh-keygen
+ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )</code></pre>
+<p>All set and now the admin, mons &amp; osds hosts are ready to make ceph cluster</p>
+<h2>Ceph Cluster Installation</h2>
+<p>First, we have to install the “ceph-deploy” utility in the <strong>Admin node</strong>. We are using this utility to install, create and control the cluster in all other VMs</p>
+<p>Run this in the ceph Admin node as the root user.</p>
+<p><code>yum update -y ; yum install ceph-deploy -y</code></p>
+<p>Administration of the cluster is done entirely from the admin node. Switch to 'cephuser' and move to a dedicated directory to collect the files that ceph-deploy will generate. This will be the working directory for any further use of ceph-depoy</p>
+<p>Run this commands from ceph admin node</p>
+<p><code>su cephuser</code><br><code>mkdir /home/cephuser/ceph-cluster ; cd /home/cephuser/ceph-cluster</code></p>
