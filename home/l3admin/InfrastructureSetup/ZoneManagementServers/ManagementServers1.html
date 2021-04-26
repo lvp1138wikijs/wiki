@@ -2,7 +2,7 @@
 title: Management Servers 1 
 description: 
 published: true
-date: 2021-04-26T22:49:51.250Z
+date: 2021-04-26T22:54:56.646Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T22:07:20.662Z
@@ -10,7 +10,7 @@ dateCreated: 2021-04-26T22:07:20.662Z
 
 <h2>Ceph Monitor 1</h2>
 <p>Here we are discussing how to set up a ceph monitor server for the cluster.&nbsp;</p>
-<p>OS installed: CentOS 7. It is installed through our installation portal.&nbsp;</p>
+<p>OS installed: CentOS 7. It is installed through our installation portal. Login to the server and set the proper hostname. Then do the following</p>
 <h4>Install the Packages</h4>
 <pre><code class="language-plaintext">yum install epel-release -y
 yum update -y 
@@ -89,7 +89,7 @@ systemctl start lldpd
 systemctl enable lldpd
 systemctl status lldpd
 </code></pre>
-<p>&nbsp;</p>
+<p>Done. Monitor server now ready for configuring ceph and add to the cluster. Go and check the Ceph-Admin</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
