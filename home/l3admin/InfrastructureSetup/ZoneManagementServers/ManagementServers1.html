@@ -1,0 +1,20 @@
+<!--
+title: Management Servers 1 
+description: 
+published: true
+date: 2021-04-26T22:07:20.662Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-26T22:07:20.662Z
+-->
+
+<h2>Ceph Monitor 1</h2>
+<p>Here we are discussing how to set up a ceph monitor server for the cluster.&nbsp;</p>
+<p>OS installed: CentOS 7. It is installed through our installation portal.&nbsp;</p>
+<h4>Install the Packages</h4>
+<pre><code class="language-plaintext">yum install epel-release -y
+yum update -y 
+yum install iptables-services epel-release lldpd python-setuptools -y
+systemctl enable iptables lldpd
+</code></pre>
+<p>&nbsp;</p>
