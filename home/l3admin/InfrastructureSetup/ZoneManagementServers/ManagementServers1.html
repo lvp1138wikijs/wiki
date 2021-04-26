@@ -2,7 +2,7 @@
 title: Management Servers 1 
 description: 
 published: true
-date: 2021-04-26T22:07:20.662Z
+date: 2021-04-26T22:10:40.985Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T22:07:20.662Z
@@ -15,6 +15,34 @@ dateCreated: 2021-04-26T22:07:20.662Z
 <pre><code class="language-plaintext">yum install epel-release -y
 yum update -y 
 yum install iptables-services epel-release lldpd python-setuptools -y
-systemctl enable iptables lldpd
+systemctl enable iptables lldpd</code></pre>
+<h4>Add the Ceph Repository</h4>
+<pre><code class="language-plaintext">cat &gt;&gt; /etc/yum.repos.d/ceph.repo &lt;&lt;END
+[Ceph]
+name=Ceph packages for $basearch
+baseurl=http://download.ceph.com/rpm-luminous/el7/x86_64/$basearch
+enabled=1
+gpgcheck=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
+priority=1
+ 
+[Ceph-noarch]
+name=Ceph noarch packages
+baseurl=http://download.ceph.com/rpm-luminous/el7/noarch
+enabled=1
+gpgcheck=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
+priority=1
+ 
+[ceph-source]
+name=Ceph source packages
+baseurl=http://download.ceph.com/rpm-luminous/el7/SRPMS
+enabled=1
+gpgcheck=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
+priority=1
+END
 </code></pre>
-<p>&nbsp;</p>
