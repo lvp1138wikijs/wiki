@@ -2,7 +2,7 @@
 title: Management Servers 1 
 description: 
 published: true
-date: 2021-04-26T22:14:00.283Z
+date: 2021-04-26T22:15:08.245Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T22:07:20.662Z
@@ -12,12 +12,12 @@ dateCreated: 2021-04-26T22:07:20.662Z
 <p>Here we are discussing how to set up a ceph monitor server for the cluster.&nbsp;</p>
 <p>OS installed: CentOS 7. It is installed through our installation portal.&nbsp;</p>
 <h4>Install the Packages</h4>
-<pre><code class="language-plaintext">yum install epel-release -y
+<pre><code class="language-cpp">yum install epel-release -y
 yum update -y 
 yum install iptables-services epel-release lldpd python-setuptools -y
 systemctl enable iptables lldpd</code></pre>
 <h4>Add the Ceph Repository</h4>
-<pre><code class="language-plaintext">cat &gt;&gt; /etc/yum.repos.d/ceph.repo &lt;&lt;END
+<pre><code class="language-cpp">cat &gt;&gt; /etc/yum.repos.d/ceph.repo &lt;&lt;END
 [Ceph]
 name=Ceph packages for $basearch
 baseurl=http://download.ceph.com/rpm-luminous/el7/x86_64/$basearch
