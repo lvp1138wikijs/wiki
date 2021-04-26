@@ -2,7 +2,7 @@
 title: Management Servers 4
 description: 
 published: true
-date: 2021-04-26T23:40:48.392Z
+date: 2021-04-26T23:42:38.467Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T23:37:50.467Z
@@ -145,9 +145,6 @@ Host ceph-dal-a2-osd
 <h5>Copy the SSH Keys</h5>
 <p>Since ceph-deploy will not prompt for a password, you must generate SSH keys on the admin node and distribute the public key to each Ceph node.</p>
 <p>Run this from the admin node</p>
-<pre><code class="language-plaintext">su cephuser
-ssh-keygen
-ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )
-
-
-</code></pre>
+<h2>su cephuser<br>ssh-keygen<br>ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )<br><br>&nbsp;</h2>
+<p>All set and now the admin, mons &amp; osds hosts are ready to make ceph cluster</p>
+<p>&nbsp;</p>
