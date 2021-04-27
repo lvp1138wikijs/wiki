@@ -2,7 +2,7 @@
 title: Install SQL Server Web Edition in Server
 description: 
 published: true
-date: 2021-04-27T16:46:00.864Z
+date: 2021-04-27T16:53:27.653Z
 tags: 
 editor: markdown
 dateCreated: 2021-04-27T16:37:27.198Z
@@ -48,4 +48,11 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 ```
 
 
- 
+
+
+
+
+
+
+
+
