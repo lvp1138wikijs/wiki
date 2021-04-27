@@ -2,7 +2,7 @@
 title: Management Servers 4
 description: 
 published: true
-date: 2021-04-26T23:53:52.741Z
+date: 2021-04-27T00:01:41.103Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T23:37:50.467Z
@@ -140,5 +140,29 @@ Host ceph-dal-a2-osd
 <p>Run this in the ceph Admin node as the root user.</p>
 <p><code>yum update -y ; yum install ceph-deploy -y</code></p>
 <p>Administration of the cluster is done entirely from the admin node. Switch to 'cephuser' and move to a dedicated directory to collect the files that ceph-deploy will generate. This will be the working directory for any further use of ceph-depoy</p>
-<p>Run this commands from ceph admin node</p>
+<p>Run these commands from ceph admin node</p>
 <p><code>su cephuser</code><br><code>mkdir /home/cephuser/ceph-cluster ; cd /home/cephuser/ceph-cluster</code></p>
+<p>Next, we have to <strong>Deploy the monitor node</strong>(s)</p>
+<blockquote>
+  <p><strong>Syntax: </strong>ceph-deploy new monitor1 monitor2 monitor3</p>
+</blockquote>
+<p><code>ceph-deploy new ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3</code></p>
+<p>Then install <strong>ceph on all nodes </strong>( ceph admin, monitors, osds )</p>
+<blockquote>
+  <p><strong>Syntax</strong>: ceph-deploy install --release luminous {ceph_nodes}</p>
+</blockquote>
+<p><code>ceph-deploy install --release luminous ceph-dal-admin-a1 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3 ceph-dal-osd-a1 ceph-dal-osd-a2</code></p>
+<p>Then add the <strong>initial monitor(s) and gather the keys</strong></p>
+<p><code>ceph-deploy mon create-initial</code></p>
+<p>Then copy over the necessary files to all the nodes</p>
+<p><code>ceph-deploy admin ceph-dal-admin-a1 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3 ceph-dal-osd-a1 ceph-dal-osd-a2</code></p>
+<p>&nbsp;</p>
+<h3><strong>OSD Creation</strong></h3>
+<p>Use <strong>disk list</strong> to list the additional hard disks connected to the OSD nodes<br><code>ceph-deploy disk list osd-host-name&nbsp;</code></p>
+<p>Use <strong>disk zap</strong> command to format and mount the disks<br><code>ceph-deploy disk zap {osd-server-name}:{disk-name}</code></p>
+<p>Use <strong>osd prepare</strong> to prepare the OSDs.<br><code>ceph-deploy osd prepare {osdserver1:disk-name}</code></p>
+<p>Example:</p>
+<p><code>ceph-deploy disk list ceph-dal-osd-a1</code><br><code>ceph-deploy disk zap ceph-dal-osd-a1:/dev/sda</code><br><code>ceph-deploy osd prepare ceph-dal-osd-a1:sda</code>&nbsp;</p>
+<p>You can also use multiple disks at a time like this</p>
+<p><code>ceph-deploy disk zap ceph-dal-osd-a1:/dev/sda ceph-dal-osd-a1:/dev/sdb</code><br><code>ceph-deploy osd prepare ceph-dal-osd-a1:sda ceph-dal-osd-a1:sdb</code><br><br>That’s it. You can use these commands to see the health of Cluster</p>
+<p><code>ceph status</code><br><code>ceph health</code></p>
