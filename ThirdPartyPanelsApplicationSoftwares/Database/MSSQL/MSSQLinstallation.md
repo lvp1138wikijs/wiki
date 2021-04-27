@@ -2,7 +2,7 @@
 title: MSSQL installation
 description: 
 published: true
-date: 2021-04-27T18:47:00.250Z
+date: 2021-04-27T18:48:01.943Z
 tags: 
 editor: markdown
 dateCreated: 2021-04-27T18:47:00.250Z
@@ -28,3 +28,4 @@ You can download virtual clone from http://www.slysoft.com/en/virtual-clonedrive
  
 2) Do check the below video to know how to install **SQL EXPRESS** (SQL Server 2012 Express and SQL Server Management Studio):
 
+https://youtu.be/vng0P8Gfx2g
