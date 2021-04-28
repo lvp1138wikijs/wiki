@@ -1,0 +1,14 @@
+<!--
+title: List mysql databases of innodb engine
+description: list mysql databases of innodb engine
+published: true
+date: 2021-04-28T08:10:18.416Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T08:10:18.416Z
+-->
+
+<p>Following mysql command can be used to list all <strong>innodb </strong>engines</p>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">
+SELECT table_schema, table_name FROM INFORMATION_SCHEMA.TABLES WHERE engine = 'innodb';</code></pre>
