@@ -2,7 +2,7 @@
 title: Handle DMCA
 description: 
 published: true
-date: 2021-03-09T23:59:12.986Z
+date: 2021-04-28T07:09:48.941Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-09T23:59:12.986Z
@@ -44,7 +44,8 @@ dateCreated: 2021-03-09T23:59:12.986Z
 
 **If a DMCA complaint is received in Gmail. Then do the following procedure.**
 
-- Reply complain that he need to submit DMCA through regular mail or fax. Send him pre-made reply.
+- Reply complain that he need to submit DMCA through regular mail or fax. Send him pre-made reply 
+https://216.108.237.96:3443/en/AbuseDepartment/HandleDMCA/ReplytoDMCAcomplain
 
 
 **If a valid DMCA complain received via fax or regular mail then do the following procedure.**
