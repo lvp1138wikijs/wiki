@@ -1,0 +1,188 @@
+<!--
+title: MySQL HowTo
+description: MySQL HowTo
+published: true
+date: 2021-04-28T07:57:43.219Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T07:57:43.219Z
+-->
+
+<ul>
+  <li>How to Start/Stop/Restart MySQL Service</li>
+  <li>How do I access MySQL Server</li>
+  <li>How can I create new MySQL user and Databse</li>
+  <li>How to Add Privileges on a MySQL user</li>
+  <li>How to create a MySQL database Backup</li>
+  <li>How to create the backup of the table structure of a MySQL Database</li>
+  <li>How to restore a database from a database backup</li>
+  <li>How to Delete a database from Mysql Server</li>
+  <li>Where is the MySQL configuration located</li>
+  <li>How to check the default MySQL Server Engine</li>
+  <li>How to Change Mysql&nbsp;Default&nbsp;Engine from InnoDB to&nbsp;MyISAM</li>
+  <li>How to check and repair a MySQL Database&nbsp;<ul>
+      <li>Database with MYISAM Engine</li>
+      <li>Database with InnoDB Engine</li>
+    </ul>
+  </li>
+  <li>Reset MySQL root Password</li>
+</ul>
+<p>&nbsp;</p>
+<ul>
+  <li><u>How to reset root user privileges in Mysql</u></li>
+  <li><u>How to install mtop (MySQL Monitoring Tool)</u></li>
+  <li>How to Load Time Zone Tables in MySQL</li>
+</ul>
+<h2>How to Start/Stop/Restart MySQL Service</h2>
+<p>Log-in to server as root via SSH</p>
+<p>Run the following commands in Ubuntu</p>
+<blockquote>
+  <p><strong>/etc/init.d/mysql start</strong><br><strong>/etc/init.d/mysql stop</strong><br><strong>/etc/init.d/mysql restart</strong></p>
+</blockquote>
+<p>Run the following command in CentOS</p>
+<blockquote>
+  <p><strong>/etc/init.d/mysqld start</strong><br><strong>/etc/init.d/mysqld stop</strong><br><strong>/etc/init.d/mysqld restart</strong></p>
+</blockquote>
+<hr>
+<h2>How do I access MySQL Server</h2>
+<p>Login to to server via SSH as root</p>
+<p>Run command&nbsp;</p>
+<blockquote>
+  <p><strong>mysql -u root -p</strong></p>
+</blockquote>
+<p>It will ask for mysql root password, then put your mysql root password and hit Enter. Then you will mysql prompt.&nbsp;</p>
+<hr>
+<h2>How can I create new MySQL user and Databse</h2>
+<p>Login to server shell prompt as root and then access mysql server using command</p>
+<blockquote>
+  <p><strong>mysql -u root -p</strong></p>
+</blockquote>
+<p>Then run the following mysql command to create new mysql user and database</p>
+<p>Run query 'create database dbname' to create new database</p>
+<blockquote>
+  <p>mysql&gt;&nbsp;<strong>create database newdb;</strong><br>Query OK, 1 row affected (0.00 sec)</p>
+</blockquote>
+<p>Run query 'create user dbuser' to create a new user.</p>
+<blockquote>
+  <p>mysql&gt;&nbsp;<strong>create user dbuser1;</strong><br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<p>The default mysql database location is "<strong>/var/lib/mysql/</strong>"</p>
+<hr>
+<h2>How to Add Privileges on a MySQL user</h2>
+<p>Run the following mysql query from mysql command prompt to grand privileges on mysql user.</p>
+<blockquote>
+  <p><strong>grant all privileges on dbname.* to dbuser@localhost identified by 'dbpassword' with grant option;</strong></p>
+  <p>replace dbname, dbuser and dbpassword with correct details</p>
+</blockquote>
+<p>Then run query to &nbsp;flush the privileges</p>
+<blockquote>
+  <p><strong>flush privileges;</strong></p>
+  <p>mysql&gt; grant all privileges on newdb.* to dbuser1@'localhost' identified by 'q1w2e3' with grant option;<br>Query OK, 0 rows affected (0.00 sec)</p>
+  <p>mysql&gt; flush privileges;<br>Query OK, 0 rows affected (0.01 sec)</p>
+</blockquote>
+<hr>
+<h2>How to create a MySQL database Backup</h2>
+<p>We can use mysqldump utility to create a mysql database backup. To create a mysql backup do the following</p>
+<p>login to server&nbsp;terminal&nbsp;as root user via SSH</p>
+<p>Then run the following command to create a database backup&nbsp;</p>
+<blockquote>
+  <p><strong>mysqldump -u dbuser -p dbname &gt; dbname.sql&nbsp;</strong></p>
+  <p>replace&nbsp;dbuser and dbname,&nbsp;dbname.sql&nbsp;with the corresponding information</p>
+</blockquote>
+<p>It will ask for your mysql password. Put your password and hit Enter</p>
+<blockquote>
+  <p>mysqldump -u dbuser1 -p newdb &gt; newdb.sql<br>Enter password:</p>
+</blockquote>
+<hr>
+<h2>How to create the backup of the table structure of a MySQL Database</h2>
+<p>The only option that is different than creating an entire backup is the -d switch, which tells mysqldump not to output the data.</p>
+<blockquote>
+  <p><strong>mysqldump -d -h localhost -u mysqluser-pmypassword databasename &gt; dumpfile.sql</strong></p>
+  <p>replace the mysqluser, mypassword, databasename and dumpfile.sql using the correct values</p>
+</blockquote>
+<p>Once the dump file is created it can be restored using the following method.</p>
+<hr>
+<h2>How to restore a database from a database backup</h2>
+<p>Run the following command to restore a mysql database from the terminal&nbsp;</p>
+<blockquote>
+  <p><strong>mysql -u dbuser -p dbname &lt; dbname.sql</strong></p>
+  <p>replace&nbsp;dbuser and dbname,&nbsp;dbname.sql&nbsp;with the corresponding information.</p>
+</blockquote>
+<p>It will ask your database password. Put your password and hit Enter</p>
+<blockquote>
+  <p>mysql -u dbuser1 -p newdb &lt; newdb.sql<br>Enter password:</p>
+</blockquote>
+<hr>
+<h2>How to Delete a database from Mysql Server</h2>
+<p>Open the mysql command prompt and then run the following mysql query to destroy the database.</p>
+<blockquote>
+  <p><strong>drop database dbname;</strong>&nbsp;&nbsp;(replace dbname with your database name)</p>
+  <p>mysql&gt; drop database test11;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<hr>
+<h2>Where is the MySQL configuration located</h2>
+<p>The default location are</p>
+<p><strong>/etc/mysql/my.cnf</strong></p>
+<p><strong>/etc/my.cnf</strong></p>
+<hr>
+<h2>How to check the default MySQL Server Engine</h2>
+<p>The most commonly using database engines are&nbsp;MyISAM and InnoDB.&nbsp;</p>
+<p>To show the default database engine run the following query from mysql command prompt</p>
+<blockquote>
+  <p>mysql&gt;&nbsp;<strong>show engines;</strong></p>
+</blockquote>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/4522112/image2012-11-10%2013%3A6%3A22.png?version=1&amp;modificationDate=1352543803000&amp;api=v2&amp;effects=border-simple,blur-border"></figure>
+<hr>
+<h2>How to Change Mysql&nbsp;Default&nbsp;Engine from InnoDB to&nbsp;MyISAM</h2>
+<p>Open the mysql configuration file&nbsp;<strong>/etc/mysql/my.cnf</strong>&nbsp;or<strong>&nbsp;/etc/my.cnf</strong>&nbsp;with your favorate editor</p>
+<p>Then add the following line under the [mysqld] section in your my.cnf and restart mysqld.</p>
+<blockquote>
+  <p><strong>default-storage-engine=myisam</strong></p>
+</blockquote>
+<p>Then run command to restart mysql service</p>
+<hr>
+<h2>How to check and repair a MySQL Database&nbsp;</h2>
+<h4><strong>Database with MYISAM Engine</strong></h4>
+<p>Login to server via SSH&nbsp;</p>
+<p>Then go to the database folder. The default location is&nbsp;<strong>/var/lib/mysql/database_name</strong></p>
+<p>Then run following command to check databases</p>
+<blockquote>
+  <p><strong>myisamchk -c *.MYI</strong></p>
+</blockquote>
+<p>for repair</p>
+<blockquote>
+  <p><strong>myisamchk -r *.MYI</strong></p>
+</blockquote>
+<h4><strong>Database with InnoDB Engine</strong></h4>
+<p>Use tool&nbsp;<i>mysqlcheck</i></p>
+<p>To check database</p>
+<blockquote>
+  <p><strong>mysqlcheck -u dbuser -p dbname</strong></p>
+</blockquote>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/4522112/image2012-11-10%2014%3A14%3A3.png?version=1&amp;modificationDate=1352547864000&amp;api=v2&amp;effects=border-simple,blur-border"></figure>
+<p>To repair</p>
+<blockquote>
+  <p><strong>mysqlcheck -u dbuser -p &nbsp;--auto-repair &nbsp;dbname</strong></p>
+</blockquote>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/4522112/image2012-11-10%2014%3A15%3A14.png?version=1&amp;modificationDate=1352547935000&amp;api=v2&amp;effects=border-simple,blur-border"></figure>
+<hr>
+<h2>Reset MySQL root Password</h2>
+<p>Stop the MySQL Server.</p>
+<blockquote>
+  <p><strong>/etc/init.d/mysql stop</strong></p>
+</blockquote>
+<p>Start the mysqld configuration.</p>
+<blockquote>
+  <p><strong>mysqld --skip-grant-tables &amp; &nbsp;&nbsp;</strong>- For ubuntu and Debian</p>
+  <p><strong>mysqld_safe --skip-grant-tables &amp;</strong>&nbsp;&nbsp;- For centOS</p>
+</blockquote>
+<p>Then hit enter button twice</p>
+<p>Login to MySQL as root.</p>
+<blockquote>
+  <p><strong>mysql -u root mysql</strong></p>
+</blockquote>
+<p>Then run following query to reset root password of mysql</p>
+<blockquote>
+  <p><strong>UPDATE user SET Password=PASSWORD('YOURNEWPASSWORD') WHERE User='root'; FLUSH PRIVILEGES; exit;</strong></p>
+</blockquote>
+<p>Replace YOURNEWPASSWORD with your new password!</p>
