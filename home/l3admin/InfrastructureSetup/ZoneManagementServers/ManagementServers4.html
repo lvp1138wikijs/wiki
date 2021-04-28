@@ -2,7 +2,7 @@
 title: Management Servers 4
 description: 
 published: true
-date: 2021-04-27T00:08:10.976Z
+date: 2021-04-28T18:53:33.286Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T23:37:50.467Z
@@ -148,6 +148,8 @@ Host ceph-dal-a2-osd
 </blockquote>
 <p><code>ceph-deploy new ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3</code></p>
 <p>Then install <strong>ceph on all nodes </strong>( ceph admin, monitors, osds )</p>
+<p>Use fsid with ceph-deploy when you reinstalling/replacing the admin node. You can get the existing fsid from ceph -s</p>
+<p><code>ceph-deploy new --fsid 39fac7f7-f5a8-4e84-b9bb-b0dfffd79c92 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3</code></p>
 <blockquote>
   <p><strong>Syntax</strong>: <span style="font-family:'Courier New', Courier, monospace;">ceph-deploy install --release luminous {ceph_nodes}</span></p>
 </blockquote>
