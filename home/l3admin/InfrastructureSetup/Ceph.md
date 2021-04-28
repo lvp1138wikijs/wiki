@@ -2,7 +2,7 @@
 title: Ceph 
 description: This page describes how to setup ceph servers and make a cluster
 published: true
-date: 2021-04-28T19:31:26.608Z
+date: 2021-04-28T19:58:08.293Z
 tags: ceph
 editor: markdown
 dateCreated: 2021-04-28T19:29:04.478Z
@@ -18,4 +18,4 @@ First setup ceph admin, monitors and osd servers
 - [Ceph Monitor](/home/l3admin/InfrastructureSetup/CephCluster/CephMonitor)
 - Ceph Osds
 - [Ceph Admin](/home/l3admin/InfrastructureSetup/CephCluster/CephAdmin)
-- Ceph Cluster
+- [Ceph Cluster](/home/l3admin/InfrastructureSetup/Ceph/CephCluster)
