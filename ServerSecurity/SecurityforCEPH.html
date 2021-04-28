@@ -1,0 +1,166 @@
+<!--
+title: Security for CEPH
+description: Security for CEPH
+published: true
+date: 2021-04-28T07:33:12.665Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T07:33:12.665Z
+-->
+
+<h2>CEPH ADMIN SERVER</h2>
+<p>These are the security things we applied to all <strong>ceph admin servers</strong>.&nbsp;</p>
+<ul>
+  <li><strong>Hardening SSH</strong>
+    <ul>
+      <li>Createasudouserfor ssh access.</li>
+      <li>Change SSH Port</li>
+      <li>Disable Direct SSH root access and enable access on that sudo user</li>
+      <li>Restrict SSH access to Allowed IPs - PENDING</li>
+      <li>Send email notification if someone logged in to server - PENDING</li>
+    </ul>
+  </li>
+  <li><strong>Change Shell Text colour for root</strong></li>
+  <li><strong>Disable firewall and Network Manager</strong></li>
+  <li><strong>IPtables</strong>
+    <ul>
+      <li>Install IPtables and configure it</li>
+      <li>Add ceph port and SSH port to the firewall rules</li>
+      <li>Enable ping</li>
+      <li>Restrict all other access to public interface bond0.xx</li>
+    </ul>
+  </li>
+</ul>
+<h3><strong>Hardening&nbsp;SSH</strong></h3>
+<p><strong>SSH hardening</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>useradd</code> <code>-s /bin/bash</code> <code>-d /home/pcruz</code> <code>-m -G wheel pcruz</code></p>
+          <p><code>passwd</code> <code>pcruz</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>sed</code> <code>-i 's/#Port 22/Port 5252/g'</code> <code>/etc/ssh/sshd_config</code></p>
+          <p><code>sed</code> <code>-i 's/#Protocol 2/Protocol 2/g'</code> <code>/etc/ssh/sshd_config</code></p>
+          <p><code>sed</code> <code>-i 's/#PermitRootLogin yes/PermitRootLogin no/g'</code> <code>/etc/ssh/sshd_config</code></p>
+          <p><code>sed</code> <code>-i '/PermitRootLogin no/a AllowUsers pcruz cephuser'</code> <code>/etc/ssh/sshd_config</code></p>
+          <p><code>cat</code> <code>&gt;&gt; /etc/sudoers</code> <code>&lt;&lt;END</code></p>
+          <p><code>pcruz ALL=(ALL) ALL</code></p>
+          <p><code>END</code></p>
+          <p><code>service sshd restart</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Set Color for Root Shell</strong></h3>
+<p>This is not an important one. It just for realizing that we are now on root shell</p>
+<p><strong>Set Color</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>cat</code> <code>&gt;&gt; /root/.bashrc &lt;&lt;END</code></p>
+          <p><code>export</code> <code>PS1='\[\e[1;31m\][\u@\h \W]\$\[\e[0m\] '</code></p>
+          <p><code>END</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>Disable firewalld and Network Manager</strong></h3>
+<p><strong>Firewalld &amp; Network Manager</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;">
+          <p><code>systemctl stop firewalld</code></p>
+          <p><code>systemctl disable firewalld</code></p>
+          <p><code>systemctl stop NetworkManager</code></p>
+          <p><code>systemctl disable NetworkManager</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3><strong>IPtables and Set Rules</strong></h3>
+<h4><strong>For Las Ceph Admin Server:</strong></h4>
+<p><strong>Note:</strong> Las zone is different from other zones. All other zones the public internet interface is set on VLAN&nbsp;4 ( bond 0.4 ) but in las zone, it depends upon the subnet assigned to the server.&nbsp;</p>
+<p><strong>Rules for Las zone</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:750px;">
+          <p><code>yum install</code> <code>-y iptables-services</code></p>
+          <p><code>systemctl enable</code> <code>iptables</code></p>
+          <p><code>iptables -F</code></p>
+          <p><code>iptables -X</code></p>
+          <p><code>iptables -A INPUT -p tcp --dport 5252 -j ACCEPT -m comment --comment "SSH Port"</code></p>
+          <p><code>iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"</code></p>
+          <p><code>iptables -A INPUT -p tcp --dport 19998 -j ACCEPT&nbsp; -m comment --comment "NetData Port"</code></p>
+          <p><code>iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>iptables -A INPUT -p icmp --icmp-type</code> <code>echo-request -j ACCEPT -m comment --comment "For Ping"</code></p>
+          <p><code>iptables -A OUTPUT -p icmp --icmp-type</code> <code>echo-reply -j ACCEPT -m comment --comment "For Ping"</code></p>
+          <p><code>iptables -A INPUT -i bond0.54 -j DROP -m comment --comment "Restricted Public Access"</code></p>
+          <p><code>service iptables save</code></p>
+          <p><code>service iptables restart</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h4>&nbsp;</h4>
+<h4><strong>IPtable Rules For Other Zone's CEPH Admin server</strong></h4>
+<p><strong>Rules for Other zones</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:750px;">
+          <p><code>yum install</code> <code>-y iptables-services</code></p>
+          <p><code>systemctl enable</code> <code>iptables</code></p>
+          <p><code>iptables -F</code></p>
+          <p><code>iptables -X</code></p>
+          <p><code>iptables -A INPUT -p tcp --dport 5252 -j ACCEPT -m comment --comment "SSH Port"</code></p>
+          <p><code>iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"</code></p>
+          <p><code>iptables -A INPUT -p tcp --dport 19998 -j ACCEPT&nbsp; -m comment --comment "NetData Port"</code></p>
+          <p><code>iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>iptables -A INPUT -p icmp --icmp-type</code> <code>echo-request -j ACCEPT -m comment --comment "For Ping"</code></p>
+          <p><code>iptables -A OUTPUT -p icmp --icmp-type</code> <code>echo-reply -j ACCEPT -m comment --comment "For Ping"</code></p>
+          <p><code>iptables -A INPUT -i bond0.4 -j DROP -m comment --comment "Restricted Public Access"</code></p>
+          <p><code>service iptables save</code></p>
+          <p><code>service iptables restart</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<h3><strong>CEPH OSDs</strong></h3>
+<p>Only Las CEPH&nbsp;OSDs has the public internet interface. So we need&nbsp;iptables rules on Las CEPH OSDs only. All other zones are purely run through the private network.&nbsp;</p>
+<p><strong>Note:</strong>&nbsp;Las zone is different from other zones. All other zones the public internet interface is set on VLAN&nbsp;4 ( bond 0.4 ) but in las zone, it depends upon the subnet assigned to the server.&nbsp;</p>
+<p><strong>Rules for Las OSDs</strong></p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:710px;">
+          <p><code>iptables -F</code></p>
+          <p><code>iptables -X</code></p>
+          <p><code>iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>iptables -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>iptables -A INPUT -i bond0.40 -j DROP&nbsp;&nbsp; -m comment --comment "Restricted Public Access"</code></p>
+          <p><code>service iptables save</code></p>
+          <p><code>service iptables restart&nbsp;</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
