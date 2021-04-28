@@ -1,0 +1,39 @@
+<!--
+title: How to fix MySQL (errno:24)
+description: How to fix MySQL (errno:24)
+published: true
+date: 2021-04-28T08:04:53.718Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T08:04:53.718Z
+-->
+
+<h1>How to fix MySQL (errno:24)</h1>
+<p><br><strong>errno:24</strong>&nbsp;simply means that too many files are open for the given process.&nbsp; There is a read-only mysql variable called open_files_limit that will&nbsp; show how many open files are allowed by the mysqld.</p>
+<p style="text-align:justify;">In&nbsp; a lot&nbsp; systems&nbsp; this is set to something very low, like 1024. while creating a large&nbsp; number of partitions or tables, MySQL may mysteriously stop working and&nbsp; will generate this error.</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>[ERROR] /usr/sbin/mysqld: Can't open file: './database/table.frm' (errno: 24)</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>When checking mysql logs in&nbsp;<strong>/var/lib/mysql/HOSTNAME.err</strong> and we get the the above error, please do the following steps:</p>
+<ol>
+  <li>Login to the server as <strong>root</strong>.</li>
+</ol>
+<p>Add the following parameter in <strong>/etc/my.cnf</strong> file.</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>[mysqld]open_files_limit = 100000</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<ol>
+  <li>Then restart MySQL service.</li>
+</ol>
