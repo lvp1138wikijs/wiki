@@ -2,7 +2,7 @@
 title: How to troubleshoot mysql database server high cpu usage/slowness issues ?
 description: Troubleshoot mysql database server high cpu usage/slowness issues
 published: true
-date: 2021-04-28T08:07:11.986Z
+date: 2021-04-28T08:07:53.213Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-28T08:07:11.986Z
@@ -33,3 +33,4 @@ dateCreated: 2021-04-28T08:07:11.986Z
 </figure>
 <p>The bufer pool hit rate shoule be nearly 1000/1000. page write/s is 427.44 for this case.<br>The innodb_buffer_pool_size system variable specifies the size of the buffer pool. If your buffer pool is small and you have sufficient memory, making the pool larger can improve performance by reducing the amount of disk I/O needed as queries access InnoDB tables.</p>
 <p>4. show processlist and then 'kill query [number]' to kill process using the following command.</p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"><code><strong># mysql -uroot -ppassword -e "show processlist" | grep client1_hostname | awk '{print "kill query "$1";"}' | mysql -uroot -ppassword</strong></code></span></p>
