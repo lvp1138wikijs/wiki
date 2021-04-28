@@ -1,0 +1,35 @@
+<!--
+title: How to troubleshoot mysql database server high cpu usage/slowness issues ?
+description: Troubleshoot mysql database server high cpu usage/slowness issues
+published: true
+date: 2021-04-28T08:07:11.986Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T08:07:11.986Z
+-->
+
+<p>For trouble shooting mysql database server high cpu usage/slowness issues, please do the following steps:</p>
+<p>1. Firstly find out what's causing server CPU high usage:</p>
+<p>Normally, we firstly will notice that server cpu load is high, run 'top' to confirm which process is contributing the cpu high usage, it's mysql or other process. Also, run uptime, vmstat 2 and iostat -x to find out if there's any abnormal situation.</p>
+<p>2. check mysql error log , slow query log etc from<strong> /etc/my.cnf</strong></p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>log_error&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = /srv/mysql/log/error.log</strong><br><strong>log_slow_queries&nbsp; &nbsp; &nbsp; &nbsp; = /srv/mysql/log/mysql-slow.log</strong><br><strong>innodb_buffer_pool_size=20000M</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>3. Please run the command<strong> mysql&gt; show engine innodb status\G </strong>and look at the end of the output as follows:</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>----------------------</strong><br><strong>BUFFER POOL AND MEMORY</strong><br><strong>----------------------</strong><br><strong>Total memory allocated 22981924466; in additional pool allocated 1048576</strong><br><strong>Dictionary memory allocated 2323288</strong><br><strong>Buffer pool size&nbsp; &nbsp;1280000</strong><br><strong>Free buffers&nbsp; &nbsp; &nbsp; &nbsp;0</strong><br><strong>Database pages&nbsp; &nbsp; &nbsp;1115883</strong><br><strong>Modified db pages&nbsp; 12101</strong><br><strong>Pending reads 0</strong><br><strong>Pending writes: LRU 0, flush list 32, single page 0</strong><br><strong>Pages read 2075693, created 11255097, written 1339038405</strong><br><strong>0.00 reads/s, 2.98 creates/s, 427.44 writes/s</strong><br><strong>Buffer pool hit rate 1000 / 1000</strong><br><strong>----------------</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>The bufer pool hit rate shoule be nearly 1000/1000. page write/s is 427.44 for this case.<br>The innodb_buffer_pool_size system variable specifies the size of the buffer pool. If your buffer pool is small and you have sufficient memory, making the pool larger can improve performance by reducing the amount of disk I/O needed as queries access InnoDB tables.</p>
+<p>4. show processlist and then 'kill query [number]' to kill process using the following command.</p>
