@@ -1,0 +1,34 @@
+<!--
+title: How to Enable MySQL slow query log ?
+description: Enable MySQL slow query log
+published: true
+date: 2021-04-28T08:02:18.237Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T08:02:18.237Z
+-->
+
+<p>The slow query log consists of SQL statements that took more than long_query_time seconds to execute and required at leastmin_examined_row_limit rows to be examined. It is very helpful in troubleshooting bad queries.</p>
+<p>In order to enable the slow query log, please add the following line to /etc/my.cnf file.</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>log-slow-queries=/var/lib/mysql/slow.log</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>After that, then do the following commands to create the file with the right ownership and file permissions:</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;">
+          <p><strong>touch /var/lib/mysql/slow.log</strong></p>
+          <p><br><strong>chown mysql:mysql /var/lib/mysql/slow.log</strong></p>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
