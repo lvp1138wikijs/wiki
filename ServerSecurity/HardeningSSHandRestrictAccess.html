@@ -1,0 +1,36 @@
+<!--
+title: Hardening SSH & Restrict Access
+description: Hardening SSH & Restrict Access
+published: true
+date: 2021-04-28T07:38:54.320Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T07:38:54.320Z
+-->
+
+<p><strong>Informations</strong></p>
+<p>Here we are going to do the following things</p>
+<ul>
+  <li>Disable direct root access</li>
+  <li>Change SSH port</li>
+  <li>Allow ssh access from specific IPs and disable others</li>
+  <li>Limit switching to root user only on allowed user</li>
+</ul>
+<p>Do understand the instructions well before executing the commands.</p>
+<h4><strong>COMMANDS</strong></h4>
+<blockquote>
+  <p>useradd -s /bin/bash -d /home/user_name -m -G wheel user_name<br>passwd user_namecp -af /etc/ssh/sshd_config /etc/ssh/sshd_config_`date +'%d_%b_%Y'`_backupsed -i 's/Port 22/Port 5252/g' /etc/ssh/sshd_config<br>sed -i 's/#Protocol 2/Protocol 2/g' /etc/ssh/sshd_config<br>sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config<br>sed -i '/PermitRootLogin no/a AllowUsers user_name' /etc/ssh/sshd_config<br>cat &gt;&gt; /etc/sudoers &lt;&lt;END<br>user_name ALL=(ALL) ALL<br>END<br><br>cat &gt;&gt; /etc/hosts.allow &lt;&lt;END<br>sshd: 64.235.52.174,72.18.206.242,72.18.207.148,<a href="http://alecka.asdf456.com/">alecka.asdf456.com</a><br>END<br><br>cat &gt;&gt; /etc/hosts.deny &lt;&lt;END<br>sshd: ALL<br>END<br><br>iptables -A INPUT -p tcp --dport 5252 -j ACCEPT<br>iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport sftp -j ACCEPT<br><br>service iptables save<br>service iptables restart<br>service sshd restart</p>
+</blockquote>
+<p>So first part is DONE. Now do the following</p>
+<p>Add this line in <strong>/etc/pam.d/su</strong>, if it is already present then uncomment it</p>
+<blockquote>
+  <p>auth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; required&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://pam_wheel.so/">pam_wheel.so</a> use_uid</p>
+</blockquote>
+<p>Add this line in <strong>/etc/pam.d/sshd</strong>. MAKE SURE IT IS THE FIRST LINE AFTER THE LINES WHICH START WITH AUTH. otherwise it will not work&nbsp;</p>
+<blockquote>
+  <p>account&nbsp;&nbsp;&nbsp; required&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://pam_access.so/">pam_access.so</a>&nbsp;</p>
+</blockquote>
+<p>Add this in <strong>/etc/security/access.conf</strong> to allow user serverp to login only from given ips&nbsp;</p>
+<blockquote>
+  <p>+ : user_name : 72.18.206.242 64.235.52.174 64.235.52.120&nbsp;<br>- : user_name : ALL</p>
+</blockquote>
