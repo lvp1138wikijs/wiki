@@ -1,0 +1,26 @@
+<!--
+title: How to access Your MySQL Server Remotely Over SSH
+description: How to access Your MySQL Server Remotely Over SSH
+published: true
+date: 2021-04-28T08:15:09.986Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T08:15:09.986Z
+-->
+
+<p>For accessing your MySQL server remotely over SSH, you can use port-forwarding through an SSH tunnel, so your MySQL client thinks it’s connecting to your localhost machine, but it’s really connecting to the other server through the tunnel.</p>
+<p>If you are using the command line ssh, the command would look like this.</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>ssh -L 3306:localhost:3306 user@webserver.com</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>The syntax is&nbsp;ssh -L &lt;localport&gt;hostname&lt;remoteport&gt; &lt;username&gt;@&lt;servername&gt;.<br>&nbsp;</p>
+<p>We’re using localhost as the hostname because we are directly accessing the remote mysql server through ssh. You could also use this technique to port-forward through one ssh server to another server.</p>
+<p><strong>Note:</strong> If you already have mysql running on your local machine then you can use a different local port for the port-forwarding, and just set your client tools to access MySQL on a different port.</p>
+<p>Once you’ve got the ssh tunnel going, you can open up MySQL Query Browser and enter in the details for your remote server,&nbsp;using localhost as the server host, and adjust the port to whatever you used.</p>
+<p>&nbsp;</p>
