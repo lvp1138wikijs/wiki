@@ -1,0 +1,58 @@
+<!--
+title: Ceph Cluster
+description: 
+published: true
+date: 2021-04-28T19:54:16.160Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-04-28T19:54:16.160Z
+-->
+
+<h1>Ceph Cluster Installation</h1>
+<p>Administration of the cluster is done entirely from the admin node.&nbsp;</p>
+<p>Switch to 'cephuser' and move to a dedicated directory to collect the files that ceph-deploy will generate. This will be the working directory for any further use of ceph-depoy</p>
+<p>Run these commands from ceph admin node</p>
+<p><code>su cephuser</code><br><code>mkdir /home/cephuser/ceph-cluster ; cd /home/cephuser/ceph-cluster</code></p>
+<p>&nbsp;</p>
+<h5><strong>Deploy the monitor nodes</strong></h5>
+<blockquote>
+  <p><strong>Syntax: </strong><span style="font-family:'Courier New', Courier, monospace;">ceph-deploy new monitor1 monitor2 monitor3</span></p>
+</blockquote>
+<p><code>ceph-deploy new ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3</code></p>
+<p><mark class="marker-yellow"><sub>Use fsid with ceph-deploy when you reinstalling/replacing the admin node. You can get the existing fsid from ceph -s</sub></mark></p>
+<p><code>ceph-deploy new --fsid 39fac7f7-f5a8-4e84-b9bb-b0dfffd79c92 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3</code></p>
+<p>&nbsp;</p>
+<h5>Install Ceph Luminos</h5>
+<p>Now install <strong>ceph on all nodes </strong>( ceph admin, monitors, osds ). We are using Ceph Luminos (Version 12.x)</p>
+<blockquote>
+  <p><strong>Syntax</strong>: <span style="font-family:'Courier New', Courier, monospace;">ceph-deploy install --release luminous {ceph_nodes}</span></p>
+</blockquote>
+<p><code>ceph-deploy install --release luminous ceph-dal-admin-a1 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3 ceph-dal-osd-a1 ceph-dal-osd-a2</code></p>
+<p>Then add the <strong>initial monitor(s) and gather the keys</strong></p>
+<p><code>ceph-deploy mon create-initial</code></p>
+<p>Then copy over the necessary files to all the nodes</p>
+<p><code>ceph-deploy admin ceph-dal-admin-a1 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3 ceph-dal-osd-a1 ceph-dal-osd-a2</code></p>
+<p>&nbsp;</p>
+<h3><strong>OSD Creation</strong></h3>
+<p>Use <strong>disk list</strong> to list the additional hard disks connected to the OSD nodes<br><code>ceph-deploy disk list osd-host-name&nbsp;</code></p>
+<p>Use <strong>disk zap</strong> command to format and mount the disks<br><code>ceph-deploy disk zap {osd-server-name}:{disk-name}</code></p>
+<p>Use <strong>osd prepare</strong> to prepare the OSDs.<br><code>ceph-deploy osd prepare {osdserver1:disk-name}</code></p>
+<p><strong>Example:</strong></p>
+<p><code>ceph-deploy disk list ceph-dal-osd-a1</code><br><code>ceph-deploy disk zap ceph-dal-osd-a1:/dev/sda</code><br><code>ceph-deploy osd prepare ceph-dal-osd-a1:sda</code>&nbsp;</p>
+<p>You can also use multiple disks at a time like this</p>
+<p><code>ceph-deploy disk zap ceph-dal-osd-a1:/dev/sda ceph-dal-osd-a1:/dev/sdb</code><br><code>ceph-deploy osd prepare ceph-dal-osd-a1:sda ceph-dal-osd-a1:sdb</code><br><br>That’s it. You can use these commands to see the health of Cluster</p>
+<p><code>ceph status</code><br><code>ceph health</code></p>
+<h3><strong>Setup Luminous Manager dashboard</strong></h3>
+<p>Run the following commands from ceph admin server</p>
+<p>To <strong>Deploy Manage</strong>r use - <span style="font-family:'Courier New', Courier, monospace;"><i>ceph-deploy -v mgr create hostnames</i></span>&nbsp;</p>
+<p><span style="font-family:'Courier New', Courier, monospace;"><code>su cephuser; cd /home/cephuser/ceph-cluster</code></span><br><code>ceph-deploy -v mgr create ceph-dal-admin-a1&nbsp; ceph-dal-mon-a1 ceph-dal-mon-a2</code></p>
+<p><strong>Stop Manager</strong> use:&nbsp; <span style="font-family:'Courier New', Courier, monospace;"><i>ceph mgr fail hostname</i>&nbsp;</span></p>
+<p><code>ceph mgr fail ceph-dal-admin-a1&nbsp;</code></p>
+<p><strong>Start Manager</strong> Daemon - Use :&nbsp; <span style="font-family:'Courier New', Courier, monospace;"><i>ceph-mgr -i&nbsp; hostname</i></span></p>
+<p><code>ceph-mgr -i ceph-dal-admin-a</code></p>
+<p>Now <strong>enable Dashboard Module</strong></p>
+<p><code>ceph mgr module enable dashboard</code></p>
+<p>Run these command to change the default dashboard port</p>
+<p>To change default port :</p>
+<p><code>ceph config-key set mgr/dashboard/server_addr admin_public-ip</code><br><code>ceph config-key set mgr/dashboard/server_port port_number</code></p>
+<p>&nbsp;</p>
