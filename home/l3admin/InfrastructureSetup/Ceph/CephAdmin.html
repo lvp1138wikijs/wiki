@@ -2,7 +2,7 @@
 title: Ceph Admin 
 description: Setup and intallation instruction of ceph admin server
 published: true
-date: 2021-04-28T19:05:24.259Z
+date: 2021-04-28T19:55:22.596Z
 tags: ceph admin
 editor: ckeditor
 dateCreated: 2021-04-28T19:05:24.259Z
@@ -85,6 +85,11 @@ NETMASK=255.255.240.0
 </blockquote>
 <h5>Create Ceph User</h5>
 <p><code>useradd -d /home/cephuser -m cephuser</code><br><code>passwd cephuser</code><br><code>echo "cephuser &nbsp;ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephuser</code><br><code>chmod 0440 /etc/sudoers.d/cephuser</code></p>
+<h5>Install Ceph-Deploy</h5>
+<p>We have to install the “ceph-deploy” utility in the <strong>Admin node</strong>. We are using this utility to install, create and control the cluster in all other servers in the cluster.</p>
+<p>Run this in the Ceph Admin node as the root user.</p>
+<p><code>yum update -y ; yum install ceph-deploy -y</code></p>
+<p>&nbsp;</p>
 <h5>LLDP configuration</h5>
 <p>We have installed the package already. Just configure it. <mark class="marker-yellow">Replace the system_name.</mark></p>
 <p><code>echo 'configure system description _system_name_' &gt; /etc/lldpd.d/lldpcli.conf</code><br><code>echo 'configure system hostname _system_name_' &gt;&gt; /etc/lldpd.d/lldpcli.conf</code><br><code>systemctl start lldpd ; systemctl enable lldpd ; systemctl status lldpd</code><br>&nbsp;</p>
@@ -134,52 +139,7 @@ Host ceph-dal-a2-osd
 <p>Since ceph-deploy will not prompt for a password, you must generate SSH keys on the admin node and distribute the public key to each Ceph node.</p>
 <p>Run this from the admin node</p>
 <p><code>su cephuser</code><br><code>ssh-keygen</code><br><code>ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )</code></p>
-<p>All set and now the admin, mons &amp; osds hosts are ready to make ceph cluster</p>
-<h2>Ceph Cluster Installation</h2>
-<p>First, we have to install the “ceph-deploy” utility in the <strong>Admin node</strong>. We are using this utility to install, create and control the cluster in all other VMs</p>
-<p>Run this in the ceph Admin node as the root user.</p>
-<p><code>yum update -y ; yum install ceph-deploy -y</code></p>
-<p>Administration of the cluster is done entirely from the admin node. Switch to 'cephuser' and move to a dedicated directory to collect the files that ceph-deploy will generate. This will be the working directory for any further use of ceph-depoy</p>
-<p>Run these commands from ceph admin node</p>
-<p><code>su cephuser</code><br><code>mkdir /home/cephuser/ceph-cluster ; cd /home/cephuser/ceph-cluster</code></p>
-<p>Next, we have to <strong>Deploy the monitor node</strong>(s)</p>
-<blockquote>
-  <p><strong>Syntax: </strong><span style="font-family:'Courier New', Courier, monospace;">ceph-deploy new monitor1 monitor2 monitor3</span></p>
-</blockquote>
-<p><code>ceph-deploy new ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3</code></p>
-<p>Then install <strong>ceph on all nodes </strong>( ceph admin, monitors, osds )</p>
-<p>Use fsid with ceph-deploy when you reinstalling/replacing the admin node. You can get the existing fsid from ceph -s</p>
-<p><code>ceph-deploy new --fsid 39fac7f7-f5a8-4e84-b9bb-b0dfffd79c92 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3</code></p>
-<blockquote>
-  <p><strong>Syntax</strong>: <span style="font-family:'Courier New', Courier, monospace;">ceph-deploy install --release luminous {ceph_nodes}</span></p>
-</blockquote>
-<p><code>ceph-deploy install --release luminous ceph-dal-admin-a1 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3 ceph-dal-osd-a1 ceph-dal-osd-a2</code></p>
-<p>Then add the <strong>initial monitor(s) and gather the keys</strong></p>
-<p><code>ceph-deploy mon create-initial</code></p>
-<p>Then copy over the necessary files to all the nodes</p>
-<p><code>ceph-deploy admin ceph-dal-admin-a1 ceph-dal-mon-a1 ceph-dal-mon-a2 ceph-dal-mon-a3 ceph-dal-osd-a1 ceph-dal-osd-a2</code></p>
+<p>All set and now the admin, mons &amp; osds hosts are ready to make <a href="/home/l3admin/InfrastructureSetup/Ceph/CephCluster">ceph cluster</a></p>
 <p>&nbsp;</p>
-<h3><strong>OSD Creation</strong></h3>
-<p>Use <strong>disk list</strong> to list the additional hard disks connected to the OSD nodes<br><code>ceph-deploy disk list osd-host-name&nbsp;</code></p>
-<p>Use <strong>disk zap</strong> command to format and mount the disks<br><code>ceph-deploy disk zap {osd-server-name}:{disk-name}</code></p>
-<p>Use <strong>osd prepare</strong> to prepare the OSDs.<br><code>ceph-deploy osd prepare {osdserver1:disk-name}</code></p>
-<p><strong>Example:</strong></p>
-<p><code>ceph-deploy disk list ceph-dal-osd-a1</code><br><code>ceph-deploy disk zap ceph-dal-osd-a1:/dev/sda</code><br><code>ceph-deploy osd prepare ceph-dal-osd-a1:sda</code>&nbsp;</p>
-<p>You can also use multiple disks at a time like this</p>
-<p><code>ceph-deploy disk zap ceph-dal-osd-a1:/dev/sda ceph-dal-osd-a1:/dev/sdb</code><br><code>ceph-deploy osd prepare ceph-dal-osd-a1:sda ceph-dal-osd-a1:sdb</code><br><br>That’s it. You can use these commands to see the health of Cluster</p>
-<p><code>ceph status</code><br><code>ceph health</code></p>
-<h3><strong>Setup Luminous Manager dashboard</strong></h3>
-<p>Run the following commands from ceph admin server</p>
-<p>To <strong>Deploy Manage</strong>r use - <span style="font-family:'Courier New', Courier, monospace;"><i>ceph-deploy -v mgr create hostnames</i></span>&nbsp;</p>
-<p><span style="font-family:'Courier New', Courier, monospace;"><code>su cephuser; cd /home/cephuser/ceph-cluster</code></span><br><code>ceph-deploy -v mgr create ceph-dal-admin-a1&nbsp; ceph-dal-mon-a1 ceph-dal-mon-a2</code></p>
-<p><strong>Stop Manager</strong> use:&nbsp; <span style="font-family:'Courier New', Courier, monospace;"><i>ceph mgr fail hostname</i>&nbsp;</span></p>
-<p><code>ceph mgr fail ceph-dal-admin-a1&nbsp;</code></p>
-<p><strong>Start Manager</strong> Daemon - Use :&nbsp; <span style="font-family:'Courier New', Courier, monospace;"><i>ceph-mgr -i&nbsp; hostname</i></span></p>
-<p><code>ceph-mgr -i ceph-dal-admin-a</code></p>
-<p>Now <strong>enable Dashboard Module</strong></p>
-<p><code>ceph mgr module enable dashboard</code></p>
-<p>Run these command to change the default dashboard port</p>
-<p>To change default port :</p>
-<p><code>ceph config-key set mgr/dashboard/server_addr admin_public-ip</code><br><code>ceph config-key set mgr/dashboard/server_port port_number</code></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
