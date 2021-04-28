@@ -2,7 +2,7 @@
 title: Ceph 
 description: This page describes how to setup ceph servers and make a cluster
 published: true
-date: 2021-04-28T19:29:04.478Z
+date: 2021-04-28T19:31:26.608Z
 tags: ceph
 editor: markdown
 dateCreated: 2021-04-28T19:29:04.478Z
