@@ -1,0 +1,20 @@
+<!--
+title: Correct Mysql Version
+description: 
+published: true
+date: 2021-05-01T07:08:30.762Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:08:30.762Z
+-->
+
+<h2>How to correct version?<br>&nbsp;</h2>
+<p>Edit the following file to correct version:</p>
+<p>Replace username with cPanel username</p>
+<blockquote>
+  <p>/home/username/.cpanel-datastore/_usr_sbin_mysqld_–version&nbsp;</p>
+</blockquote>
+<p>If you have multiple accounts with problem</p>
+<blockquote>
+  <p>find ./*/.cpanel-datastore/ | grep _usr_sbin_mysqld_–version | awk ‘{system (“rm ” $1)}’&nbsp;</p>
+</blockquote>
