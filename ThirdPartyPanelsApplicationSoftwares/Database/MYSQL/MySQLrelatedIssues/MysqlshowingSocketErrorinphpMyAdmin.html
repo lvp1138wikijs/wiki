@@ -1,0 +1,25 @@
+<!--
+title: Mysql showing Socket Error in phpMyAdmin
+description: 
+published: true
+date: 2021-05-01T07:24:32.211Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:24:32.211Z
+-->
+
+<p>While accessing phpMyAdmin, you ma&nbsp;y get the following error .</p>
+<p><strong>#2002 - The server is not responding (or the local &nbsp;MySQL server‘s socket is not correctly configured)</strong></p>
+<p>This is due to the missing socket file in the location /tmp.</p>
+<p>The socket path which &nbsp;is specified in the phpM&nbsp;yAdmin configuration file is /tmp/mysql.sock.</p>
+<pre><code class="language-plaintext">vi /usr/local/cpanel/base/3rdparty/phpMyAdmin/config.inc.php cfg*'Server'+*'socket'+ = ‘/tmp/mysql.sock’;
+</code></pre>
+<p>If mysql.sock is missing in /tmp, &nbsp;then create a link to the &nbsp;mysql.sock file in /var/lib/mysql.</p>
+<pre><code class="language-plaintext">ln -s  /var/lib/mysql/mysql.sock /tmp/mysql.sock</code></pre>
+<p><strong>There is also another fix for this issue.</strong></p>
+<pre><code class="language-plaintext">1) Open the phpMyadmin config file ?config.inc.php
+vi  /usr/local/cpanel/base/3rdparty/phpMyAdmin/config.inc.php
+2)&nbsp;Locate the line
+$cfg*'Servers'+*$i+*'host'+ = ‘localhost’;
+3) Replace ?localhost‘ with ?127.0.0.1′ and save
+$cfg*'Servers'+*$i+*'host'+ = ‘127.0.0.1';</code></pre>
