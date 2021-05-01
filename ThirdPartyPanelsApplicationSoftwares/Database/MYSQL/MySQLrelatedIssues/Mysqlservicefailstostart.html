@@ -1,0 +1,23 @@
+<!--
+title: Mysql service fails to start with Error as "Cant init databases"
+description: 
+published: true
+date: 2021-05-01T07:27:47.387Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:27:47.387Z
+-->
+
+<p>Following is the error message in &nbsp;mysql server log file /var/log/mysqld.log</p>
+<p>/usr/libexec/mysqld: Can’t create/write to file ‘/tmp/ibCfJwf1? (Errcode: 13)</p>
+<p><br>&nbsp;</p>
+<p>While trying to start it, following is the error.</p>
+<pre><code class="language-plaintext">Initializing MySQL database: [ OK ] 
+Timeout error occurred trying to start MySQL Daemon.
+Starting MySQL: [FAILED]</code></pre>
+<p>This error occurs when MySQL is &nbsp;not able to access &nbsp;the /tmp directory to write and create temporary files. &nbsp;Make sure /tmp is owned by root and 1777 permisssion is set on /tmp director.</p>
+<p>Following commands will fix the problem</p>
+<pre><code class="language-plaintext"># chown root:root /tmp
+# chmod 777 /tmp 
+# /etc/init.d/mysqld start</code></pre>
+<p>Now MySQL should start without a problem.</p>
