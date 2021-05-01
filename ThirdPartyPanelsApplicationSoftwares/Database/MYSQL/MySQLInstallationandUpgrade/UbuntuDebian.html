@@ -1,0 +1,29 @@
+<!--
+title: Mysql Installation on Ubuntu / Debian
+description: 
+published: true
+date: 2021-05-01T06:52:46.636Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T06:52:46.636Z
+-->
+
+<h2>MySQL Installation On Ubuntu/Debian</h2>
+<p>To install MySQL, run the following command from a terminal prompt of ubuntu.</p>
+<blockquote>
+  <p><strong>apt-get install mysql-server</strong></p>
+</blockquote>
+<p>During the installation process you will be asked to enter a password for the MySQL root user. Put a password for mysql root user.</p>
+<p>Once the installation is complete, the MySQL server should be started automatically. You can run the following command from a terminal prompt to check whether the MySQL server is running:</p>
+<blockquote>
+  <p><strong>netstat -tap | grep mysql</strong></p>
+</blockquote>
+<p>When you run this command, you should see the following line or something similar:</p>
+<blockquote>
+  <p><strong>tcp 0 0 </strong><a href="http://localhostmysql/"><strong>localhost:mysql</strong></a><strong> *:* LISTEN xxxxx/mysqld</strong></p>
+</blockquote>
+<p><br>If the server is not running correctly, you can type the following command to start it:</p>
+<blockquote>
+  <p><strong>/etc/init.d/mysql restart</strong></p>
+</blockquote>
+<p>&nbsp;</p>
