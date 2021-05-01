@@ -1,0 +1,20 @@
+<!--
+title: Can not create Mysql User from cPanel
+description: 
+published: true
+date: 2021-05-01T07:12:33.924Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:12:33.924Z
+-->
+
+<h3><strong>Database Created in MySQL but not in cPanel</strong></h3>
+<p>If client is adding databases in MySQL and it is created successfully but doesn't show up in cPanel</p>
+<pre><code class="language-plaintext">Fix : Reset MySQL password by using WHM </code></pre>
+<hr>
+<h3>Can not Create MySQL User from cPanel</h3>
+<p>Newly created Mysql Users do not list&nbsp;in the current users table at the bottom of mysql db user in cpanel</p>
+<p>To fix the issue run the following commands</p>
+<blockquote>
+  <p>/scripts/mysqlup --force<br><br>/usr/local/cpanel/bin/updatephpmyadmin --force<br><br>/scripts/upcp --force</p>
+</blockquote>
