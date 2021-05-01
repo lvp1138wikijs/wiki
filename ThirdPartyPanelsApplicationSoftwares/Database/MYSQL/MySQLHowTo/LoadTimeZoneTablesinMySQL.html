@@ -1,0 +1,36 @@
+<!--
+title: How to Load Time Zone Tables in MySQL
+description:  Load Time Zone Tables in MySQL
+published: true
+date: 2021-05-01T06:36:17.343Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T06:36:17.343Z
+-->
+
+<h3><strong>Test if Time Zone Enabled or Not</strong></h3>
+<p>To see if the tables are already loaded, enter mysql and type:</p>
+<blockquote>
+  <p>SELECT CONVERT_TZ('2013-03-17 12:00:00', 'GMT', 'America/New_York');</p>
+</blockquote>
+<p>If the response looks like:</p>
+<p>+--------------------------------------------------------------+
+  | CONVERT_TZ('2012-03-17 12:00:00', 'GMT', 'America/New_York') |
+  +--------------------------------------------------------------+
+  | 2013-03-17 08:00:00 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|
+  +--------------------------------------------------------------+</p>
+<p>That means&nbsp;the tables are loaded already and no further action is required.</p>
+<p>If the response looks like:</p>
+<p>+--------------------------------------------------------------+
+  | CONVERT_TZ('2012-03-17 12:00:00', 'GMT', 'America/New_York') |
+  +--------------------------------------------------------------+
+  | NULL &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+  +--------------------------------------------------------------+</p>
+<p>That means the table must be loaded in MySQL.</p>
+<h3><strong>Load Time Zone Table in MySQL</strong></h3>
+<p>In linux the&nbsp;time zone information is in /usr/share/zoneinfo. So type the following command and hit enter</p>
+<blockquote>
+  <p>mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql<br>Password:</p>
+</blockquote>
+<p>Then type the mysql root password.&nbsp;</p>
+<p>Restart MySQL, and repeat the initial test.</p>
