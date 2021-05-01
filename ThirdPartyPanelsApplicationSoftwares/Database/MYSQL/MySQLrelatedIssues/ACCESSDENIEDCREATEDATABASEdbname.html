@@ -1,0 +1,15 @@
+<!--
+title: ACCESS DENIED CREATE DATABASE db_name' while importing a database
+description: 
+published: true
+date: 2021-05-01T07:29:18.852Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:29:18.852Z
+-->
+
+<p>In order to solve this issue follow these steps:</p>
+<pre><code class="language-plaintext"> &nbsp; 1)&nbsp; Open the MySQL dump file with a text editor on your local workstation
+ &nbsp; 2)&nbsp; Delete the line saying "CREATE DATABASE yourdbname". Usually this line is found at
+ &nbsp;     the very beginning of the file;
+ &nbsp; 3)&nbsp; Save the file and try to import it again.</code></pre>
