@@ -1,0 +1,26 @@
+<!--
+title: How to change the Mysql database directory on server
+description: 
+published: true
+date: 2021-05-01T07:31:37.463Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:31:37.463Z
+-->
+
+<p>Some times the ?/var‘ partition get crowded and we &nbsp;might need to relocate the &nbsp;database to some other location where<br>&nbsp;</p>
+<p>there is enough space. Below are the steps given for a trouble free relocation.</p>
+<p><strong>Note: Let ?/mysql‘ be the directory to which we want to relocate the database</strong></p>
+<p><strong>Steps to change the mysql database directory</strong></p>
+<p>1) Execute the following command in the server to write the transactions saved in the memory to the hard disk</p>
+<pre><code class="language-plaintext">mysqladmin -u root -p  flush-tables</code></pre>
+<p>2) Stop the mysql process in the server</p>
+<pre><code class="language-plaintext">service mysql stop or /etc/init.d/mysqld stop</code></pre>
+<p>3) Move the database files to the the new directory</p>
+<pre><code class="language-plaintext">mv /var/lib/mysql/* /mysql</code></pre>
+<p>4) Create symlink with the old &nbsp;directory</p>
+<pre><code class="language-plaintext">ln -s /test/mysql /var/lib/mysql/</code></pre>
+<p>5) Give the correct ownership &nbsp;to the new directory</p>
+<pre><code class="language-plaintext">chown -R mysql:mysql /mysql/*</code></pre>
+<p>6) Restart mysql</p>
+<pre><code class="language-plaintext">service mysql start or /etc/init.d/mysqld start</code></pre>
