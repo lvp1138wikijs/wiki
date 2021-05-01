@@ -1,0 +1,22 @@
+<!--
+title: Using myisamchk to Repair or Optimzie MySQL
+description: 
+published: true
+date: 2021-05-01T07:20:41.904Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:20:41.904Z
+-->
+
+<p>If you run mysqld with external locking disabled (which is the default), you cannot reliably use myisamchk to check&nbsp;a table when mysqld is using the same table.If the server is run with external locking enabled, you can use myisamchk to check tables at any time. In this case, if&nbsp;the server tries to update a &nbsp;table that myisamchk is using, &nbsp;the server will wait for myisamchk to finish &nbsp;before itcontinues.If you use myisamchk to repair or optimize tables, you must always ensure that the mysqld server is not using thetable (this also applies if external locking is disabled). If you do not stop mysqld, you should at least do amysqladmin flush-tables before you run myisamchk. Your tables may become corrupted if the server andmyisamchk access the tables simultaneously.When performing crash recovery, it is important to understand that each MyISAM table tbl_name in a databasecorresponds to the three files in the database directory shown in the following table.</p>
+<p>File Purpose</p>
+<pre><code class="language-plaintext">tbl_name.frm Definition (format) file
+tbl_name.MYD Data file
+tbl_name.MYI Index file</code></pre>
+<p><br>Each of these three file types is subject to corruption in various ways, but problems occur most often in data files and index files.</p>
+<p><br>myisamchk works by creating a copy of the .MYD data file row by row. It ends the repair stage by removing the old.MYD file and renaming the new file to &nbsp;the original file name.</p>
+<pre><code class="language-plaintext">myisamchk -e tbl_name
+</code></pre>
+<p>&nbsp;</p>
+<p>This does a complete and thorough check of all data (-e means ?extended check?).</p>
+<p>It does a check&nbsp;-read of every keyfor each row to verify that they indeed point to the correct row.This may take a long time for a large table that hasmany indexes. Normally, myisamchk stops &nbsp;after the first error it finds. If you want to &nbsp;obtain more information, youcan add the -v (verbose) option. This causes myisamchk to keep going, up through a maximum of 20 error.</p>
