@@ -1,0 +1,17 @@
+<!--
+title: How to Backup/Export and Restore/Import MySQL Database
+description: 
+published: true
+date: 2021-05-01T07:22:25.793Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:22:25.793Z
+-->
+
+<p><strong>Exporting the Database.</strong></p>
+<p>&nbsp;In this example,we will export the ?testdb‘ database into &nbsp;a file called ?testdb.sql‘:</p>
+<pre><code class="language-plaintext"> Command : mysqldump -u root -p mydb  &gt; mydb.sql</code></pre>
+<p><strong>Importing the Database.</strong><br>Importing the data is just as easy but involves two steps.The first step is to create a blank database ready to receive the data.</p>
+<pre><code class="language-plaintext">Command : mysqladmin -u root -p create testdb1</code></pre>
+<p>Once done, all that is &nbsp;left is to actually import the data:</p>
+<pre><code class="language-plaintext">mysql -u root -p testdb1 &lt; testdb.sql</code></pre>
