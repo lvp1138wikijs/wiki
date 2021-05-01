@@ -1,0 +1,39 @@
+<!--
+title: MySQL Installation on CentOS
+description: 
+published: true
+date: 2021-05-01T06:59:14.232Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T06:59:14.232Z
+-->
+
+<h2>MySQL Installation on CentOS</h2>
+<p>Do the following procedure to install MySQL on linux CentOS</p>
+<p>Login to server via SSH as root</p>
+<p><strong>1. Install MySQL Server</strong></p>
+<blockquote>
+  <p><strong>yum install mysql mysql-server</strong></p>
+</blockquote>
+<p><strong>2. Start MySQL</strong></p>
+<blockquote>
+  <p><strong>service mysql start &nbsp;or /etc/init.d/mysql restart</strong></p>
+</blockquote>
+<p><strong>3.&nbsp;Securing the installation</strong></p>
+<p>Now run following script</p>
+<blockquote>
+  <p>/usr/bin/mysql_secure_installation</p>
+</blockquote>
+<p>The script will ask you the following questions:</p>
+<blockquote>
+  <p>current root password (in our case it’s not set so hit enter)<br>remove anonymous users (say yes)<br>disallow remote login (in our case we want remote login active so we say no here, but if you’re using MySQL on a system which will not need this then say yes here)<br>remove test database and access to it (say yes)<br>reload all privieleges (say yes)</p>
+</blockquote>
+<p><strong>4.&nbsp;Now you can access MySQL with the following command:</strong></p>
+<blockquote>
+  <p><strong>mysql -p</strong></p>
+</blockquote>
+<p><strong>5.&nbsp;Starting MySQL at boot time</strong></p>
+<blockquote>
+  <p><strong>chkconfig --levels 235 mysqld on</strong></p>
+</blockquote>
+<p>You are done!!!!!!...</p>
