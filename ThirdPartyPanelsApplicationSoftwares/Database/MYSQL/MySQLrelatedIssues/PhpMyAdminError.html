@@ -1,0 +1,25 @@
+<!--
+title: PhpMyAdmin Error , Can not start Session
+description: 
+published: true
+date: 2021-05-01T07:19:00.020Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:19:00.020Z
+-->
+
+<p>Cannot start session without errors, please &nbsp;check errors given in your PHP and/or web server log file and configure your PHP installation properly.</p>
+<p>There can be error in writing session files. Either the owner &nbsp;do not have ?write‘ permission or the owner is different.</p>
+<p>Normally tmp directories are used to dump sessions. And phpMyAdmin has its own tmp folder. Check the permission and ownership of this folder. Change it to the following</p>
+<pre><code class="language-plaintext">Location : /var/cpanel/userhomes/cpanel-phpmyadmin</code></pre>
+<pre><code class="language-plaintext">cd /var/cpanel/userhomes/cpanel-phpmyadmin
+Permission of tmp must be 700
+chmod 700 -R tmp
+Ownership must be cpanel-phpmyadmin
+chown cpanel-phpmyadmin: -R *</code></pre>
+<p>The output should look similar to as given below</p>
+<pre><code class="language-plaintext">ll /&nbsp;var/cpanel/userhomes/cpanel-phpmyadmin 
+drwx –x –x 4 cpanel-phpmyadmin cpanel-phpmyadmin 4096 Mar 10 23:56 ./
+drwx –x –x 5 root root 4096 ../
+drwxr-x—2 cpanel-phpmyadmin cpanel-phpmyadmin 4096 Mar 10 23:53 mail
+drwx——2 cpanel-phpmyadmin cpanel-phpmyadmin 4096 Mar 10 23:56 tmp/ </code></pre>
