@@ -1,0 +1,22 @@
+<!--
+title: How to enable MySQL Native Driver (mysqlnd)
+description: 
+published: true
+date: 2021-05-01T07:37:17.188Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:37:17.188Z
+-->
+
+<p>You can easily enable this.&nbsp;</p>
+<p>Login to server via&nbsp;SSH &nbsp;as root user and create of edit the following file:</p>
+<blockquote>
+  <p>/var/cpanel/easy/apache/rawopts/all_php5</p>
+</blockquote>
+<p>Add the following line to that file: ( If&nbsp;you're using mysqli)</p>
+<blockquote>
+  <p>--with-mysqli=mysqlnd</p>
+</blockquote>
+<p>If not using mysqli, then use&nbsp;"<i>--with-mysql=mysqlnd</i>" instead.</p>
+<p>Save the file, launch <strong>EasyApache</strong> and recompile as normal. &nbsp;</p>
+<p>Once done, run a PHP file with phpinfo() as the code to check the extension has been enabled.</p>
