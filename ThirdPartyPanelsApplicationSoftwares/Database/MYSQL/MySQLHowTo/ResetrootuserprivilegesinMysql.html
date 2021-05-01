@@ -1,0 +1,70 @@
+<!--
+title: How to reset root user privileges in Mysql
+description: reset root user privileges in Mysql
+published: true
+date: 2021-05-01T06:44:37.512Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T06:44:37.512Z
+-->
+
+<p>If root privileges for the mysql database are lost you can follow the steps given below to reset it.</p>
+<p>1) Login to the server using SSH</p>
+<p>2) Stop the mysql service</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>#/etc/init.d/mysqld stop</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>3) Start the mysql server with skip grant table options.</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>/usr/bin/mysqld_safe&nbsp; --skip-grant-tables &amp;</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>4) Connect to mysql DB with your root user</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>#/usr/bin/mysql -uroot -p mysql</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>5) Now update the root privileges with the following command</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>update user set Select_priv='Y', Insert_priv='Y',Update_priv='Y',Delete_priv='Y',
+            &nbsp; &nbsp; &nbsp; &nbsp;Create_priv='Y',Drop_priv='Y',Reload_priv='Y',Shutdown_priv='Y',
+            &nbsp; &nbsp; &nbsp; &nbsp;Process_priv='Y',File_priv='Y',Grant_priv='Y',References_priv='Y',
+            &nbsp; &nbsp; &nbsp; &nbsp;Index_priv='Y',Alter_priv='Y',Show_db_priv='Y',Super_priv='Y',
+            &nbsp; &nbsp; &nbsp; &nbsp;Create_tmp_table_priv='Y',Lock_tables_priv='Y',Execute_priv='Y',
+            &nbsp; &nbsp; &nbsp; &nbsp;Repl_slave_priv='Y',Repl_client_priv='Y',Create_view_priv='Y',
+            &nbsp; &nbsp; &nbsp; &nbsp;Show_view_priv='Y',Create_routine_priv='Y',Alter_routine_priv='Y',
+            &nbsp; &nbsp; &nbsp; &nbsp;Create_user_priv='Y',Event_priv='Y',Trigger_priv='Y' where User='root';</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>6) Now kill the mysql deamon and start it with normal privileges</p>
+<figure class="table">
+  <table style="background-color:rgb(255, 255, 255);">
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>/etc/init.d/mysqld start</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Now all the root mysql commands should be working fine.</p>
