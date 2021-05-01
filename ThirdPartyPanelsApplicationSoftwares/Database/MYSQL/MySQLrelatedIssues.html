@@ -1,0 +1,33 @@
+<!--
+title: MySQL related Issues
+description: MySQL related Issues
+published: true
+date: 2021-05-01T07:03:31.987Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:03:31.987Z
+-->
+
+<h2>Remote Mysql Connection Error with PHP</h2>
+<p>Only PHP application was throwing a <i>‘Can’t connect to MySQL server on … (13)’</i> error when trying connect to remote mysql server. It may be an issue with SElinux security policy on httpd service. Try the solution.</p>
+<p>To see the current rules run the command</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>getsebool -a |grep httpd</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Check the httpd_can_network_connect status . If its off , then need to turned on it.</p>
+<p>To change the value</p>
+<figure class="table" style="height:auto !important;width:704.109px;">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;">
+    <tbody>
+      <tr>
+        <td style="border-bottom:0px !important;border-left:0px !important;border-right:0px !important;border-top:0px !important;height:auto !important;padding:0px 0px 0px 15px;width:689px;"><code>setsebool -P httpd_can_network_connect=1</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
