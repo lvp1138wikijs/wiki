@@ -1,0 +1,27 @@
+<!--
+title: Mysql got error 28 from server handler
+description: 
+published: true
+date: 2021-05-01T07:26:15.411Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T07:26:15.411Z
+-->
+
+<p>This error means no space left on hard disk. If you get his error, you need to check all filesystems where MySQL operates.</p>
+<p>1) Stop mysql server</p>
+<pre><code class="language-plaintext">etc/init.d/mysql stop OR  /etc/init.d/mysqld stop</code></pre>
+<p>2) Check filesystem and /tmp &nbsp;directories</p>
+<pre><code class="language-plaintext">$ df -h 
+$ cd /tmp 
+$ df -h /tmp</code></pre>
+<p>3) Remove files from /tmp to free up space</p>
+<pre><code class="language-plaintext"># cd /tmp 
+# rm -rf "contents that must be removed"</code></pre>
+<p><br>4) Look into /var/log directory and remove &nbsp;or compress logs file</p>
+<p>5) Use myisamchk command to check and repair of ISAM table</p>
+<pre><code class="language-plaintext"># cd /var/lib/mysql 
+# myisamchk</code></pre>
+<p>6) Increase disk space (add new hard disk or remove unwanted softwares)</p>
+<p>7) Start the mysql server:</p>
+<pre><code class="language-plaintext"># /etc/init.d/mysql start OR # /etc/init.d/mysqld start</code></pre>
