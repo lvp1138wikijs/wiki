@@ -1,0 +1,56 @@
+<!--
+title: How to install mtop (MySQL Monitoring Tool)
+description: MySQL Monitoring Tool
+published: true
+date: 2021-05-01T06:32:49.750Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-01T06:32:49.750Z
+-->
+
+<p><strong>mtop</strong>&nbsp;(MySQL top) monitors a MySQL server showing the queries which are taking the most amount of time to complete. Features include 'zooming' in on a process to show the complete query, 'explaining' the query optimizer information for a query and 'killing' queries. In addition, server performance statistics, configuration information, and tuning tips are provided.</p>
+<p>In order to install the mtop(MySQL top), please do the following steps:</p>
+<p>&nbsp;1) Download the mtop source file and untar it using the following command:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;">
+          <p><a href="http://sourceforge.net/projects/mtop/files/latest/download"><strong>wget http://sourceforge.net/projects/mtop/files/latest/download</strong></a><strong>&nbsp;</strong></p>
+          <p><strong>tar -zxvf mtop-0.6.6.tar.gz</strong></p>
+          <p><strong>cd mtop-0.6.6/</strong></p>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>2) Then compile it using the following commands:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>perl Makefile.PL</strong><br><strong>make</strong><br><strong>make install</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>3) Then execute the following MySql commands from the MySql prompt:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>mysql</strong><br><strong>grant super, reload, process on *.* to mysqltop;</strong><br><strong>grant super, reload, process on *.* to mysqltop@localhost;</strong><br><strong>flush privileges;</strong><br><strong>exit</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>4) Remove the source file using the following commands:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th style="background-color:rgb(240, 240, 240);border-bottom:1px solid rgb(221, 221, 221);border-left:1px solid rgb(221, 221, 221);border-right:1px solid rgb(221, 221, 221);border-top:1px solid rgb(221, 221, 221);padding:7px 10px;vertical-align:top;"><strong>cd ..</strong><br><strong>rm mtop-0.6.6.tar.gz</strong><br><strong>rm -fr rm mtop-0.6.6/</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
