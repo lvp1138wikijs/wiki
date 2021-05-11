@@ -2,7 +2,7 @@
 title: Ceph Admin 2
 description: Setup and intallation instruction of ceph admin server 2
 published: true
-date: 2021-05-11T21:57:47.456Z
+date: 2021-05-11T21:59:10.818Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-11T21:57:47.456Z
@@ -79,13 +79,11 @@ NETMASK=255.255.240.0
 # ceph-deploy admin ceph-dal-admin-a2</code></pre>
 <p>&nbsp;</p>
 <h5>Make server as a ceph-admin node</h5>
-<p>After installing ceph, go the admin server2 and make sure it has the correct host entries and can able to communicate all monitor and osds hosts fine.&nbsp;</p>
-<p>Now do the following</p>
+<p>After installing ceph, go to the admin server2 and make sure it has the correct host entries and can able to communicate all monitor and osds hosts fine. Then do the following</p>
 <pre><code class="language-plaintext"># su cephuser ; cd /home/cephuser/ceph-cluster
 # cp -af /etc/ceph/ceph.client.admin.keyring ./
 # cp -af /etc/ceph/ceph.conf ./
 # ceph-deploy gatherkeys ceph-dal-mon-a1</code></pre>
-<p>&nbsp;</p>
 <p>The ceph-deploy gatherkeys will copy all keyring from the monitor server to this admin server 2. Make sure all files have correct ownership</p>
 <pre><code class="language-plaintext">$ pwd
 /home/cephuser/ceph-cluster
@@ -100,5 +98,34 @@ total 44
 -rw-rw-r-- 1 cephuser cephuser 14996 May 11 14:28 ceph-deploy-ceph.log
 -rw------- 1 cephuser cephuser    77 May 11 14:06 ceph.mon.keyring
 </code></pre>
-<p>That's all. Now you can manage the cluster from the admin server node 2. To test, run ceph-deploy disk list ods<i>host</i></p>
-<pre><code class="language-plaintext">&nbsp;</code></pre>
+<p>That's all. Now you can manage the cluster from the admin server node 2. To test, run ceph-deploy disk list</p>
+<pre><code class="language-plaintext">$ ceph-deploy disk list ceph-dal-osd-a10
+[ceph_deploy.conf][DEBUG ] found configuration file at: /home/cephuser/.cephdeploy.conf
+[ceph_deploy.cli][INFO  ] Invoked (2.0.1): /usr/bin/ceph-deploy disk list ceph-dal-osd-a10
+[ceph_deploy.cli][INFO  ] ceph-deploy options:
+[ceph_deploy.cli][INFO  ]  username                      : None
+[ceph_deploy.cli][INFO  ]  verbose                       : False
+[ceph_deploy.cli][INFO  ]  debug                         : False
+[ceph_deploy.cli][INFO  ]  overwrite_conf                : False
+[ceph_deploy.cli][INFO  ]  subcommand                    : list
+[ceph_deploy.cli][INFO  ]  quiet                         : False
+[ceph_deploy.cli][INFO  ]  cd_conf                       : &lt;ceph_deploy.conf.cephdeploy.Conf instance at 0x7efca0dee320&gt;
+[ceph_deploy.cli][INFO  ]  cluster                       : ceph
+[ceph_deploy.cli][INFO  ]  host                          : ['ceph-dal-osd-a10']
+[ceph_deploy.cli][INFO  ]  func                          : &lt;function disk at 0x7efca0e2c938&gt;
+[ceph_deploy.cli][INFO  ]  ceph_conf                     : None
+[ceph_deploy.cli][INFO  ]  default_release               : False
+[ceph-dal-osd-a10][DEBUG ] connection detected need for sudo
+[ceph-dal-osd-a10][DEBUG ] connected to host: ceph-dal-osd-a10
+[ceph-dal-osd-a10][DEBUG ] detect platform information from remote host
+[ceph-dal-osd-a10][DEBUG ] detect machine type
+[ceph-dal-osd-a10][DEBUG ] find the location of an executable
+[ceph-dal-osd-a10][INFO  ] Running command: sudo fdisk -l
+[ceph-dal-osd-a10][INFO  ] Disk /dev/sda: 120.0 GB, 120034123776 bytes, 234441648 sectors
+[ceph-dal-osd-a10][INFO  ] Disk /dev/sdb: 1920.4 GB, 1920383410176 bytes, 3750748848 sectors
+[ceph-dal-osd-a10][INFO  ] Disk /dev/sdc: 960.2 GB, 960197124096 bytes, 1875385008 sectors
+[ceph-dal-osd-a10][INFO  ] Disk /dev/sdf: 1920.4 GB, 1920383410176 bytes, 3750748848 sectors
+[ceph-dal-osd-a10][INFO  ] Disk /dev/sdd: 960.2 GB, 960197124096 bytes, 1875385008 sectors
+[ceph-dal-osd-a10][INFO  ] Disk /dev/sdg: 960.2 GB, 960197124096 bytes, 1875385008 sectors
+[ceph-dal-osd-a10][INFO  ] Disk /dev/sde: 960.2 GB, 960197124096 bytes, 1875385008 sectors
+</code></pre>
