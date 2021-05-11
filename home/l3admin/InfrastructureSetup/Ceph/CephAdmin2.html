@@ -1,0 +1,104 @@
+<!--
+title: Ceph Admin 2
+description: Setup and intallation instruction of ceph admin server 2
+published: true
+date: 2021-05-11T21:57:47.456Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-11T21:57:47.456Z
+-->
+
+<h2>Ceph Admin Server 2</h2>
+<p>Admin Server2 is the reserved admin server. Prepare this server only after the ceph cluster completed.&nbsp;</p>
+<p>OS installed: CentOS 7. It is installed through our installation portal. Login to the server and set the proper hostname. Then do the following</p>
+<h4>Install the Packages</h4>
+<p><code>yum install epel-release -y</code><br><code>yum update -y</code><br><code>yum install lldpd python-setuptools -y</code><br><code>systemctl enable lldpd</code></p>
+<p>&nbsp;</p>
+<h5>Configure Networks</h5>
+<p>The Admin needs a Public Network, Private &amp; Ceph storage IPs.&nbsp;</p>
+<blockquote>
+  <p>Las Cluster, the private network binded on vlan 8. In the other zones it binded on vlan 2.&nbsp;</p>
+  <p>Las Cluster, <span style="font-family:Arial, Helvetica, sans-serif;">All other zones the public internet interface is set on VLAN&nbsp;4 ( bond 0.4 ) but in Las zone, it depends upon the subnet assigned to the server.</span></p>
+  <p>Ceph network binded on vlan 9 in all zones</p>
+</blockquote>
+<p><strong>Sample interfaces files</strong></p>
+<pre><code class="language-plaintext"># cat ifcfg-bond0.4
+DEVICE=bond0.4
+VLAN=yes
+ONBOOT=yes
+VLAN_ID=4
+BOOTPROTO=static
+IPADDR=72.18.198.9
+NETMASK=255.255.255.0
+GATEWAY=72.18.198.1
+
+# cat ifcfg-bond0.8
+DEVICE=bond0.8
+VLAN=yes
+ONBOOT=yes
+VLAN_ID=8
+BOOTPROTO=static
+IPADDR=10.1.1.103
+NETMASK=255.255.255.0
+GATEWAY=10.1.1.1
+
+# cat ifcfg-bond0.9
+DEVICE=bond0.9
+VLAN=yes
+ONBOOT=yes
+VLAN_ID=9
+BOOTPROTO=static
+IPADDR=10.255.0.198
+NETMASK=255.255.240.0
+</code></pre>
+<blockquote>
+  <p>The IPaddress and Gateway will be different on each zone.</p>
+</blockquote>
+<h5>Create Ceph User</h5>
+<p><code>useradd -d /home/cephuser -m cephuser</code><br><code>passwd cephuser</code><br><code>echo "cephuser &nbsp;ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephuser</code><br><code>chmod 0440 /etc/sudoers.d/cephuser</code></p>
+<h5>Install Ceph-Deploy</h5>
+<p>We have to install the “ceph-deploy” utility in the <strong>Admin node2 </strong>too. We are using this utility to install, create and control the cluster in all other servers in the cluster.</p>
+<p>Run this in the Ceph Admin node 2 as the root user.</p>
+<p><code>yum update -y ; yum install ceph-deploy -y</code></p>
+<p>&nbsp;</p>
+<h5>LLDP configuration</h5>
+<p>We have installed the package already. Just configure it. <mark class="marker-yellow">Replace the system_name.</mark></p>
+<p><code>echo 'configure system description _system_name_' &gt; /etc/lldpd.d/lldpcli.conf</code><br><code>echo 'configure system hostname _system_name_' &gt;&gt; /etc/lldpd.d/lldpcli.conf</code><br><code>systemctl start lldpd ; systemctl enable lldpd ; systemctl status lldpd</code><br>&nbsp;</p>
+<h5><strong>Copy /etc/hosts &amp;&nbsp; /etc/ssh/ssh_config&nbsp;</strong></h5>
+<p>We have to copy hosts entries from &nbsp;/etc/hosts and ceph related hosts details from &nbsp;/etc/ssh/ssh_config and /etc/hosts file from ceph-admin-node-1 so that ceph-deploy can log in to Ceph nodes as the user you created without requiring you to specify --username each time you execute ceph-deploy.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h5>Copy the SSH Keys</h5>
+<p>Since ceph-deploy will not prompt for a password, you must generate SSH keys on the admin node and distribute the public key to each Ceph node.</p>
+<p>Run this from the admin node</p>
+<p><code>su cephuser</code><br><code>ssh-keygen</code><br><code>ssh-copy-id cephuser@hostname ( ceph-dal-mon-a1, ceph-dal-mon-a2, etc )</code></p>
+<h5><br>Install Ceph</h5>
+<p>Now login to the admin server node 1 and install ceph from it. Follow these commands</p>
+<pre><code class="language-plaintext"># su cephuser ; cd /home/cephuser/ceph-cluster
+# ceph-deploy install --release luminous ceph-dal-admin-a2
+# ceph-deploy admin ceph-dal-admin-a2</code></pre>
+<p>&nbsp;</p>
+<h5>Make server as a ceph-admin node</h5>
+<p>After installing ceph, go the admin server2 and make sure it has the correct host entries and can able to communicate all monitor and osds hosts fine.&nbsp;</p>
+<p>Now do the following</p>
+<pre><code class="language-plaintext"># su cephuser ; cd /home/cephuser/ceph-cluster
+# cp -af /etc/ceph/ceph.client.admin.keyring ./
+# cp -af /etc/ceph/ceph.conf ./
+# ceph-deploy gatherkeys ceph-dal-mon-a1</code></pre>
+<p>&nbsp;</p>
+<p>The ceph-deploy gatherkeys will copy all keyring from the monitor server to this admin server 2. Make sure all files have correct ownership</p>
+<pre><code class="language-plaintext">$ pwd
+/home/cephuser/ceph-cluster
+$ ll
+total 44
+-rw------- 1 cephuser cephuser   113 May 11 14:06 ceph.bootstrap-mds.keyring
+-rw------- 1 cephuser cephuser   113 May 11 14:06 ceph.bootstrap-mgr.keyring
+-rw------- 1 cephuser cephuser   113 May 11 14:07 ceph.bootstrap-osd.keyring
+-rw------- 1 cephuser cephuser   113 May 11 14:07 ceph.bootstrap-rgw.keyring
+-rw------- 1 cephuser cephuser   151 May 11 14:06 ceph.client.admin.keyring
+-rw-r--r-- 1 cephuser cephuser   358 May 11 13:46 ceph.conf
+-rw-rw-r-- 1 cephuser cephuser 14996 May 11 14:28 ceph-deploy-ceph.log
+-rw------- 1 cephuser cephuser    77 May 11 14:06 ceph.mon.keyring
+</code></pre>
+<p>That's all. Now you can manage the cluster from the admin server node 2. To test, run ceph-deploy disk list ods<i>host</i></p>
+<pre><code class="language-plaintext">&nbsp;</code></pre>
