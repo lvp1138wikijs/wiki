@@ -2,7 +2,7 @@
 title: Installation & Upgrade
 description: 
 published: true
-date: 2021-05-15T01:34:12.538Z
+date: 2021-05-15T03:32:19.285Z
 tags: 
 editor: markdown
 dateCreated: 2021-05-15T01:34:12.538Z
@@ -110,4 +110,116 @@ Click Next.
 When you are prompted, insert the Windows Server 2003 CD-ROM into the computer's CD-ROM or DVD-ROM drive or provide a path to the location of the files, and then click OK.
 Click Finish.
 IIS and the FTP service are now installed. You must configure the FTP Service before you can use it.
+
+# Configure The FTP Service
+
+To configure the FTP Service to allow only anonymous connections, follow these steps:
+
+1. Start Internet Information Services Manager or open the IIS snap-in.
+1. Expand Server_name, where Server_name is the name of the server.
+1. Expand FTP Sites
+1. Right-click Default FTP Site, and then click Properties.
+1. Click the Security Accounts tab.
+1. Click to select the Allow Anonymous Connections check box (if it is not already selected), and then click to select the Allow only anonymous connections check box.
+1. 
+1. When you click to select the Allow only anonymous connections check box, you configure the FTP Service to allow only anonymous connections. Users cannot log on by using user names and passwords.
+1. Click the Home Directory tab.
+1. Click to select the Read and Log visits check boxes (if they are not already selected), and then click to clear the Write check box (if it is not already cleared).
+1. Click OK.
+1. Quit Internet Information Services Manager or close the IIS snap-in.
+
+The FTP server is now configured to accept incoming FTP requests. Copy or move the files that you want to make available to the FTP publishing folder for access. The default folder is drive:\Inetpub\Ftproot, where drive is the drive on which IIS is installed.
+
+# Install & Configure FTP on w2k8 server
+
+- Open Server Manager, go to Roles and click “Add Roles”
+- In the Add Role Wizard, select Web Server (IIS) role to install
+- Click Next until you reach Select Role Services page, leave the default and check FTP Server, FTP Service and FTP Extensibility at the bottom. Click Next, follow the wizard and finish the role installation.
+- Click Next until you reach Select Role Services page, leave the default and check FTP Server, FTP Service and FTP Extensibility at the bottom. Click Next, follow the wizard and finish the role installation.
+- Configure Binding and SSL. In our case, we’d like to bind to all unassigned IP addresses and do not use SSL
+- Enable Basic Authentication and configure authorization. In our case I’ll start with allowing All users both Read and Write permission as long as all users on the server are password protected.
+- Click Finish to finish the configuration.
+- Open Windows Firewall with Advanced Security from Start > Administrative Tools, go to Inbound Rules in the left pane, and create a new rule by clicking New Rule in the Action Pane, select Port and click next.
+- Apply this rule to TCP port 21, and click Next
+- Keep the default configure for the rest of steps to Allow the connection and apply it to all profiles, name the rule and finish the wizard.
+- Now the FTP should be up and running, please test the connection to confirm.
+
+# How to Install Perl on W2k3
+
+1) Open IIS 6.0
+2) Click on the name of your computer -> click on "Web Service Extensions" and one can view few links. One of them says "Add a new Web service extension...", click on that link.
+3) In that window it will ask for the extension name one can put anything, like "CGI script" and under the "Required Files" section put 'C:\Perl\bin\perl.exe "%s" %s' click OK to the notification, click "Set status to allowed" and press ok.
+4) Now, one need to go at command prompt and "md c:\inetpub\cgi-bin" [without quote].
+5) Now go back to the IIS Manager and right click on Default Web Site highlight "New" in the pop-up menu and click "Virtual Directory..." in the new menu.
+6) Click next then as an alias put "cgi-bin" and click next then as a path for the next dialog put in "c:\inetpub\cgi-bin". On the next dialog leave everything checked and checks executes and click next.
+7) Click Finish to end the installation wizard.
+8) Right-click on cgi-bin directory from default web sites and click on properties.
+9) Click Configuration in the lower right-hand area of the dialog and make sure .pl is there (if it isn't, add it the way you see it).
+
+To make the scripts work the line (#!/usr/bin/perl) should now be #!C:\Perl\bin\perl.exe. Any reference to any files should be changed from /home/user etc, to c:/home/user or c:\\home\\users - note the double back-slashes. Now, one should be able to run Perl scripts successfully using Windows Server 2003, and IIS 6.0.
+
+ 1) Click on start -> run.
+ 2) Type tscc.msc and click on OK button.
+
+ 3) On the left side you should see that "Connections" is selected, on the right side you should see, under the "Connection" tab, RDP-Tcp. Right click that, and press properties.
+
+ 4) Go to the Client Settings tab, and under "Disable the following:" one will see "Audio mapping" checked. Please uncheck it.
+
+5) Click on OK button to complete the process.
+
+# How to install VPN server on W2k3
+
+1. Go to Start > Administrative Tools > Routing and Remote Access.
+2. Right-click on server’s icon -> select "Configure and Enable Routing and Remote Access" to start the Setup Wizard
+3. Click Next
+4. Select "Remote Access (dial-up or VPN)"
+5. Click Next.
+6. Check the VPN check box and then click next.
+7. in the "VPN Connection "window, select the network interface is connected to the Internet and click Next.
+8. In the "IP Address Assignment window", there are two options available:
+ 
+
+    *Automatically Choose this option if you have a DHCP server.
+    *From a specified range of addresses Choose the option if the remote clients can only be given an address from a specified pool of addresses.
+ 
+
+9. Select default value of No, use Routing and Remote Access to authenticate connection requests and click the Next.
+10. Click Finish to turn on RRAS and to configure the server as a remote-access server.
+ 
+
+**Note: One must have to setup RRAS and turn on the service for VPN server**.
+
+# How to set scheduler tasks in W2k3
+
+1) Click on Start -> Control Panel -> Scheduled Task.
+2) Click on “Add Scheduled Tasks”.
+3) Click on Next to continue.
+4) Select scheduler task file or program for which one need to set it.
+5) Click on Next.
+6) Provide scheduler name and select the radio button to fix scheduler run time. Options are:
+    Daily
+    Weekly
+    Monthly
+    One Time Only
+    When my Computer Stats
+    When I log on
+7) Click on Next.
+8) Select the time and scheduler start date.
+9) Enter scheduler username and password.
+10) Click on Finish
+
+#  How to set scheduler tasks in W2k8
+
+Log into your server through Terminal Services or Remote Desktop Connection
+Navigate to Start > All Programs > Administrative Tools > Server Manager. This brings you to the Server Manager interface
+Drill down to Configuration > Task Scheduler
+On the right hand side of the interface, click Create Basic Task… Give the task a name and description. Click Next
+Select the radio button for how often the task should run: Daily, Weekly, Monthly, one time only, when the computer starts, when I log in, or when a specific event is logged. Click Next
+Select a start time, how often to perform the task, and an end time. Click Next
+Configure the task to Start a Program, Send an e-mail, or display a message by selecting the appropriate radio button. Click Next
+Browse to the program or script and enter in any arguments or paths to start in. For example to run a command prompt, enter in C:\Windows\System32\cmd.exe. Click Next
+Select the checkbox for Open the Properties dialog for this task when I click Finish if you wish to configure the task further. Click Finish
+The Advanced Properties window will appear. Configure the task further to your liking by adding comments to the task, telling the task when to run (only if logged in or otherwise), deleting the task after its run if it's scheduled to not run infinitely, to reschedule the task if it is missed, and so forth. After doing so, the task is setup and will run if configured proper
+
+
 
