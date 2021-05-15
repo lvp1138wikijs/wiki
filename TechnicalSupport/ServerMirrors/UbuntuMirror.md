@@ -2,7 +2,7 @@
 title: Ubuntu Mirror
 description: 
 published: true
-date: 2021-05-15T13:57:44.619Z
+date: 2021-05-15T14:44:18.567Z
 tags: 
 editor: markdown
 dateCreated: 2021-05-15T13:57:44.619Z
@@ -32,7 +32,7 @@ Create a new script named /usr/local/sbin/ubuntu-rsync.sh. Change ownership to r
 
 Open it using your favorite editor and add the following codes to that file. The script is taken from https://help.ubuntu.com/community/Rsyncmirror
 
-## Mirror Synchronization Script /usr/local/bin/ubuntu-mirror-sync.sh
+> `## Mirror Synchronization Script /usr/local/bin/ubuntu-mirror-sync.sh
 ## Version 1.01 Updated 13 Feb 2007 by Peter Noble
 ## Point our log file to somewhere and setup our admin email
 log=/var/log/mirrorsync.log
@@ -86,10 +86,10 @@ OUTMAIL
         complete="true"
         fi
 done
-exit 0
+exit 0`
 
-Save it
-Step 03:
+
+**Step 03:**
 
 Run the mirror script.
 
