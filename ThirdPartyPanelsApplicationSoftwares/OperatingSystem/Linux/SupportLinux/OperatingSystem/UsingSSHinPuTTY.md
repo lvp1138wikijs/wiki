@@ -2,7 +2,7 @@
 title: Using SSH in PuTTY (Windows)
 description: 
 published: true
-date: 2021-05-15T01:20:48.212Z
+date: 2021-05-15T01:21:06.738Z
 tags: 
 editor: markdown
 dateCreated: 2021-05-15T01:20:09.465Z
