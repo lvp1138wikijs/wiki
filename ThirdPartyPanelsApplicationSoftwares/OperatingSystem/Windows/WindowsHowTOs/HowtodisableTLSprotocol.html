@@ -1,0 +1,119 @@
+<!--
+title: How to disable TLS protocol
+description: 
+published: true
+date: 2021-05-16T05:48:09.159Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-16T05:48:09.159Z
+-->
+
+<h1>How to disable TLS protocol in Windows Server</h1>
+<p>&nbsp;</p>
+<p>We can enable or disable the TLS protocol in Windows server by editing the registry keys.</p>
+<p><strong>Note</strong>: <i><mark class="pen-red">It is important to export the registry keys before modification</mark></i>.</p>
+<p>To open the registry editor, open the Run program windows using (Win Key + R). In the Run prompt type 'regedit' and click "ok". Now the registry editor tool will open for you.</p>
+<p><strong><u>TLS 1.0</u></strong></p>
+<p>This subkey controls the use of TLS 1.0.</p>
+<p>Registry path: HKLM SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols</p>
+<p>To disable the TLS 1.0 protocol, create an Enabled entry in the appropriate subkey. This entry does not exist in the registry by default. After you have created the entry, change the DWORD value to 0. To enable the protocol, change the DWORD value to 1.</p>
+<p>TLS 1.0 subkey table</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><mark class="marker-blue">Subkey</mark></td>
+        <td><mark class="marker-blue">Description</mark></td>
+        <td><mark class="marker-blue">Default</mark></td>
+      </tr>
+      <tr>
+        <td><span style="font-family:Arial, Helvetica, sans-serif;">Client</span></td>
+        <td>Controls the use of TLS 1.0 on the client.</td>
+        <td><span style="font-family:Arial, Helvetica, sans-serif;">Enabled</span></td>
+      </tr>
+      <tr>
+        <td><span style="font-family:Arial, Helvetica, sans-serif;">Server</span></td>
+        <td>Controls the use of TLS 1.0 on the server.</td>
+        <td><span style="font-family:Arial, Helvetica, sans-serif;">Enabled</span></td>
+      </tr>
+      <tr>
+        <td>DisabledByDefault</td>
+        <td>Flag to disable TLS 1.0 by default.</td>
+        <td><span style="font-family:Arial, Helvetica, sans-serif;">Enabled</span></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p><strong><u>TLS 1.1</u></strong></p>
+<p>This subkey controls the use of TLS 1.1.</p>
+<p>Registry path: HKLM SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols</p>
+<p>To disable the TLS 1.1 protocol, create an Enabled entry in the appropriate subkey. This entry does not exist in the registry by default. After you have created the entry, change the DWORD value to 0. To enable the protocol, change the DWORD value to 1.</p>
+<p>TLS 1.1 subkey table</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>Subkey</td>
+        <td>Description</td>
+        <td>Default</td>
+      </tr>
+      <tr>
+        <td>Client</td>
+        <td>Controls the use of TLS 1.1 on the client.</td>
+        <td>Enabled</td>
+      </tr>
+      <tr>
+        <td>Server</td>
+        <td>Controls the use of TLS 1.1 on the server.</td>
+        <td>Enabled</td>
+      </tr>
+      <tr>
+        <td>DisabledByDefault</td>
+        <td>Flag to disable TLS 1.1 by default.</td>
+        <td>Enabled</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p><strong><u>TLS 1.2</u></strong></p>
+<p>This subkey controls the use of TLS 1.2.</p>
+<p>Note: For TLS 1.2 to be enabled and negotiated on servers that run Windows Server 2008 R2, you MUST create the "DisabledByDefault" entry in the appropriate subkey (Client, Server) and set it to "0". The entry will not be seen in the registry and it is set to "1" by default.</p>
+<p>Registry path: HKLM SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols</p>
+<p>To disable the TLS 1.2 protocol, create an Enabled entry in the appropriate subkey. This entry does not exist in the registry by default. After you have created the entry, change the DWORD value to 0. To enable the protocol, change the DWORD value to 1.</p>
+<p>TLS 1.2 subkey table</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><mark class="marker-blue">Subkey</mark></td>
+        <td><mark class="marker-blue">Description</mark></td>
+        <td><mark class="marker-blue">Default</mark></td>
+      </tr>
+      <tr>
+        <td>Server</td>
+        <td>Controls the use of TLS 1.2 on the server.</td>
+        <td>Enabled</td>
+      </tr>
+      <tr>
+        <td>DisabledByDefault</td>
+        <td>Flag to disable TLS 1.2 by default.</td>
+        <td>Enabled</td>
+      </tr>
+      <tr>
+        <td><span style="font-family:Arial, Helvetica, sans-serif;">Client</span></td>
+        <td>Controls the use of TLS 1.2 on the client.</td>
+        <td>Enabled</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p>Source: https://technet.microsoft.com/en-us/library/dn786418(v=ws.11).aspx#BKMK_SchannelTR_TLS10</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
