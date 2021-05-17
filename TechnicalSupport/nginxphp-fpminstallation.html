@@ -1,0 +1,35 @@
+<!--
+title: Nginx+php-fpm installation
+description: 
+published: true
+date: 2021-05-17T00:36:13.702Z
+tags: nginx, phpfpm, php-fpm
+editor: ckeditor
+dateCreated: 2021-05-17T00:36:13.702Z
+-->
+
+<h1>Nginx + PHP-FMP Installation Issue</h1>
+<p>REFERENCE TICKET ID <a href="https://secure.serverpoint.com/tickets/staff/index.php?/Tickets/Ticket/View/329010/inbox/-1/-1/-1/0">LHO-388-37411</a></p>
+<p>When we try to install Nginx with PHP-FPM from Plesk panel &gt;&gt; Tools and Settings &gt; Updates and Upgrades. it finishes with the following message, but PHP-FPM was not installed</p>
+<blockquote>
+  <p><strong>Installation started in background</strong></p>
+  <p><strong>Error: You already have the latest version of product(s) and all selected components installed. Installation will not continue.</strong></p>
+</blockquote>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">When you check Nginx status, it will show following message and wont start.</span></p>
+<blockquote>
+  <p><strong>root@:~# /etc/init.d/nginx status</strong></p>
+  <p><strong>* could not access PID file for nginx</strong></p>
+  <p><strong>root@:~# /etc/init.d/nginx start</strong></p>
+  <p><strong>* Not starting NGINX as it is disabled in config</strong></p>
+</blockquote>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">To fix the issue, follow the steps given below:</span></p>
+<blockquote>
+  <p><span style="font-family:Arial, Helvetica, sans-serif;"><strong>apt-get install python-software-properties add-apt-repository ppa:yola/php5 apt-get update apt-get upgrade</strong></span><br><br><span style="font-family:Arial, Helvetica, sans-serif;"><strong>/usr/local/psa/admin/bin/autoinstaller</strong></span><br><span style="font-family:Arial, Helvetica, sans-serif;"><strong>/usr/local/psa/admin/bin/nginxmng --disable /usr/local/psa/admin/bin/nginxmng --enable /etc/init.d/nginx restart</strong></span><br><br><span style="font-family:Arial, Helvetica, sans-serif;"><strong>/usr/local/psa/admin/sbin/httpdmng --reconfigure-all/etc/init.d/apache2 restart/etc/init.d/nginx restart</strong></span></p>
+</blockquote>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
