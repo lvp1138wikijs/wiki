@@ -1,0 +1,38 @@
+<!--
+title: Blocked Ports, IRC
+description: Blocked Ports in Dedicated Centos servers 
+published: true
+date: 2021-05-18T14:14:47.850Z
+tags: centos blocked ports, linux blocked ports, firewall
+editor: ckeditor
+dateCreated: 2021-05-18T14:14:47.850Z
+-->
+
+<h1>Blocked Ports, IRC</h1>
+<p>If a customer complains that some ports on their dedicated server are blocked.</p>
+<p>For example.</p>
+<pre><code class="language-plaintext">I have two non-linked irc servers however the portst 6667 etc (irc) are blocked. I do not see anything at your AUP about this block.</code></pre>
+<p>&nbsp;</p>
+<p><code>In such cases you can provide the following details to the customer.</code></p>
+<ul>
+  <li><code>We do not block any ports on our network.</code></li>
+  <li><code>If you are not able to access these ports it might be blocked on the default firewall comes with the server.</code></li>
+</ul>
+<p>&nbsp;</p>
+<p>For Example:</p>
+<p>CentOS has a default firewall enabled by default.</p>
+<p>To see the rules on the firewall, Execute the following command.</p>
+<blockquote>
+  <p>iptables --list -nv</p>
+</blockquote>
+<p>To remove those rules, clear out the following file</p>
+<blockquote>
+  <p>/etc/sysconfig/iptables</p>
+</blockquote>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">and execute the following commands:</span></p>
+<blockquote>
+  <p><code>iptables -F</code></p>
+  <p><code>iptables -X</code></p>
+</blockquote>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
