@@ -1,0 +1,42 @@
+<!--
+title: API Server
+description: 
+published: true
+date: 2021-05-19T16:32:58.030Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-19T16:32:58.030Z
+-->
+
+<h2>API Server Installation</h2>
+<p>Here the steps how to setup serverpoint API servers</p>
+<p>OS Used: CentOS 7. It is installed via our inventory</p>
+<h5>Install the Packages</h5>
+<pre><code class="language-plaintext">yum install epel-release
+yum update -y
+yum install -y httpd mariadb-server mod_ssl mod_fcgid mariadb
+ 
+systemctl restart httpd
+systemctl restart mariadb
+systemctl enable httpd
+systemctl enable mariadb
+rm -rf /etc/httpd/conf.d/welcome.conf
+rm -rf /var/www</code></pre>
+<h5>Perl Packages</h5>
+<pre><code class="language-plaintext">yum -y install perl perl-devel perl-version perl-ExtUtils-ParseXS perl-Compress-Raw-Zlib \
+perl-CPAN perl-XML-Simple perl-Crypt-SSLeay perl-Socket6 perl-DBI perl-libwww-perl \
+perl-Crypt-DES perl-Net-SSLeay perl-libs perl-XML-Parser perl-ExtUtils-MakeMaker \
+perl-Test-Harness perl-IO-Compress-Base perl-Digest-SHA perl-Compress-Zlib \
+perl-Object-MultiType perl-XML-Smart perl-IO-Socket-INET6 perl-SNMP_Session \
+perl-Error perl-Git perl-DBD-SQLite perl-JSON perl-HTML-Tagset perl-URI perl-Crypt-CBC \
+perl-Crypt-Rijndael perl-Net-LibIDN perl-Pod-Escapes perl-IO-Socket-SSL \
+perl-Unicode-String perl-Module-Pluggable perl-IO-Compress-Zlib perl-CGI \
+rrdtool-perl perl-WWW-Curl perl-HTML-Parser perl-DBD-MySQL perl-HTML-Template \
+perl-Pod-Simple perl-Net-Telnet perl-XML-Entities perl-LWP-Protocol-https
+
+perl -MCPAN -e 'force install Business::PayPal::NVP'</code></pre>
+<h5>Configure Apache</h5>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
