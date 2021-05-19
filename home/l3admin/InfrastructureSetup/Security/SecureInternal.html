@@ -1,0 +1,59 @@
+<!--
+title: Secure Internal Servers
+description: 
+published: true
+date: 2021-05-19T19:46:56.804Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-19T19:46:56.804Z
+-->
+
+<h1>Secure Internal Servers</h1>
+<h5>Secure the SSH Service</h5>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">useradd -s /bin/bash -d /home/pcruz -m -G wheel pcruz
+passwd pcruz
+  
+sed -i 's/#Port 22/Port 5252/g' /etc/ssh/sshd_config
+sed -i 's/#Protocol 2/Protocol 2/g' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+sed -i '/PermitRootLogin no/a AllowUsers pcruz webroot' /etc/ssh/sshd_config
+  
+cat &gt;&gt; /etc/sudoers &lt;&lt;END
+pcruz ALL=(ALL) ALL
+END
+ 
+systemctl restart sshd</code></pre>
+<h5>Set IPtables Firewall Rules to Enable SSH Access Only through VPN</h5>
+<p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct bond_ID of the server</mark></i></p>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">yum install iptables-services -y
+systemctl enable iptables
+iptables -F
+iptables -X
+ 
+&gt;/etc/sysconfig/iptables
+iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
+iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
+iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
+iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
+
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT -m comment --comment "For Ping"
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT -m comment --comment "For Ping"
+iptables -A INPUT -i bond0.XX -j DROP -m comment --comment "Restricted Public Access"
+ 
+service iptables save
+service iptables restart</code></pre>
+<h5>Additional IPtables Rules for API Server</h5>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">iptables -A INPUT -p tcp --dport 80 -j ACCEPT  -m comment --comment "Apache Port"
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT  -m comment --comment "Apache SSL Port"
+iptables -A INPUT -p tcp --dport 3305 -j ACCEPT  -m comment --comment "MySQL Port"</code></pre>
+<h5>Additional IPtables Rules for CEPH Admin Server</h5>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"
+iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"
+</code></pre>
+<p>&nbsp;</p>
