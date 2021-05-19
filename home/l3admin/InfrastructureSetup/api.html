@@ -2,7 +2,7 @@
 title: API Server
 description: 
 published: true
-date: 2021-05-19T16:32:58.030Z
+date: 2021-05-19T18:09:18.666Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T16:32:58.030Z
@@ -35,7 +35,99 @@ rrdtool-perl perl-WWW-Curl perl-HTML-Parser perl-DBD-MySQL perl-HTML-Template \
 perl-Pod-Simple perl-Net-Telnet perl-XML-Entities perl-LWP-Protocol-https
 
 perl -MCPAN -e 'force install Business::PayPal::NVP'</code></pre>
+<h5>Configure SSL Certificate</h5>
+<p>Copy the serverpoint.com's wildcard SSL certificate from any of the internal server and put in to /etc/httpd/ssl</p>
 <h5>Configure Apache</h5>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">
+service httpd start
+systemctl enable httpd.service
+rm -rf /var/www/cgi-bin
+groupadd webroot
+useradd -s /bin/bash -d /var/www -m -g webroot webroot
+mkdir -p /var/www/public_html/cgi-bin
+chown -R webroot:webroot /var/www</code></pre>
+<p><i><mark class="marker-yellow">Note: Rename the api-vX to the exact name of sub-domain</mark></i></p>
+<pre><code class="language-plaintext">cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.`date +%Y-%m-%d:%H:%M:%S`
+rm -rf /etc/httpd/conf.d/welcome.conf
+sed -i 's/#AddHandler cgi-script .cgi/AddHandler cgi-script .cgi .pl/g' /etc/httpd/conf/httpd.conf
+sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/var/www"#' /etc/httpd/conf/httpd.conf
+sed -i 's#Directory "/var/www/html"#Directory "/var/www"#' /etc/httpd/conf/httpd.conf
+sed -i 's/Options Indexes FollowSymLinks/Options FollowSymLinks/g' /etc/httpd/conf/httpd.conf
+
+cat &gt;&gt; /etc/httpd/conf.d/fcgid.conf &lt;&lt;END
+FcgidConnectTimeout 200
+FcgidMaxRequestLen 15728640
+FcgidFixPathinfo 1
+END
+
+cat &gt;&gt; /etc/httpd/conf.d/api-vX.serverpoint.conf &lt;&lt;END
+&lt;VirtualHost *:80&gt;
+    ServerName api-vX.serverpoint.com
+    ServerAlias api-vX.serverpoint.app
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/public_html/cgi-bin/gen4cp/engine
+    DirectoryIndex index.html index.htm default.html index.js
+     &lt;Files ~ "(.html)"&gt;
+        Order allow,deny
+        Deny from all
+    &lt;/Files&gt;
+    ScriptAlias /cgi-bin/ /var/www/public_html/cgi-bin/
+    &lt;Directory "/var/www/public_html/cgi-bin"&gt;
+        AllowOverride All
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+    ErrorLog /var/log/httpd/default.error.log
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+    CustomLog /var/log/httpd/default.access.log combined
+&lt;/VirtualHost&gt;
+&lt;VirtualHost *:443&gt;
+    ServerName api-vX.serverpoint.com
+    ServerAlias api-vX.serverpoint.app
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/public_html/cgi-bin/gen4cp/engine
+    DirectoryIndex index.html index.htm default.html index.js
+     &lt;Files ~ "(.html)"&gt;
+        Order allow,deny
+        Deny from all
+     &lt;/Files&gt;
+    ScriptAlias /cgi-bin/ /var/www/public_html/cgi-bin/
+    &lt;Directory "/var/www/public_html/cgi-bin"&gt;
+        AllowOverride All
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+#   SSL Engine Switch:
+        #   Enable/Disable SSL for this virtual host.
+        SSLEngine on
+        SSLProxyEngine On
+        SSLCertificateFile    /etc/httpd/ssl/wild.serverpoint.com.crt
+        SSLCertificateKeyFile /etc/httpd/ssl/wild.serverpoint.com.key
+        SSLCertificateChainFile /etc/httpd/ssl/wild.serverpoint.com.ca
+        &lt;FilesMatch "\.(cgi|shtml|phtml|php)$"&gt;
+                SSLOptions +StdEnvVars
+        &lt;/FilesMatch&gt;
+        &lt;Directory /usr/lib/cgi-bin&gt;
+                SSLOptions +StdEnvVars
+        &lt;/Directory&gt;
+        BrowserMatch "MSIE [2-6]"                 nokeepalive ssl-unclean-shutdown                 downgrade-1.0 force-response-1.0
+        # MSIE 7 and newer should be able to use keepalive
+        BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+    ErrorLog /var/log/httpd/default.error.log
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+    CustomLog /var/log/httpd/default.access.log combined
+&lt;/VirtualHost&gt;
+END
+ 
+service httpd restart</code></pre>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
