@@ -1,0 +1,71 @@
+<!--
+title: SSL Certificates
+description: 
+published: true
+date: 2021-05-19T14:09:36.549Z
+tags: ssl
+editor: ckeditor
+dateCreated: 2021-05-19T14:09:36.549Z
+-->
+
+<blockquote>
+  <p><span style="font-family:Arial, Helvetica, sans-serif;">This procedure is only for Dedicated/VPS plan. For shared plan please check the </span><a href="http://64.235.39.80:8090/pages/viewpage.action?pageId=2064721">tutorial</a><span style="font-family:Arial, Helvetica, sans-serif;">.</span></p>
+</blockquote>
+<h2>SSL Plans</h2>
+<ul>
+  <li>Geo Trust Quick SSL - $89.95/year</li>
+  <li>Geo Trust Quick SSL Premium - $149.95/year</li>
+  <li>Geotrust True Business ID&nbsp;</li>
+  <li>Geotrust True Business ID Wildcard&nbsp;</li>
+</ul>
+<h2>What the difference between QuickSSL, QuickSSL Premium, True BusinessID, and Wildcard SSL ?</h2>
+<p>QuickSSL and QuickSSL Premium are authenticated at the domain level only, whereas True BusinessID and Wildcard SSL are authenticated at the domain level and at the company/organization level.</p>
+<ul>
+  <li>Quick SSL is ideal for small to medium online businesses and shopping carts and online stores</li>
+  <li>Quick SSL Premium is ideal for medium to Large online Business and Business-2-Business (B2B)</li>
+  <li>True Business ID is ideal for large ecommerce retailers and High volume online businesses</li>
+</ul>
+<h2>SSL New Order Procedure</h2>
+<pre><code class="language-plaintext">IP address &amp; Domain
+
+A dedicated IP address should be assigned to the domain name which is need SSL certificate.
+SSL certificates are installed on fully qualified domain names (FQDN). That means if you purchase it for domain.com, it can not be installed on www.domain.com or subdomain.domain.com</code></pre>
+<h4><strong>1: Generate CSR</strong></h4>
+<p>A customer signing request should be need to order SSL certificate</p>
+<pre><code class="language-plaintext">Key Size
+
+CSR must have a minimum of 2048 bit key size.</code></pre>
+<ol>
+  <li><a href="http://64.235.39.80:8090/display/CS/Generate+CSR#GenerateCSR-FromcPanel">Genereate CSR&nbsp;Genereate CSR from cPanel</a></li>
+  <li><a href="http://64.235.39.80:8090/display/CS/Generate+CSR#GenerateCSR-FromPlesk">Generate CSR from Plesk</a></li>
+  <li><a href="http://64.235.39.80:8090/display/CS/Generate+CSR#GenerateCSR-FromIIS-Windows">Generate CSR from IIS</a></li>
+  <li><a href="http://64.235.39.80:8090/display/CS/Generate+CSR#GenerateCSR-FromLinuxServer">Generate CSR from Linux</a></li>
+</ol>
+<p>If a client want to Install SSL, then inform him&nbsp;<a href="http://64.235.39.80:8090/pages/viewpage.action?pageId=1441908"><strong>Add payment</strong></a>&nbsp;to account and get back us with the CSR, Domain name, Country, State, City, Organisation and Email address which need to send SSL certificate.</p>
+<p><strong>Email Address:</strong>&nbsp;Validation email can only be sent to an email attached to the domain. like&nbsp;<a href="mailto:admin@domain.com">admin@domain.com</a>&nbsp;or administrator / hostmaster / webmaster / or postmaster<a href="mailto:support@domain.com.">@domain.com.</a>&nbsp;Those are the options and is for security reasons to prove they own the domain. Inform customer create and configure an email account with any of it before generating CSR</p>
+<h4><strong>2: Order SSL</strong></h4>
+<p>Once customer send CSR and the payment,&nbsp;then remove payment from customer using<strong>&nbsp;</strong><a href="http://64.235.39.80:8090/display/CS/Accounting#Accounting-Onetimebilling"><strong>One time</strong></a></p>
+<p>Then contact Minerva&nbsp;with the following information to order SSL.</p>
+<blockquote>
+  <p><span style="font-family:Arial, Helvetica, sans-serif;">Client First/Last Name</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Company Name</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Address</span><br><span style="font-family:Arial, Helvetica, sans-serif;">City</span><br><span style="font-family:Arial, Helvetica, sans-serif;">State</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Country</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Zip/Postal code</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Phone Number</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Email</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Domain</span><br><span style="font-family:Arial, Helvetica, sans-serif;">Web Server type</span></p>
+</blockquote>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">Once SSL order, then authorization email and SSL cert will send to the email address he provided.</span></p>
+<h4><strong>3: Install SSL</strong></h4>
+<p>Customer can install it from their control panels. If they want us to install it, then tell them to provide SSL certificate, RSA Private Key and the CA bundle.</p>
+<h2>Renew Existing SSL Certificate</h2>
+<p><strong>For Linux</strong></p>
+<ol>
+  <li>Check which SSL cert they already have and tell them&nbsp;<a href="http://64.235.39.80:8090/pages/viewpage.action?pageId=1441908"><strong>add a payment</strong></a>&nbsp;to their account.</li>
+  <li>Once its added, then remove it using<strong>&nbsp;</strong><a href="http://64.235.39.80:8090/display/CS/Accounting#Accounting-Onetimebilling"><strong>One time</strong></a></li>
+  <li>Then&nbsp;provided the domain information to Ms. Minerva to do a renewal request.</li>
+  <li>Once its done an approval email will send to customer's email address. Inform customer to wait for the email and follow the instruction emails.</li>
+</ol>
+<p><br><strong>For Windows</strong></p>
+<p>The customer has to provide a new CSR to renew the SSL certificate.</p>
+<ol>
+  <li>Check which SSL cert they already have and tell them&nbsp;to <a href="http://64.235.39.80:8090/pages/viewpage.action?pageId=1441908"><strong>add a payment</strong></a>&nbsp;to their account.</li>
+  <li>Once its added, then remove it using<strong>&nbsp;</strong><a href="http://64.235.39.80:8090/display/CS/Accounting#Accounting-Onetimebilling"><strong>One time</strong></a></li>
+  <li>Then&nbsp;provided the domain information to Ms. Minerva to do renewal request.</li>
+  <li>Once its done an approval email will send to customer email address. Inform customer wait for the email and follow the instruction emails.</li>
+</ol>
+<p>&nbsp;</p>
