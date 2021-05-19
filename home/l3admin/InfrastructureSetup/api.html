@@ -2,7 +2,7 @@
 title: API Server
 description: 
 published: true
-date: 2021-05-19T18:09:18.666Z
+date: 2021-05-19T19:19:30.204Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T16:32:58.030Z
@@ -11,6 +11,10 @@ dateCreated: 2021-05-19T16:32:58.030Z
 <h2>API Server Installation</h2>
 <p>Here the steps how to setup serverpoint API servers</p>
 <p>OS Used: CentOS 7. It is installed via our inventory</p>
+<h5>Set Hostname</h5>
+<p><i><mark class="marker-yellow">Note: Replace api-vX with the correct hostname</mark></i>&nbsp;</p>
+<pre><code class="language-plaintext">hostname api-vX.serverpoint.com
+echo api-vX.serverpoint.com &gt; /etc/hostname</code></pre>
 <h5>Install the Packages</h5>
 <pre><code class="language-plaintext">yum install epel-release
 yum update -y
@@ -36,7 +40,12 @@ perl-Pod-Simple perl-Net-Telnet perl-XML-Entities perl-LWP-Protocol-https
 
 perl -MCPAN -e 'force install Business::PayPal::NVP'</code></pre>
 <h5>Configure SSL Certificate</h5>
-<p>Copy the serverpoint.com's wildcard SSL certificate from any of the internal server and put in to /etc/httpd/ssl</p>
+<p>Copy the serverpoint.com's wildcard SSL certificate from any of the internal server and put it to /etc/httpd/ssl</p>
+<pre><code class="language-plaintext">#ls -l
+total 12
+-rw-r--r-- 1 root root 2167 May 19 10:17 wild.serverpoint.com.ca
+-rw-r--r-- 1 root root 2057 May 19 10:15 wild.serverpoint.com.crt
+-rw-r--r-- 1 root root 1679 May 19 10:15 wild.serverpoint.com.key</code></pre>
 <h5>Configure Apache</h5>
 <p>&nbsp;</p>
 <pre><code class="language-plaintext">
@@ -46,11 +55,14 @@ rm -rf /var/www/cgi-bin
 groupadd webroot
 useradd -s /bin/bash -d /var/www -m -g webroot webroot
 mkdir -p /var/www/public_html/cgi-bin
-chown -R webroot:webroot /var/www</code></pre>
-<p><i><mark class="marker-yellow">Note: Rename the api-vX to the exact name of sub-domain</mark></i></p>
-<pre><code class="language-plaintext">cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.`date +%Y-%m-%d:%H:%M:%S`
+chown -R webroot:webroot /var/www
+
+cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.`date +%Y-%m-%d:%H:%M:%S`
 rm -rf /etc/httpd/conf.d/welcome.conf
 sed -i 's/#AddHandler cgi-script .cgi/AddHandler cgi-script .cgi .pl/g' /etc/httpd/conf/httpd.conf
+
+sed -i 's/User apache/User webroot/g' /etc/httpd/conf/httpd.conf
+sed -i 's/Group apache/Group webroot/g' /etc/httpd/conf/httpd.conf
 sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/var/www"#' /etc/httpd/conf/httpd.conf
 sed -i 's#Directory "/var/www/html"#Directory "/var/www"#' /etc/httpd/conf/httpd.conf
 sed -i 's/Options Indexes FollowSymLinks/Options FollowSymLinks/g' /etc/httpd/conf/httpd.conf
@@ -59,9 +71,9 @@ cat &gt;&gt; /etc/httpd/conf.d/fcgid.conf &lt;&lt;END
 FcgidConnectTimeout 200
 FcgidMaxRequestLen 15728640
 FcgidFixPathinfo 1
-END
-
-cat &gt;&gt; /etc/httpd/conf.d/api-vX.serverpoint.conf &lt;&lt;END
+END</code></pre>
+<p><i><mark class="marker-yellow">Note: Rename the api-vX to the exact name of sub-domain</mark></i></p>
+<pre><code class="language-plaintext">cat &gt;&gt; /etc/httpd/conf.d/api-vX.serverpoint.conf &lt;&lt;END
 &lt;VirtualHost *:80&gt;
     ServerName api-vX.serverpoint.com
     ServerAlias api-vX.serverpoint.app
