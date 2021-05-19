@@ -2,7 +2,7 @@
 title: Installing Terminal Service CAL licenses on Windows 2012 R2
 description: 
 published: true
-date: 2021-05-19T05:34:13.254Z
+date: 2021-05-19T05:37:17.364Z
 tags: 
 editor: markdown
 dateCreated: 2021-05-19T05:29:22.454Z
@@ -57,6 +57,43 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 - When I come up then login to it and wait for wizard to complete
 - Once Wizard is complete, click on close button
 
-
-
+- Now open Server Manager, click on "Remote Desktop Service"
+- Click on "Overview" and then on "RD Licensing"
+- Select server from server pool to move it to select list and click Next
+- Then click on Add button
+- Now in "Server Manager" click on Tools>>Terminal Service >> Remote desktop licensing manager
+- Right click on Name >> Activate Server
+- Click Next, then Next again
+- Enter
+- First Name: Peter
+- Last Name: Cruz
+- company: Serverpoint
+- Country: United States
+- Click Next
+- Enter
+- Email: support@serverpoint.com
+- Click Next
+- Select "Start Install Licenses Wizard now
+- Click Next
+- Select License program: Services provider license agreement
+- click Next
+- Enter Agreement number (SPLA Enrollment Number) from "Product key" in google sheets
+- Select, Product Version = Windows Server 2012, License type: RDS Per User CAL
+- Enter Quantity of CAL customer want
+- End up wizard by clicking Next
+- You will see exclamation sign, click on Review
+- Click on "Add to Group" button and click OK
+- Now open Services, by clicking on Server Manager >> Tools>> Services
+- Select "Remote desktop Licensing" Service and restart it
+- Now go back to "Remote desktop licensing manager", right click and refresh and you will see green mark
+- Open RUN, and enter gpedit.msc
+- 
+- "Local computer Policy>> Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Session Host\Licensing
+- Double click on "Use the specified RD license servers" >> click Enable, then Enter server name and click on Apply
+- Get name of Server from RD Licensing Manager, for this example it is "reBe4hR0r"
+- Double click on "Set the Remote Desktop licensing mode" >> click  enable, then select "Per User" and Apply
+- Now restart Remote Desktop Licensing service again
+- Now to confirm everything is ok,
+- click on Server Manager >> Tools >> Terminal service >> RD Licensing Diagnoser
+- And you will see like below
 
