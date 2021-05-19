@@ -1,0 +1,150 @@
+<!--
+title: Generate CSR
+description: 
+published: true
+date: 2021-05-19T14:39:58.909Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-05-19T14:39:58.909Z
+-->
+
+<h1>Generate CSR</h1>
+<h2>From cPanel</h2>
+<blockquote>
+  <p>1. Login to your cPanel/WHM control panel.
+  </p>
+  <p>2. On the left menu click on Generate a SSL Certificate and Signing Request.
+  </p>
+  <p>3. In the Generate a New Certificate Signing Request section, enter the following information:
+
+    &nbsp; &nbsp;</p>
+  <ul>
+    <li>Email - Your email address where the CSR will be sent.
+      &nbsp; &nbsp;</li>
+    <li>Password - Make up a password to be associated with the certificate. You will need to remember this password later.
+      &nbsp; &nbsp;</li>
+    <li>Host - The domain that you enetered or selected when generating the private key.
+      &nbsp; &nbsp;</li>
+    <li>City - The city in which your organization is located.
+      &nbsp; &nbsp;</li>
+    <li>State - The state in which your organization is located. Do not use an abbreviation.
+      &nbsp; &nbsp;</li>
+    <li>Country - If needed, you can find your two-digit country code in our list.
+      &nbsp; &nbsp;</li>
+    <li>Company Name - The legally registered name of your organization/company.
+      &nbsp; &nbsp;</li>
+    <li>Company Division - The name of your department within the organization (frequently this entry will be listed as "IT," "Web Security," or is simply left blank).
+      Key Size - 2048 bit key size minimum&nbsp;</li>
+  </ul>
+  <p>
+
+    4. Click the Create button.
+    5. Copy and paste the entire CSR (including the BEGIN and END lines) to order SSL certificate.</p>
+</blockquote>
+<h2>From Plesk</h2>
+<h3><strong>Plesk 8/9</strong></h3>
+<blockquote>
+  <p>1. Login to plesk as admin, click on Domains.
+  </p>
+  <p>
+    2. Click the domain that you want to secure with SSL.
+  </p>
+  <p>
+    3. Click Certificates in the Services group. A list of certificates that you have in your repository will be displayed.
+  </p>
+  <p>
+    4. To add a certificate to the repository, click the Add Certificate icon &nbsp; at the Control panel certificate repository page. The SSL certificate creation page will open. On this page you can generate a Certificate Signing Request (CSR).
+  </p>
+  <p>
+    5. On the CSR form and complete it with necessary details. The Bits selection allows you to choose the level of encryption for the key exchange, 2048 is minimum.
+  </p>
+  <p>
+    6. Once form fill up, the click the Request button. A private key and certificate signing request will be generated and added to the repository.
+  </p>
+  <p>
+    7. In the Certificates section of the certificates repository click the certificate name you created step 5 above. You should see the CSR.
+
+    8. Save a copy of your CSR. Send the CSR to us for order the SSL certificate.&nbsp;</p>
+</blockquote>
+<h3><strong>Plesk 10</strong></h3>
+<blockquote>
+  <p>1. Login to the Plesk Control Panel as an administrator.&nbsp;</p>
+  <p>
+
+    2. To manage your certificates on PLESK go to: Tools &amp; Utilities &gt; SSL Certificates (in the Resources group).&nbsp;</p>
+  <p>
+
+    3. To create a new certificate request click Add SSL Certificate and specify the certificate properties:
+
+    &nbsp;&nbsp;</p>
+  <ul>
+    <li>* Certificate name. This will help you identify this certificate in the repository.
+
+      &nbsp;&nbsp;</li>
+    <li>* Fill in the form as explained here under:
+
+      &nbsp; &nbsp; &nbsp;&nbsp;</li>
+    <li>* Encryption level : Choose the encryption level of your SSL certificate (2048-bit is minmum).
+      &nbsp; &nbsp; &nbsp;&nbsp;</li>
+    <li>* Country : provide the contry in which your company is based.
+      &nbsp; &nbsp; &nbsp;&nbsp;</li>
+    <li>* State: in France indicate the name of the department where your company headquarters are based (not the number).
+      &nbsp; &nbsp; &nbsp;&nbsp;</li>
+    <li>* City: indicate the city where your company headquarters are based.
+      &nbsp; &nbsp; &nbsp;&nbsp;</li>
+    <li>* Organisation: indicate the corporate name of your company (no trade name or acronym), in uppercase preferably.
+      &nbsp; &nbsp; &nbsp;&nbsp;</li>
+    <li>* Organisational unit / Department / Branch : If needed, indicate the department that manage the server.
+      &nbsp; &nbsp; &nbsp;&nbsp;</li>
+    <li>* Domain name: Indicate here your SSL server name, such as "secure.company.com", "www.my-domain.com" or "www.product.com".
+      &nbsp; &nbsp; &nbsp;</li>
+    <li>* E-mail: E-mail address of the personn in charge of the certificates mamagement in your company
+    </li>
+  </ul>
+  <p>
+    4. Finally, click "Request" NOT ""Self-signed". You will then be redirected to your certificates management page. The private key and certificate signing request have been generated and stored in this repository.</p>
+</blockquote>
+<h2>From IIS - Windows</h2>
+<blockquote>
+  <p>For IIS 7 just follow the procedure from&nbsp;<a href="http://www.digicert.com/csr-creation-microsoft-iis-7.htm">http://www.digicert.com/csr-creation-microsoft-iis-7.htm</a></p>
+  <p>For IIS 6/5 follow the procedure from&nbsp;<a href="http://www.digicert.com/csr-creation-microsoft-iis-5-6.htm">http://www.digicert.com/csr-creation-microsoft-iis-5-6.htm</a></p>
+</blockquote>
+<h2>From Linux Server</h2>
+<p>A CSR is a file containing your certificate application information, including your Public Key. Generate your CSR and then copy and paste the CSR file into the webform in the enrollment process.</p>
+<h3><strong>Generate keys and certificate:</strong></h3>
+<p>To generate a pair of private key and public Certificate Signing Request (CSR) for a domain, use the following command :</p>
+<pre><code class="language-plaintext">openssl req -new -nodes -keyout mydomain.key -out domain.csr</code></pre>
+<p>This creates a two files. The file mydomain.key contains a private key; do not disclose this file to anyone. Carefully protect the private key.</p>
+<p>In particular, be sure to backup the private key, as there is no means to recover it should it be lost. The private key is used as input in the command to generate a Certificate Signing Request (CSR).</p>
+<p>You will now be asked to enter details to be entered into your CSR</p>
+<p>What you are about to enter is what is called a Distinguished Name or a DN.</p>
+<p>For some fields there will be a default value, If you enter '.', the field will be left blank.</p>
+<blockquote>
+  <p>Country Name (2 letter code) [AU]: GB
+  </p>
+  <p>State or Province Name (full name) [Some-State]: Yorks
+  </p>
+  <p>Locality Name (eg, city) ]: York
+  </p>
+  <p>Organization Name (eg, company) [Internet Widgits Pty Ltd]: MyCompany Ltd
+  </p>
+  <p>Organizational Unit Name (eg, section) ]: IT
+  </p>
+  <p>Common Name (eg, YOUR name) ]: domain.com
+  </p>
+  <p>Email Address ]:
+  </p>
+  <p>
+    Please enter the following 'extra' attributes to be sent with your certificate request
+  </p>
+  <ul>
+    <li>
+      A challenge password ]:
+    </li>
+    <li>An optional company name ]:</li>
+  </ul>
+</blockquote>
+<p>Use the name of your domain as Common Name (CN).</p>
+<p>Check the content of the certificate request file:</p>
+<pre><code class="language-plaintext">openssl req -noout -text -in domain.csr</code></pre>
+<p>Your CSR will now have been created. Open the domain.csr in a text editor and copy and paste the contents into the online enrollment form when requested.</p>
