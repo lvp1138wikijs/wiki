@@ -2,7 +2,7 @@
 title: Secure Internal Servers
 description: 
 published: true
-date: 2021-05-19T19:46:56.804Z
+date: 2021-05-19T19:48:11.713Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T19:46:56.804Z
@@ -54,6 +54,5 @@ iptables -A INPUT -p tcp --dport 3305 -j ACCEPT  -m comment --comment "MySQL Por
 <h5>Additional IPtables Rules for CEPH Admin Server</h5>
 <p>&nbsp;</p>
 <pre><code class="language-plaintext">iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"
-iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"
-</code></pre>
+iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"</code></pre>
 <p>&nbsp;</p>
