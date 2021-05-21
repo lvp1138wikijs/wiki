@@ -2,7 +2,7 @@
 title: Ceph Admin 2
 description: Setup and intallation instruction of ceph admin server 2
 published: true
-date: 2021-05-21T19:23:58.180Z
+date: 2021-05-21T19:44:41.817Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-11T21:57:47.456Z
@@ -80,7 +80,8 @@ NETMASK=255.255.240.0
 <p>&nbsp;</p>
 <h5>Make server as a ceph-admin node</h5>
 <p>After installing ceph, go to the admin server2 and make sure it has the correct host entries and can able to communicate all monitor and osds hosts fine. Then do the following</p>
-<pre><code class="language-plaintext"># su cephuser ; cd /home/cephuser/ceph-cluster
+<pre><code class="language-plaintext"># su cephuser ; 
+# mkdir /home/cephuser/ceph-cluster ; cd /home/cephuser/ceph-cluster
 # cp -af /etc/ceph/ceph.client.admin.keyring ./
 # cp -af /etc/ceph/ceph.conf ./
 # ceph-deploy gatherkeys ceph-dal-mon-a1</code></pre>
