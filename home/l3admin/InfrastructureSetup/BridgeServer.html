@@ -2,7 +2,7 @@
 title: Bridge Server
 description: 
 published: true
-date: 2021-06-01T20:55:26.508Z
+date: 2021-06-01T20:56:18.365Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-01T15:53:23.530Z
@@ -29,8 +29,7 @@ systemctl stop firewalld
 systemctl disable firewalld
 systemctl stop NetworkManager
 systemctl disable NetworkManager
-systemctl enable iptables
-</code></pre>
+systemctl enable iptables</code></pre>
 <h5>Set Hostname &amp; enable IP forward</h5>
 <pre><code class="language-plaintext">hostname las-bridge1
 echo las-bridge1 &gt; /etc/hostname
@@ -126,8 +125,7 @@ Full list of resources:
 Daemon Status:
   corosync: active/enabled
   pacemaker: active/enabled
-  pcsd: active/enabled
-</code></pre>
+  pcsd: active/enabled</code></pre>
 <h6>Destroy Virtual IPs &amp; Cluster</h6>
 <pre><code class="language-plaintext">pcs resource delete VIP1 --force
 pcs cluster disable --all
@@ -135,7 +133,7 @@ pcs cluster destroy --all
 pcs cluster status</code></pre>
 <h5>Install VNC Apache for Colossus Cloud Vms</h5>
 <p><strong>Install the packages</strong></p>
-<p><code>yum install gcc openssl-devel apr-devel apr-util-devel perl-XML-Smart perl-Crypt-SSLeay python-websockify perl-CGI &nbsp;perl-libwww-perl cpan -y</code><br><code>yum install perl-LWP-Protocol-https</code></p>
+<p><code>yum install gcc openssl-devel apr-devel apr-util-devel perl-XML-Smart \</code><br><code>perl-Crypt-SSLeay python-websockify perl-CGI &nbsp;perl-libwww-perl cpan -y</code><br><code>yum install perl-LWP-Protocol-https</code></p>
 <p>If “yum install perl-LWP-Protocol-https ” didn't work then do the following</p>
 <p><code>perl -MCPAN -eshell</code><br><code>force install LWP::Protocol::https</code></p>
 <p><strong>Create necessary folders, user and set permission</strong></p>
