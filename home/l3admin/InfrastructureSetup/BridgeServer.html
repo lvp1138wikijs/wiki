@@ -2,7 +2,7 @@
 title: Bridge Server
 description: 
 published: true
-date: 2021-06-01T17:40:26.366Z
+date: 2021-06-01T20:51:49.716Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-01T15:53:23.530Z
@@ -134,4 +134,17 @@ Daemon Status:
 pcs cluster disable --all
 pcs cluster destroy --all
 pcs cluster status</code></pre>
-<p>&nbsp;</p>
+<h5>Install VNC Apache for Colossus Cloud Vms</h5>
+<p><strong>Install the packages</strong></p>
+<p><code>yum install gcc openssl-devel apr-devel apr-util-devel perl-XML-Smart perl-Crypt-SSLeay python-websockify perl-CGI &nbsp;perl-libwww-perl cpan -y</code><br><code>yum install perl-LWP-Protocol-https</code></p>
+<p>If “yum install perl-LWP-Protocol-https ” didn't work then do the following</p>
+<p><code>perl -MCPAN -eshell</code><br><code>force install LWP::Protocol::https</code></p>
+<p><strong>Create necessary folders, user and set permission</strong></p>
+<p><code>mkdir /var/serverchameleon/apache -p</code><br><code>useradd -d /var/serverchameleon/apache vnc</code><br><code>chown vnc:vnc /var/serverchameleon/apache</code><br><code>mkdir /tmp/logs</code><br><code>chown vnc:vnc /tmp/logs</code></p>
+<p>Now copy the apache folder from the old bridge server or from the link and unzip it</p>
+<p><code>wget http://data.serverpointsupport.com/apache.zip</code><br><code>chown -R vnc:vnc /var/serverchameleon/apache</code></p>
+<p>Add the following to /etc/rc.local</p>
+<pre><code class="language-plaintext">cat &gt;&gt; /etc/rc.local &lt;&lt;END
+su - vnc /var/serverchameleon/apache/bin/apachectl start
+END</code></pre>
+<p>Finally, secure the server. Follow the page <a href="https://216.108.237.96:3443/en/home/l3admin/InfrastructureSetup/Security/SecureInternal">How to secure the internal serve</a>r.</p>
