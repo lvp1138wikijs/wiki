@@ -2,7 +2,7 @@
 title: Secure Internal Servers
 description: 
 published: true
-date: 2021-05-19T19:48:11.713Z
+date: 2021-06-01T15:57:50.653Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T19:46:56.804Z
@@ -55,4 +55,10 @@ iptables -A INPUT -p tcp --dport 3305 -j ACCEPT  -m comment --comment "MySQL Por
 <p>&nbsp;</p>
 <pre><code class="language-plaintext">iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"
 iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"</code></pre>
-<p>&nbsp;</p>
+<h5>Additional IPtables Rules for Bridge Servers</h5>
+<pre><code class="language-plaintext">iptables -A INPUT -m state --state NEW -p udp -m multiport --dports 5404,5405 -j ACCEPT
+iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 2224 -j ACCEPT
+iptables -A INPUT -p igmp -j ACCEPT
+iptables -A INPUT -m addrtype --dst-type MULTICAST -j ACCEPT
+iptables -A INPUT -m addrtype --dst-type MULTICAST -j ACCEPT
+</code></pre>
