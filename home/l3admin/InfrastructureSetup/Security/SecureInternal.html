@@ -2,7 +2,7 @@
 title: Secure Internal Servers
 description: 
 published: true
-date: 2021-06-01T15:57:50.653Z
+date: 2021-06-01T17:44:08.150Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T19:46:56.804Z
@@ -17,7 +17,7 @@ passwd pcruz
 sed -i 's/#Port 22/Port 5252/g' /etc/ssh/sshd_config
 sed -i 's/#Protocol 2/Protocol 2/g' /etc/ssh/sshd_config
 sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-sed -i '/PermitRootLogin no/a AllowUsers pcruz webroot' /etc/ssh/sshd_config
+sed -i '/PermitRootLogin no/a AllowUsers pcruz' /etc/ssh/sshd_config
   
 cat &gt;&gt; /etc/sudoers &lt;&lt;END
 pcruz ALL=(ALL) ALL
@@ -25,6 +25,7 @@ END
  
 systemctl restart sshd</code></pre>
 <h5>Set IPtables Firewall Rules to Enable SSH Access Only through VPN</h5>
+<p>All our internal servers ssh access limited through VPN ips only. We use OpenVPN. You can check this tutorial on how to set up an OpenVPN access server.</p>
 <p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct bond_ID of the server</mark></i></p>
 <p>&nbsp;</p>
 <pre><code class="language-plaintext">yum install iptables-services -y
