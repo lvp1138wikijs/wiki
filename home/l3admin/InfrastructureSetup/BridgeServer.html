@@ -2,7 +2,7 @@
 title: Bridge Server
 description: 
 published: true
-date: 2021-06-01T20:56:18.365Z
+date: 2021-06-01T21:14:31.344Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-01T15:53:23.530Z
@@ -10,12 +10,12 @@ dateCreated: 2021-06-01T15:53:23.530Z
 
 <h1>Setup Bridge Servers with Floating IPs</h1>
 <p>The bridge servers are the servers that provide the internet connection to all hypervisors, ceph monitor &amp; osd servers. It acts as gateway servers.&nbsp;</p>
-<h3>Requirements</h3>
+<h2>Requirements</h2>
 <ul>
   <li>Two Dedicated servers with IPs from the same subnet</li>
   <li>Install CentOS 7</li>
 </ul>
-<h3>Installation &amp; Configuration</h3>
+<h2>Installation &amp; Configuration</h2>
 <h5>Yum Packages</h5>
 <pre><code class="language-plaintext">yum -y install net-utils net-snmp telnet net-snmp-utils whois emacs rsync \
 htop hdparm munin-node ntfs-3g dstat mtr pciutils tree ncurses-devel ntfsprogs nbd \
@@ -68,12 +68,13 @@ systemctl start lldpd
 systemctl enable lldpd
 systemctl status lldpd</code></pre>
 <h2>Install Pacemaker High Availability Cluster</h2>
-<h6>Add Host Entries</h6>
+<p>Before installing the pacemaker application, you have to set up both server nodes and set the proper hostname.&nbsp;</p>
+<h6>Add Host Entries in both servers</h6>
 <pre><code class="language-plaintext">cat &gt;&gt; /etc/hosts &lt;&lt;END
 10.1.1.2 las-bridge1
 10.1.1.3 las-bridge2
 END</code></pre>
-<h6>Install PaceMaker</h6>
+<h6>Install PaceMaker on both servers</h6>
 <pre><code class="language-plaintext">yum -y update
 yum -y install  pcs fence-agents-all
 
@@ -83,13 +84,11 @@ systemctl enable corosync.service</code></pre>
 <h6>Set a password for hacluster user on each host &amp; Use that password to authenticate to the nodes that will make up the cluster</h6>
 <pre><code class="language-plaintext">echo serverpoint | passwd --stdin hacluster
 pcs cluster auth las-bridge1 las-bridge2 -u hacluster -p serverpoint --force</code></pre>
-<h6>Create and name the cluster. Then, start it and enable all components to auto-start at boot time</h6>
-<pre><code class="language-plaintext">pcs cluster setup --start --name las_gateway las-bridge1 las-bridge2
-pcs cluster enable --all
-pcs cluster status
-pcs status nodes
-pcs status corosync</code></pre>
-<h6>Cluster Configuration</h6>
+<h2>Create the Cluster</h2>
+<p><i><mark class="marker-yellow">Note: You have to run all commands from one of the servers. Let's run it from server 1. (</mark></i></p>
+<p>Create and name the cluster. Then, start it and enable all components to auto-start at boot time</p>
+<p><code>pcs cluster setup --start --name las_gateway las-bridge1 las-bridge2</code><br><code>pcs cluster enable --all</code><br><code>pcs cluster status</code><br><code>pcs status nodes</code><br><code>pcs status corosync</code></p>
+<p><u>Cluster Configuration</u></p>
 <p>To check the configuration for errors run <code>crm_verify -L -V</code>, and there are still shows errors</p>
 <pre><code class="language-plaintext">crm_verify -L -V
 ----------
@@ -100,10 +99,11 @@ Errors found during check: config not valid
 ------------</code></pre>
 <p>Then run &nbsp;</p>
 <p><code>pcs property set stonith-enabled=false</code><br><code>pcs property set no-quorum-policy=ignore</code></p>
-<h6>Set Virtual IP address</h6>
+<p><u>Set Virtual IP address</u></p>
 <p><code>pcs resource create VIP1 ocf:heartbeat:IPaddr2 ip=10.1.1.1 cidr_netmask=32 nic=bond0.8 op monitor interval=30s</code><br><code>pcs resource create VIP2 ocf:heartbeat:IPaddr2 ip=72.18.207.172 cidr_netmask=32 nic=bond0.207 op monitor interval=30s</code></p>
-<h6>Check the Pacemaker Status</h6>
-<p>Run the following commands to check the status &amp; property list</p>
+<p>That's all. Now you can check the status.&nbsp;</p>
+<h2>Check the Pacemaker Status</h2>
+<p>Run the following commands to check the status &amp; property list. Run these commands on both servers to make sure all works fine.</p>
 <p><code>pcs status</code><br><code>pcs property list</code></p>
 <pre><code class="language-plaintext"># pcs status
 Cluster name: las_gateway
@@ -131,7 +131,7 @@ Daemon Status:
 pcs cluster disable --all
 pcs cluster destroy --all
 pcs cluster status</code></pre>
-<h5>Install VNC Apache for Colossus Cloud Vms</h5>
+<h2>Install VNC Apache for Colossus Cloud Vms</h2>
 <p><strong>Install the packages</strong></p>
 <p><code>yum install gcc openssl-devel apr-devel apr-util-devel perl-XML-Smart \</code><br><code>perl-Crypt-SSLeay python-websockify perl-CGI &nbsp;perl-libwww-perl cpan -y</code><br><code>yum install perl-LWP-Protocol-https</code></p>
 <p>If “yum install perl-LWP-Protocol-https ” didn't work then do the following</p>
