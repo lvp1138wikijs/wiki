@@ -2,94 +2,12 @@
 title: Management Servers 2
 description: 
 published: true
-date: 2021-04-26T23:14:47.770Z
+date: 2021-06-01T14:40:51.257Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-26T23:14:47.770Z
 -->
 
 <h2>Ceph Monitor 2</h2>
-<p>Here we are discussing how to set up a ceph monitor server for the cluster.&nbsp;</p>
-<p>OS installed: CentOS 7. It is installed through our installation portal. Login to the server and set the proper hostname. Then do the following</p>
-<h4>Install the Packages</h4>
-<pre><code class="language-plaintext">yum install epel-release -y
-yum update -y 
-yum install lldpd python-setuptools -y
-systemctl enable lldpd</code></pre>
-<h4>Add the Ceph Repository</h4>
-<pre><code class="language-plaintext">cat &gt;&gt; /etc/yum.repos.d/ceph.repo &lt;&lt;END
-[Ceph]
-name=Ceph packages for $basearch
-baseurl=http://download.ceph.com/rpm-luminous/el7/x86_64/$basearch
-enabled=1
-gpgcheck=1
-type=rpm-md
-gpgkey=https://download.ceph.com/keys/release.asc
-priority=1
- 
-[Ceph-noarch]
-name=Ceph noarch packages
-baseurl=http://download.ceph.com/rpm-luminous/el7/noarch
-enabled=1
-gpgcheck=1
-type=rpm-md
-gpgkey=https://download.ceph.com/keys/release.asc
-priority=1
- 
-[ceph-source]
-name=Ceph source packages
-baseurl=http://download.ceph.com/rpm-luminous/el7/SRPMS
-enabled=1
-gpgcheck=1
-type=rpm-md
-gpgkey=https://download.ceph.com/keys/release.asc
-priority=1
-END</code></pre>
-<h5>Configure Networks</h5>
-<p>The monitor server has Private &amp; Ceph storage IPs only.&nbsp;</p>
-<blockquote>
-  <p>Las Cluster, the private network binded on vlan 8. In the other zones it binded on vlan 2</p>
-  <p>Ceph network binded on vlan 9 in all zones</p>
-</blockquote>
-<p><strong>Sample interfaces files</strong></p>
-<pre><code class="language-plaintext"># cat ifcfg-bond0.8
-DEVICE=bond0.8
-VLAN=yes
-ONBOOT=yes
-VLAN_ID=8
-BOOTPROTO=static
-IPADDR=10.1.1.103
-NETMASK=255.255.255.0
-GATEWAY=10.1.1.1
-
-# cat ifcfg-bond0.9
-DEVICE=bond0.9
-VLAN=yes
-ONBOOT=yes
-VLAN_ID=9
-BOOTPROTO=static
-IPADDR=10.255.0.198
-NETMASK=255.255.240.0
-</code></pre>
-<blockquote>
-  <p>The IPaddress and Gateway will be different on each zone.</p>
-</blockquote>
-<h5>Create Ceph User</h5>
-<pre><code class="language-plaintext">useradd -d /home/cephuser -m cephuser
-passwd cephuser
-echo "cephuser  ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephuser
-chmod 0440 /etc/sudoers.d/cephuser
-</code></pre>
-<h5>LLDP configuration</h5>
-<p>We have installed the package already. Just configure it. <mark class="marker-yellow">Replace the system_name.</mark></p>
-<pre><code class="language-plaintext">echo 'configure system description _system_name_' &gt; /etc/lldpd.d/lldpcli.conf
-echo 'configure system hostname _system_name_' &gt;&gt; /etc/lldpd.d/lldpcli.conf
-	
-systemctl start lldpd
-systemctl enable lldpd
-systemctl status lldpd
-</code></pre>
-<p>Done. Monitor server now ready for configuring ceph and add to the cluster. Go and do it from the Ceph-Admin Server.&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p>The management server2 is the 2nd ceph monitor server node. You can read the following tutorial on how to set up a ceph monitor server.</p>
+<p><a href="https://216.108.237.96:3443/en/home/l3admin/InfrastructureSetup/Ceph/CephMonitor">Instruction to Setup Ceph Monitor Server</a></p>
