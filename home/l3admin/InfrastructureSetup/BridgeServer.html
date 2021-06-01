@@ -2,7 +2,7 @@
 title: Bridge Server
 description: 
 published: true
-date: 2021-06-01T15:53:23.530Z
+date: 2021-06-01T17:40:26.366Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-01T15:53:23.530Z
@@ -61,6 +61,14 @@ VLAN_ID=8
 BOOTPROTO=static
 IPADDR=10.1.1.2
 NETMASK=255.255.255.0</code></pre>
+<h5>LLDP configuration</h5>
+<p>We have installed the package already. Just configure it. <mark class="marker-yellow">Replace the system_name.</mark></p>
+<pre><code class="language-plaintext">echo 'configure system description _system_name_' &gt; /etc/lldpd.d/lldpcli.conf
+echo 'configure system hostname _system_name_' &gt;&gt; /etc/lldpd.d/lldpcli.conf
+
+systemctl start lldpd
+systemctl enable lldpd
+systemctl status lldpd</code></pre>
 <h2>Install Pacemaker High Availability Cluster</h2>
 <h6>Add Host Entries</h6>
 <pre><code class="language-plaintext">cat &gt;&gt; /etc/hosts &lt;&lt;END
