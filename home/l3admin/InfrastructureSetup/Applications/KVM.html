@@ -1,0 +1,48 @@
+<!--
+title: KVM
+description: 
+published: true
+date: 2021-06-02T21:09:11.389Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-02T21:09:11.389Z
+-->
+
+<h1>KVM HyperVisor</h1>
+<h2>Pre-installation Steps</h2>
+<h4>Install Packages</h4>
+<pre><code class="language-plaintext">yum groupinstall "Development Tools" -y
+yum install epel-release -y
+yum install -y librbd-devel -y
+yum install jwhois hdparm gdisk munin-node ntfs-3g e4fsprogs tree ncurses-devel ntfsprogs bc rpm-build \
+redhat-rpm-config kernel-debug-devel avahi gcc make libxml2-devel gnutls-devel device-mapper-devel \
+python-devel libnl-devel dejavu-lgc-sans-fonts openssl-devel yajl-devel avahi-devel libssh2-devel \
+libcurl-devel kernel-devel libpciaccess-devel perl perl-CPAN perl-libwww-perl perl-IO-Socket-SSL emacs \
+python-virtinst htop wget nbd ebtables perl-Crypt-SSLeay perl-IO-Socket-SSL perl-XML-Parser perl-IO-Socket-SSL \
+perl-IO-Socket-INET6 unzip emacs rpm-build perl-CPAN  kernel-devel redhat-rpm-config nano emacs openssl-devel \
+gcc man screen traceroute mtr vixie-cron nmap bzip2 sysstat perl-XML-Smart dstat wget rsync nano unzip gcc ntp \
+xen-ocaml perl-CGI perl-libwww-perl apr-devel apr-util-devel python-websockify perl-LWP-Protocol-https -y</code></pre>
+<h4>Install Kernel-ml&nbsp;</h4>
+<p><code>rpm -Uvh https://linux.cc.iitk.ac.in/mirror/centos/elrepo/kernel/el7/x86_64/RPMS/kernel-ml-5.8.0-1.el7.elrepo.x86_64.rpm</code><br><code>grub2-install /dev/sda&nbsp;</code> <mark class="marker-yellow"><sub>Note: This step needed if only grub2 not enabled</sub></mark><br><code>grub2-mkconfig -o /boot/grub2/grub.cfg</code><br><code>grep ^menuentry /boot/grub2/grub.cfg</code><br><code>grub2-set-default 0</code></p>
+<pre><code class="language-plaintext">chkconfig fcoe off
+chkconfig rpcidmapd off
+chkconfig lldpad off
+chkconfig sendmail off
+chkconfig atd off
+chkconfig auditd off
+chkconfig avahi-daemon off
+chkconfig haldaemon off
+chkconfig iscsid off
+chkconfig iscsi off
+chkconfig iptables off
+chkconfig xend off
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl stop NetworkManager
+systemctl disable NetworkManager
+systemctl disable iptables
+iptables -F
+iptables -X
+service iptables save
+service iptables stop
+</code></pre>
