@@ -2,19 +2,11 @@
 title: Apache Installation
 description: 
 published: true
-date: 2021-06-04T20:37:33.903Z
+date: 2021-06-04T20:38:46.914Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-04T20:37:33.903Z
 ---
-
-
-## Installation
-Configuration Files of Apache2 
-Installation Procedure for CentOS
-Installation
-Configuration
-Apache / php Modules Installations
 
 
 Apache is the most commonly used Web Server on Linux systems. Web Servers are used to serve Web Pages requested by client computers.
@@ -88,7 +80,7 @@ Then start Apache:
 /etc/init.d/httpd start
 ```
 
-**Configuration**
+## Configuration
 
 The default location of apache configuration file and folders is /etc/httpd/.
 
