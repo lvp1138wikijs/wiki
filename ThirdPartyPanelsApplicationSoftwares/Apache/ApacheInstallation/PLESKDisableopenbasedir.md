@@ -2,7 +2,7 @@
 title: PLESK: Disable open_basedir without Breaking/commenting Your current httpd.conf Basedir lines
 description: 
 published: true
-date: 2021-06-10T17:49:21.720Z
+date: 2021-06-10T18:30:49.827Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-10T17:49:21.720Z
