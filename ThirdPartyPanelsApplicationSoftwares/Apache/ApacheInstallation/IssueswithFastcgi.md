@@ -2,7 +2,7 @@
 title: Issues with Fastcgi
 description: 
 published: true
-date: 2021-06-10T17:45:36.385Z
+date: 2021-06-10T18:29:51.998Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-10T17:45:36.385Z
