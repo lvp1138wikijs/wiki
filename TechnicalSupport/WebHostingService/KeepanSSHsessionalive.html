@@ -1,0 +1,24 @@
+<!--
+title:  How to keep an SSH session alive and not timeout 
+description: 
+published: true
+date: 2021-06-20T01:05:04.913Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-20T01:05:04.913Z
+-->
+
+<p>In order to keep an SSH session alive and not timeout, please do the following&nbsp; steps:</p>
+<p>1) Open <strong>/etc/ssh/ssh_config</strong> and edit it using vi editor.</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>ServerAliveInterval 30</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>2) Then restart SSH.</p>
+<p>3) You can also make in changes in PUTTY. Go to&nbsp;<strong>Connection</strong>&nbsp;-&gt; and set&nbsp;<strong>Seconds between keepalives</strong>&nbsp;to 30.</p>
