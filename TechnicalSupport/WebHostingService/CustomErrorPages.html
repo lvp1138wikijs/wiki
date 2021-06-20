@@ -1,0 +1,42 @@
+<!--
+title: Custom Error Pages in Shared hosting 
+description: 
+published: true
+date: 2021-06-20T00:32:28.272Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-20T00:32:28.272Z
+-->
+
+<h4>Issue:</h4>
+<p>Customer needs to configure custom error pages for his website. Reference ticket : IDY-252-38294<br><br>&nbsp;</p>
+<h4>Solution:</h4>
+<p>You can follow the steps given below to do that.</p>
+<p>1) Edit the .htaccess file in the DocumentRoot for the domain</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <p>cd ~/public_html</p>
+          <p>vi .htaccess</p>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Note : Login to server using ssh as the user to edit the file.</p>
+<p>2) Add the following line to the .htaccess file</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>ErrorDocument 404 /file.html</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Note : Replace file.html with your actual filename.</p>
+<p>3) Now save and exit the .htaccess file</p>
+<p>Please note that the custom error page will not work for non existing .php page and it will be showing the error "No input file specified. "</p>
+<p>If we want to use 404 redirect to non existing .php pages then it will require us to use Rewrite rules in .htaccess. We use Zeus webserver which do not support mod_rewrite. Customer has to get a VPS/dedicated server if he wants to use it.</p>
