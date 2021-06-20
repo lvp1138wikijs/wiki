@@ -1,0 +1,34 @@
+<!--
+title: Frontpage Issues 
+description: 
+published: true
+date: 2021-06-20T00:54:30.101Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-20T00:54:30.101Z
+-->
+
+<p><mark class="marker-green"><strong>FrontPage Error - Cannot open "we80.cnf": no such file or folder</strong></mark></p>
+<p>Shared customers reports following error with FrontPage:<br>&nbsp;</p>
+<pre><code class="language-plaintext">
+Unable to open 'http://domainname'.Server error: Server error: Cannot open "we80.cnf": no such file 
+or folder.</code></pre>
+<p><strong>Possible causes:&nbsp;</strong></p>
+<pre><code class="language-plaintext">1. The web server may not have the FrontPage Server Extensions installed. 
+2. The web server may be temporarily out of service. 
+3. If you are connecting through a proxy server, the proxy settings may be incorrect. 
+4. An error may have occurred in the web server.</code></pre>
+<p><strong>Solution:</strong><br>&nbsp;</p>
+<pre><code class="language-plaintext">1) Go to properties of local site in front page
+2) Change the address from http://domainname to http://www.domainname
+
+This will fix the error.
+</code></pre>
+<p>&nbsp;</p>
+<p><mark class="marker-green"><strong>Frontpage: Unable to Publish Website&nbsp;</strong></mark></p>
+<p>If a client is not able to publish his "front page extensions" installed website please follow this procedure:</p>
+<p>Prepare the following inserts and send to&nbsp;James</p>
+<blockquote>
+  <p><code>update sharedtrack_sites set sc_fp = 1</code> <code>where sc_domain = "_domain_";</code></p>
+  <p><code>insert into sc_trigger (server,sc_trigger,domain,param1) SELECT server,"fpresd",username,"_domain_"</code> <code>FROM sharedtrack WHERE username = "_username_";</code></p>
+</blockquote>
