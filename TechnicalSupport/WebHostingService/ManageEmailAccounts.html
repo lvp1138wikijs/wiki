@@ -1,0 +1,107 @@
+<!--
+title: Manage Email Accounts
+description: 
+published: true
+date: 2021-06-20T05:11:03.967Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-20T05:11:03.967Z
+-->
+
+<h2><span class="text-small">Email Configuration for Mail Clients</span></h2>
+<p><span class="text-small">Customers can configure their email accounts with their email client application.</span></p>
+<p><span class="text-small">They can use the following settings to configure account.</span></p>
+<pre><code class="language-plaintext">Mail Account Settings
+Email Address: Username@domainname.com
+Username: Username@domainname.com
+Password: Email account password
+SMTP/Outgoing Server: mail.domainname.com
+Incoming Mail Server: mail.domainname.com
+Incoming Server Type: POP/IMAP
+Ports: SMTP: 25 / 26 ; POP: 110 ; IMAP: 143
+Secure Ports: 995&nbsp;pop3s, 465&nbsp;smtps, 993&nbsp;imaps</code></pre>
+<p><br><a href="http://www.serverpoint.com/en/tutorials/email-software-client-configuration-tutorials.phtml"><span class="text-small">http://www.serverpoint.com/en/tutorials/email-software-client-configuration-tutorials.phtml</span></a></p>
+<p><span class="text-small">You can check the video tutorial for how to configure email account in different platform&nbsp;</span></p>
+<h2><span class="text-small">Email Infrastructure on Shared Account</span></h2>
+<p><span class="text-small">In our shared account email , hosting space, and databases are hosted on different dedicated servers for redundancy. If customer did any changes/updates from client Portal, this will automatically updated in corresponding servers within few seconds/minutes.</span></p>
+<p><span class="text-small">If any of the change/update doesn't work then first verify if backend is up on the related nodes. You can check it from old ICP.</span></p>
+<p><span class="text-small"><strong>Login to Old ICP » then click on “Home”</strong> . You can see the status of server backends. Check the time <strong>Last time it checked in</strong> with the <strong>current time on db server</strong>. If you see long difference in server time with current time on db time, then the backend of that server is down. Inform Peter about it.</span></p>
+<h2><span class="text-small">Shared Account Email Issues</span></h2>
+<p><span class="text-small">If a client report their emails are slow or not working. It may be due to any of the following reasons . Check the following in SERVER SIDE</span></p>
+<p><span class="text-small">Check website working or not. Just load the website in browser. If not working check it by the help of </span><a href="http://64.235.39.80:8090/pages/viewpage.action?pageId=1442246"><span class="text-small">website related problems</span></a></p>
+<p><span class="text-small"><i><strong>Check Mail Server:</strong></i></span></p>
+<p><span class="text-small">First confirm client domain using our mail server . You can check it from </span><a href="http://www.dnswatch.info/"><span class="text-small">http://www.dnswatch.info/</span></a><span class="text-small"> . Put the domain and change the type to MX . Then click on resolve</span></p>
+<p><span class="text-small">Do a dig command to find the mail server</span></p>
+<p><span class="text-small">&nbsp;dig domain.com MX
+  </span></p>
+<p><span class="text-small"><strong>High server load:</strong></span></p>
+<p><span class="text-small">Check the server load . If load is high, then alert will be received in Ticket system . Contact James immediately</span></p>
+<p><span class="text-small"><strong>Too many connections to mail server ports:</strong></span></p>
+<p><span class="text-small">If shared server has exceeded the port limit , alert will be received and Contact James immediately</span></p>
+<p><span class="text-small"><strong>Large mail queue:</strong></span></p>
+<p><span class="text-small">If mail queue getting high , system send alert messages . Contact James to clear it and investigate issue</span></p>
+<p><span class="text-small"><strong>IP blacklisted:</strong></span></p>
+<p><span class="text-small">Put the shared email server IP address in </span><a href="http://www.mxtoolbox.com/blacklists.aspx"><span class="text-small">http://www.mxtoolbox.com/blacklists.aspx</span></a><span class="text-small"> and do a black list check . If IP listed anywhere , then contact them to remove the listing . Also check the IP address in Gmail Abuse folder. If you see any complaints on shared account, then contact client to resolve the issue as soon as possible.</span></p>
+<p><span class="text-small">Also create test email account from their control panel and try send emails by your self and confirm it.</span></p>
+<p><span class="text-small">If everything is fine in Server Side , then the issue should be with Client Side</span></p>
+<p><span class="text-small"><strong>Timeout issue with IPs/Ports by customer ISP</strong></span></p>
+<p><span class="text-small">May be client ISP is blocking ports 25 or server IP. Ask for a </span><a href="http://64.235.39.80:8090/pages/viewpage.action?pageId=1442178"><span class="text-small">traceroute/telnet</span></a><span class="text-small"> result.</span></p>
+<p><span class="text-small"><strong>Attachment Size</strong></span></p>
+<p><span class="text-small">Maximum attachment size is 5 MB .</span></p>
+<p><span class="text-small"><strong>Anti virus/ firewall on customer PC</strong></span></p>
+<p><span class="text-small">Antivirus/firewall may block sending email from customer PC . Tell them disable it and try to send emails</span></p>
+<p><span class="text-small">Old Email client versions</span></p>
+<p><span class="text-small">DNS resolving delay related to customer IP address</span></p>
+<h3><span class="text-small">Using External Email server</span></h3>
+<p><span class="text-small">Check if client is using external email servers, you can check it from </span><a href="https://secure.serverpoint.com/wiki/doku.php?id=tech:email_setup#list_external_email_server"><span class="text-small">here</span></a><span class="text-small"> or icp at icp»Emails.</span></p>
+<p><span class="text-small">You can check it by runing host command for the domain name in your putty</span></p>
+<p><span class="text-small">If a domain will not using external email servers then it will give you below output</span></p>
+<p><span class="text-small">$ host serverpoint.com</span></p>
+<p><span class="text-small">serverpoint.com has address 72.18.207.149</span></p>
+<p><span class="text-small">serverpoint.com mail is handled by 10 email-mx.serverpoint.com.</span></p>
+<p><span class="text-small">Default setting of MX for every account which is using our email servers is <strong>email-mx.domain.com</strong></span><br><span class="text-small">if you get something else in it then it means client is using any external email server, and email problem is because of external email server, and can be correct if he/she can contact with the Admin of that external email server.</span></p>
+<h3><span class="text-small">Login to email account via windows command prompt</span></h3>
+<p><span class="text-small">If website is working and client is not even using external email server then try to login to client's email address from windows command prompt.
+    &nbsp;Open command prompt from Windows Start&gt;&gt;Run&gt;&gt; write "cmd" and press enter.
+    &nbsp;In command prompt, write
+    &nbsp; &nbsp;'''telnet pop.domain.com 110'''
+    &nbsp;and press Enter
+    &nbsp;It will give you a new screen with
+    &nbsp; &nbsp;'''+OK &lt;27697.1212154181@emailserver2.asdf456.com&gt;'''
+    &nbsp;write
+    &nbsp; &nbsp;'''user user%domani.com'''
+    &nbsp;press Enter
+    &nbsp;</span></p>
+<p><span class="text-small">It will give you '''+OK'''
+    &nbsp;</span></p>
+<p><span class="text-small">Then write
+    &nbsp; &nbsp;'''pass [passwords_of_email_address]'''
+    &nbsp;If it will give you
+    &nbsp; '''+OK'''
+    &nbsp;Then it means email is working fine.
+    &nbsp;Or it will show you what the problem is.</span></p>
+<h3><span class="text-small">How to setup ServerPoint as my SMTP</span></h3>
+<p><span class="text-small">&nbsp;You can use below information.</span></p>
+<p><span class="text-small">SMTP Server IP: 72.18.207.136
+    SMTP port: 25 (you can also use 26 if your ISP block 25)
+
+    If you use "smtp authentication" then use your email address as username and email account password as password.</span></p>
+<h3><span class="text-small">problem in sending emails</span></h3>
+<p><span class="text-small">The common problem with email sending is always due to the isp who block port 25, therefore we have configured port 26 for smtp server in our email server,
+    you can ask client to use port 25 in smtp server in their email client or use their isp smtp server to send emails.</span></p>
+<h3><span class="text-small">Error '550 User does not exist to you'</span></h3>
+<p><span class="text-small">Bounced back email is showing error “550 User does not exist to you”
+    This means email sending server IP do not have properly Reverse DNS setup.
+    This is common security setup of every email server in the world,
+    that they do not accept emails from the servers which do not have proper Reverse DNS for their IPs.
+    You need to have your customer to contact their email server admin to setup proper rdns for their email server ip.</span></p>
+<h3><span class="text-small">Ask client to provide you error message</span></h3>
+<p><span class="text-small">If client is having problem and you cannot find any problem related to email address, then ask him/her to provide you the exact error message which he/she is getting from email client. Also ask them for email headers too.</span></p>
+<p><span class="text-small">Try to diagnose the problem using that error message, if you cannot then google up with this error message and find the solution.</span></p>
+<h2><span class="text-small">Issues With OutLook Email Client</span></h2>
+<h3><span class="text-small">553 sorry, that domain isn't in my list of allowed rcpthosts</span></h3>
+<p><span class="text-small">It is a silly Outlook issue that has existed for many years. Outlook maintains a nickname list that is used by both the automatic name checking and the automatic completion features. The nickname list is automatically generated while you use Outlook. If the nickname cache is corrupted, Outlook may not be able to identify recipients, may offer incorrect recipients when automatically completing the e-mail address, or may send the message to the wrong person</span></p>
+<p><span class="text-small">To resolve this issue just clear Outlook's auto completion cache:</span></p>
+<p><span class="text-small">Check the following tutorial</span></p>
+<p><a href="http://support.appriver.com/KB/a620/how-to-cleardisable-the-auto-complete-cache-in-outlook-2010.aspx"><span class="text-small">http://support.appriver.com/KB/a620/how-to-cleardisable-the-auto-complete-cache-in-outlook-2010.aspx</span></a><span class="text-small"> [outlook 2010]</span></p>
+<p><a href="http://www.groovypost.com/howto/microsoft/outlook/disable-microsoft-outlook-2007-and-2003-email-auto-complete"><span class="text-small">http://www.groovypost.com/howto/microsoft/outlook/disable-microsoft-outlook-2007-and-2003-email-auto-complete</span></a><span class="text-small"> [outlook 2003 and 2007]</span></p>
