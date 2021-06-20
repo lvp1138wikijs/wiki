@@ -1,0 +1,28 @@
+<!--
+title:  Install Node.js in shared account 
+description: 
+published: true
+date: 2021-06-20T03:28:34.792Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-20T03:28:34.792Z
+-->
+
+<p>You can install node.js using the steps below:</p>
+<p>======<br>&gt;&gt;curl -o- <a href="https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh">https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh</a> | bash<br>You will see some message after running the above command.<br>Please run the line mentioned after the message " Append the following lines to the correct file yourself:"</p>
+<p>For eg:</p>
+<p>I have tried to install in my test account:</p>
+<p>++++++++</p>
+<p>-bash-4.1$ wget -qO- <a href="https://cdn.rawgit.com/creationix/nvm/master/install.sh">https://cdn.rawgit.com/creationix/nvm/master/install.sh</a> | bash<br>=&gt; nvm is already installed in /data/e/eaterte1/.nvm, trying to update the script</p>
+<p>=&gt; Profile not found. Tried ~/.bashrc, ~/.bash_profile, ~/.zshrc, and ~/.profile.</p>
+<p>=&gt; Create one of them and run this script again<br>OR<br>=&gt; Append the following lines to the correct file yourself:</p>
+<p>export NVM_DIR="$HOME/.nvm"<br>[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh" # This loads nvm<br>=&gt; Close and reopen your terminal to start using nvm or run the following to use it now:</p>
+<p>export NVM_DIR="$HOME/.nvm"<br>[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh" # This loads nvm<br>-bash-4.1</p>
+<p>Got these messages and have run the commands below to load nvm</p>
+<p>-bash-4.1$ export NVM_DIR="$HOME/.nvm"<br>-bash-4.1$ [ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh"</p>
+<p>++++++++</p>
+<p>&gt;&gt;To make sure it’s installed enter<br>nvm --version</p>
+<p>&gt;&gt;Now we can get around to installing Node.js . To install the latest version enter in bash:<br>nvm install node</p>
+<p>&gt;&gt;You can now set this as the default via bash:<br>nvm alias default node</p>
+<p>&gt;&gt;To check that worked enter in bash:<br>node -v</p>
+<p>npm -v<br>============</p>
