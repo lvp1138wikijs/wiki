@@ -1,0 +1,27 @@
+<!--
+title: Crontab
+description: 
+published: true
+date: 2021-06-20T00:30:27.075Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-20T00:30:27.075Z
+-->
+
+<p><code>To setup the cron job customer will have to login to his account via SSH.</code></p>
+<p><code>Place the script file at root of the account, That is outside public_html and then Then just need to enter that script in to cronjob so it will be executed automatically at specified time.</code></p>
+<p><code>To add a cronjob use the command "crontab -e", An editor will be opened,</code></p>
+<p><code>-Press insert to go in insert mode</code></p>
+<p><code>- Then he can write the cront job text in it in below format.</code></p>
+<p><code>MINUTE HOUR DAY MONTH DAYOFTHEWEEK COMMAND</code></p>
+<p><code>&nbsp;</code>&nbsp;</p>
+<p><code>Example:</code></p>
+<p><code>0</code> <code>* * * * test.pl</code></p>
+<p><code>OR</code></p>
+<p><code>0</code> <code>* * * * php test.php</code></p>
+<p><code>This will execute each hour (*:00), every day</code></p>
+<p><code>&nbsp;</code></p>
+<p><code>59</code> <code>23</code> <code>30</code> <code>4,6,9,11</code> <code>* /home/kira/cmd2.pl</code></p>
+<p><code>This will execute the program at 23:59pm, on the 30th day of the month, on the 4, 6, 9</code> <code>and 11</code> <code>of each month.</code></p>
+<p><code>After the editing, Press escape and then :wq to save and exit.</code></p>
+<p><code>we are using litespeed webserver therefore php in your account is lsphp rather then php. For litespeed change php to lsphp in crontab.</code></p>
