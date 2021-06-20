@@ -1,0 +1,23 @@
+<!--
+title: Install Zend FrameWork for Shared Account 
+description: 
+published: true
+date: 2021-06-20T03:31:04.455Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-20T03:31:04.455Z
+-->
+
+<p>If customer need Zend Framework, Which is not something installed on server level. It is a part of application and if it is not included in their application. We just need to download Zend Framework and put it in his public_html directory under Zend directory</p>
+<h4>Here the steps for installing zend framework</h4>
+<p>Login to the account shell prompt via ssh</p>
+<p><strong>Download the Zend Framework and extract it</strong></p>
+<pre><code class="language-plaintext">wget http://framework.zend.com/releases/ZendFramework-1.11.4/ZendFramework-1.11.4-minimal.tar.gz 
+tar -zxf ZendFramework-1.11.4-minimal.tar.gz</code></pre>
+<p><strong>Locate the Loader.php script</strong></p>
+<pre><code class="language-plaintext">find ./ -name Loader.php 
+</code></pre>
+<p>The result should like this ./ZendFramework-1.11.4-minimal/library/Zend/Loader.php</p>
+<p><strong>Copy the folder Zend to public_html</strong></p>
+<pre><code class="language-plaintext">cp -rf ./ZendFramework-1.11.4-minimal/library/Zend  ./public_html/</code></pre>
+<p>Now the Zend location is <strong>./public_html/Zend</strong></p>
