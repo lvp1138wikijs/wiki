@@ -1,8 +1,8 @@
 ---
-title: How to Access Plesk
+title: Common Plesk Control Panel Functions
 description: 
 published: true
-date: 2021-06-24T19:09:20.545Z
+date: 2021-06-24T19:25:45.475Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-17T17:17:14.410Z
