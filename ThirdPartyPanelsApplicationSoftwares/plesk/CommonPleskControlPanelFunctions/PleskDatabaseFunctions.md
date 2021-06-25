@@ -2,7 +2,7 @@
 title: Plesk Database Functions
 description: 
 published: true
-date: 2021-06-25T15:41:19.747Z
+date: 2021-06-25T15:49:42.929Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-25T15:41:19.747Z
@@ -23,5 +23,20 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 - From the database management panel click on **Add New Database** button to create new database
 - In the next windows put your database name, database type and database server.
 - Then click on **OK** button to create new database
+
+
+## Setup Database User and Password to on a Database
+
+From the database management panel click on on database name you want to setup username and password.
+In the next window click on **Add New Database User**
+In the next window put your database name, password. Then click on OK to add user to the database.
+
+## How to Reset Database Username and Password
+
+- From the database management panel click on on database name.
+- Then click on the username from the list
+- In the next window put your new user name and password and then click on OK button.
+
+## Remove Database
 
 
