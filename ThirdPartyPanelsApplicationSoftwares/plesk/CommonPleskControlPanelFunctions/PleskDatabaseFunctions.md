@@ -2,7 +2,7 @@
 title: Plesk Database Functions
 description: 
 published: true
-date: 2021-06-25T17:26:05.721Z
+date: 2021-06-25T18:17:14.491Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-25T15:41:19.747Z
@@ -67,4 +67,37 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 
 **How to check / repair Database from Plesk Panel**
 
-Open the database in phpMyAdmin.
+- Open the database in **phpMyAdmin**.
+
+   -To do that, go to your Plesk control panel, click "**Websites and Domains**," click "Databases," and then click the database in question. 
+   -From there, click "**Webadmin**" under "**Tools**." You will most likely be presented with **phpMyAdmin**.  
+
+
+- Next, click "**Databases**" in the upper right, click the database name.
+- Then scroll all the way down and click "**Check All**" to check all the tables.
+- From the drop down menu, select "**Check Tables**" and your tables will immediately be checked. 
+- After that, you can decide which tables to select and choose "**repair**" from the drop down menu.
+
+**How to Download / Restore a Mysql Backup file from Plesk**
+
+- Login into your plesk panel
+- Click on **Domains** 
+- Click on **Backup Manager** under **Websites & Domains**
+- Click on **Database Backup Repository**
+- Select Your Database from the drop down list.
+- To Generate Backup click on **Backup**
+- Provide your backup file name with .bak extension
+- click on **OK** Button
+
+Your Database Backup is created and you can download it by clicking into save icon
+
+**To Restore**
+
+You can restore existing database backup available in server or upload a new database backup file from your local machine.
+
+- From the Database Backup Repository window select the database backup file you want to restore and then click on restore button.
+- To upload new database backup from your local machine, then click on the Upload Backup File button then restore it.
+
+
+
+
