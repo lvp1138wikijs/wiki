@@ -2,7 +2,7 @@
 title: Plesk Email Service Management
 description: 
 published: true
-date: 2021-06-25T20:33:22.087Z
+date: 2021-06-25T21:34:13.356Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-25T19:05:24.736Z
@@ -53,3 +53,6 @@ Set up an automatic response to any mail message coming to your e-mail address. 
 - Click on **Auto Reply** button.
 - By default it is disabled. You have to select "**Switch on auto-reply**" first.
 - Fill up the form correctly and then click on **OK** button to setup auto reply on your email address.
+
+**E-mail Aliases**
+
