@@ -1,0 +1,267 @@
+<!--
+title: Client Portal Server
+description: 
+published: true
+date: 2021-06-29T17:05:03.427Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-29T17:05:03.427Z
+-->
+
+<h1>Client Portal Server</h1>
+<p>You can configure portal servers on both dedicated and VPS platforms. Here we are using 3 VPS with the same specifications and load-balanced them through Cloudflare.&nbsp;</p>
+<p>Platform used: Linux VPS with CentOS 7</p>
+<h5>Install Packages</h5>
+<pre><code class="language-plaintext">yum install epel-release
+yum install -y httpd mariadb-server mod_ssl php php-cli mod_fcgid php-cgi php-common \
+php-gd php-mcrypt php-pdo php-mbstring php-pdo_mysql php-imap php-php-ldap mariadb
+ 
+systemctl restart httpd
+systemctl restart mariadb
+systemctl enable httpd
+systemctl enable mariadb
+rm -rf /etc/httpd/conf.d/welcome.conf
+rm -rf /var/www</code></pre>
+<h5>Install Essential Perl modules for&nbsp; Portal</h5>
+<pre><code class="language-plaintext">yum -y install perl perl-devel perl-version perl-ExtUtils-ParseXS perl-Compress-Raw-Zlib \
+perl-CPAN perl-XML-Simple perl-Crypt-SSLeay perl-Socket6 perl-DBI perl-libwww-perl \
+perl-Crypt-DES perl-Net-SSLeay perl-libs perl-XML-Parser perl-ExtUtils-MakeMaker \
+perl-Test-Harness perl-IO-Compress-Base perl-Digest-SHA perl-Compress-Zlib \
+perl-Object-MultiType perl-XML-Smart perl-IO-Socket-INET6 perl-SNMP_Session \
+perl-Error perl-Git perl-DBD-SQLite perl-JSON perl-HTML-Tagset perl-URI perl-Crypt-CBC \
+perl-Crypt-Rijndael perl-Net-LibIDN perl-Pod-Escapes perl-IO-Socket-SSL \
+perl-Unicode-String perl-Module-Pluggable perl-IO-Compress-Zlib perl-CGI \
+rrdtool-perl perl-WWW-Curl perl-HTML-Parser perl-DBD-MySQL perl-HTML-Template \
+perl-Pod-Simple perl-Net-Telnet perl-XML-Entities perl-LWP-Protocol-https
+
+perl -MCPAN -e 'force install Business::PayPal::NVP'</code></pre>
+<h5>Apache PHP Pre configuration steps</h5>
+<pre><code class="language-plaintext">
+service httpd start
+systemctl enable httpd.service
+rm -rf /var/www/cgi-bin
+groupadd webroot
+useradd -s /bin/bash -d /var/www -m -g webroot webroot
+mkdir -p /var/www/public_html/cgi-bin
+chown -R webroot:webroot /var/www
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/g' /etc/php.ini
+sed -i 's/short_open_tag = Off/short_open_tag = On/g' /etc/php.ini
+cat &gt;&gt; /var/www/public_html/cgi-bin/php.fcgi &lt;&lt;END
+#!/bin/bash
+PHP_CGI=/usr/bin/php-cgi
+PHP_FCGI_CHILDREN=4
+PHP_FCGI_MAX_REQUESTS=0
+export PHP_FCGI_CHILDREN
+export PHP_FCGI_MAX_REQUESTS
+exec $PHP_CGI
+END
+chmod 755 /var/www/public_html/cgi-bin/php.fcgi
+chown -R webroot:webroot /var/www/public_html/cgi-bin/php.fcgi</code></pre>
+<h5>Copy the SSL Certificate from Server Alecka</h5>
+<p>Get the ssl certificates from server alecka. The path is /etc/httpd/ssl. Certificates name start with wild.serverpoint.com. If you didn't find, then ask James and get the latest SSL certificate. We are using a wildcard SSL certificate.</p>
+<p><code>mkdir -p /etc/httpd/ssl</code><br><code>touch /etc/httpd/ssl/wild.serverpoint.com.crt /etc/httpd/ssl/wild.serverpoint.com.key /etc/httpd/ssl/wild.serverpoint.com.ca</code></p>
+<h5>Apache and PHP configuration. Run the following code block.</h5>
+<pre><code class="language-plaintext">cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.`date +%Y-%m-%d:%H:%M:%S`
+rm -rf /etc/httpd/conf.d/welcome.conf
+
+sed -i 's/User apache/User webroot/g' /etc/httpd/conf/httpd.conf
+sed -i 's/Group apache/Group webroot/g' /etc/httpd/conf/httpd.conf
+sed -i 's/#AddHandler cgi-script .cgi/AddHandler cgi-script .cgi .pl/g' /etc/httpd/conf/httpd.conf
+sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/var/www"#' /etc/httpd/conf/httpd.conf
+sed -i 's#Directory "/var/www/html"#Directory "/var/www"#' /etc/httpd/conf/httpd.conf
+sed -i 's/Options Indexes FollowSymLinks/Options FollowSymLinks/g' /etc/httpd/conf/httpd.conf
+  
+cat &gt;&gt; /etc/httpd/conf.d/fcgid.conf &lt;&lt;END
+FcgidConnectTimeout 200
+FcgidMaxRequestLen 15728640
+FcgidFixPathinfo 1
+END
+ 
+cat &gt;&gt; /etc/httpd/conf.d/portal.serverpoint.conf &lt;&lt;END
+&lt;VirtualHost *:80&gt;
+    ServerName portal.serverpoint.com
+    ServerAlias portal1.serverpoint.com
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/public_html
+    DirectoryIndex index.html index.htm index.php index.phtml index.php5 index.cgi default.html default.php default.phtml default.php5
+
+    &lt;Directory /var/www/public_html&gt;
+        Options +ExecCGI +Includes +FollowSymLinks
+        AllowOverride All
+        AddHandler php5-fastcgi .php .phtml .php5
+        Action php5-fastcgi /cgi-bin/php.fcgi
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    ScriptAlias /cgi-bin/ /var/www/public_html/cgi-bin/
+    &lt;Directory "/var/www/public_html/cgi-bin"&gt;
+        AllowOverride All
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+    ErrorLog /var/log/httpd/default.error.log
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+    CustomLog /var/log/httpd/default.access.log combined
+&lt;/VirtualHost&gt;
+&lt;VirtualHost *:443&gt;
+    ServerName portal.serverpoint.com
+    ServerAlias portal1.serverpoint.com
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/public_html
+    DirectoryIndex index.html index.htm index.php index.phtml index.php5 index.cgi default.html default.php default.phtml default.php5
+
+    &lt;Directory /var/www/public_html&gt;
+        Options +ExecCGI +Includes  +FollowSymLinks
+        AllowOverride All
+        AddHandler php5-fastcgi .php .phtml .php5
+        Action php5-fastcgi /cgi-bin/php.fcgi
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    ScriptAlias /cgi-bin/ /var/www/public_html/cgi-bin/
+    &lt;Directory "/var/www/public_html/cgi-bin"&gt;
+        AllowOverride All
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+#   SSL Engine Switch:
+        #   Enable/Disable SSL for this virtual host.
+        SSLEngine on
+        SSLCertificateFile    /etc/httpd/ssl/wild.serverpoint.com.crt
+        SSLCertificateKeyFile /etc/httpd/ssl/wild.serverpoint.com.key
+        SSLCertificateChainFile /etc/httpd/ssl/wild.serverpoint.com.ca
+        &lt;FilesMatch "\.(cgi|shtml|phtml|php)$"&gt;
+                SSLOptions +StdEnvVars
+        &lt;/FilesMatch&gt;
+        &lt;Directory /usr/lib/cgi-bin&gt;
+                SSLOptions +StdEnvVars
+        &lt;/Directory&gt;
+        BrowserMatch "MSIE [2-6]" \
+                nokeepalive ssl-unclean-shutdown \
+                downgrade-1.0 force-response-1.0
+        # MSIE 7 and newer should be able to use keepalive
+        BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+    ErrorLog /var/log/httpd/default.error.log
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+    CustomLog /var/log/httpd/default.access.log combined
+&lt;/VirtualHost&gt;
+END
+ 
+service httpd restart</code></pre>
+<h5>Secure SSH &amp; Firewall Rules</h5>
+<pre><code class="language-plaintext">useradd -s /bin/bash -d /home/pcruz -m -G wheel pcruz
+passwd pcruz
+  
+sed -i 's/#Port 22/Port 5252/g' /etc/ssh/sshd_config
+sed -i 's/#Protocol 2/Protocol 2/g' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+sed -i '/PermitRootLogin no/a AllowUsers pcruz webroot' /etc/ssh/sshd_config
+  
+cat &gt;&gt; /etc/sudoers &lt;&lt;END
+pcruz ALL=(ALL) ALL
+END
+ 
+systemctl restart sshd
+ 
+yum install iptables-services -y
+systemctl enable iptables
+iptables -F
+iptables -X
+ 
+&gt;/etc/sysconfig/iptables
+iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
+iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
+iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
+iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
+
+iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "
+iptables -A INPUT -p tcp --dport 873 -j ACCEPT -m comment --comment "Rsync Port"
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT  -m comment --comment "Apache Port"
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT  -m comment --comment "Apache SSL Port"
+iptables -A INPUT -p tcp --dport 3305 -j ACCEPT  -m comment --comment "MySQL Port"
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT -m comment --comment "For Ping"
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT -m comment --comment "For Ping"
+iptables -A INPUT -i bond0.55 -j DROP -m comment --comment "Restricted Public Access"
+ 
+service iptables save
+service iptables restart</code></pre>
+<h5>Sync Data From Alecka Server</h5>
+<p>Login to the server alecka as root. Make sure it has the rsync package installed as a daemon. If not follow this link</p>
+<p>Now open&nbsp;/etc/rsyncd.conf&nbsp; and add the following</p>
+<pre><code class="language-plaintext">###### Panel Website #######
+[panel_sync]
+
+# Directory name for rsync
+path = /var/www
+# Allowed Hosts
+# 72.18.207.132 - IP of current Live Server
+hosts allow = 64.235.49.18 64.235.40.10 64.235.55.54 64.235.48.39 216.108.229.53 216.108.227.99
+hosts deny = *
+list = true
+uid = webroot
+gid = webroot
+read only
+
+
+[mrtg_sync1]
+
+# Directory name for rsync
+path = /home/users/s/serverpoint.com/public_html/gen4cp/rrd
+# Allowed Hosts
+# 72.18.207.132 - IP of current Live Server
+hosts allow = 64.235.49.18 64.235.40.10 64.235.55.54 216.108.229.53 216.108.227.99 64.235.48.39
+hosts deny = *
+list = true
+uid = webroot
+gid = webroot
+read only
+
+
+[mrtg_sync2]
+
+# Directory name for rsync
+path = /var/serverchameleon/data/mrtg/trafficdata
+# Allowed Hosts
+# 72.18.207.132 - IP of current Live Server
+hosts allow = 64.235.49.18 64.235.40.10 64.235.55.54 216.108.229.53 216.108.227.99 64.235.48.39
+hosts deny = *
+list = true
+uid = root
+gid = root
+read only
+
+
+####### SSL #######
+[Web_ssl]
+
+# Directory name for rsync
+path = /etc/httpd/ssl
+
+# Allowed Hosts
+# 72.18.207.132 - IP of current Live Server
+hosts allow = 64.235.49.18 64.235.40.10 64.235.55.54 216.108.229.53 216.108.227.99 64.235.48.39
+hosts deny = *
+list = true
+uid = root
+gid = root
+read only = false</code></pre>
+<h5>Set CronJobs in Portal Servers</h5>
+<p>Login to all the portal servers and set cronjobs</p>
+<pre><code class="language-plaintext">* * * * * rsync -avz 72.18.207.132::panel_sync /var/www 2&gt;&amp;1 &gt; /dev/null
+* * * * * rsync -avz 72.18.207.132::mrtg_sync1 /var/www/public_html/gen4cp/rrd 2&gt;&amp;1 &gt; /dev/null; chown -R webroot:webroot /var/www/public_html/gen4cp/rrd 2&gt;&amp;1 &gt; /dev/null
+* * * * * rsync -avz 72.18.207.132::mrtg_sync2 /var/serverchameleon/data/mrtg/trafficdata 2&gt;&amp;1 &gt; /dev/null
+* * * * * rsync -avz --delete 72.18.207.132::Web_ssl /etc/httpd/ssl 2&gt;&amp;1 &gt; /dev/null
+</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
