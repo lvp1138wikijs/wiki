@@ -1,0 +1,44 @@
+<!--
+title: Rsyncd Configuration
+description: 
+published: true
+date: 2021-06-29T17:31:35.543Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-06-29T17:31:35.543Z
+-->
+
+<h1>File Transfer Through rsyncd Service</h1>
+<p>By default, rsync is using SSH ports to synchronize the file. When you set up a mirror system through rsync then it will be good to run rsync as a daemon. The listening port is 873</p>
+<p>Please follow the steps to do that</p>
+<h5>Install the Service</h5>
+<p><code>yum -y install rsync</code></p>
+<h5>Configuration Rsyncd</h5>
+<p>In the source server create a file in /etc/rsyncd.conf &nbsp;and the following</p>
+<pre><code class="language-plaintext"># Module Name
+[Backup]
+# Directory name for rsync
+path = /var/www
+# Allowed Hosts
+hosts allow = node_ip_01 node_ip_02 node_ip_03
+hosts deny = *
+list = true
+uid = userid
+gid = groupid
+read only = false</code></pre>
+<p>Run the following to start rsync as a daemon&nbsp;</p>
+<blockquote>
+  <p>centos 6 :&nbsp;rsync --daemon<br>centos 7:&nbsp;systemctl start rsyncd</p>
+</blockquote>
+<p>Run command now go to the slave/mirror server and set a cronjob</p>
+<blockquote>
+  <p>crontab -e</p>
+</blockquote>
+<p>Then add the following cron&nbsp;</p>
+<blockquote>
+  <p>* * * * * rsync -avz --delete Master_server_IP::Backup /home/dir1 2&gt;&amp;1 &gt; /dev/null</p>
+</blockquote>
+<h3><strong>Example rsyncd.conf</strong></h3>
+<blockquote>
+  <p># /etc/rsyncd: configuration file for rsync daemon mode# Module Name<br>[Backup]# Directory name for rsync<br>path = /var/www# Allowed Hosts<br># 10.250.2.31 - IP of current Live Server<br>hosts allow = 10.250.1.68 10.250.7.74 10.250.0.74 10.250.2.31 64.235.50.12<br>hosts deny = *<br>list = true<br>uid = bebfoot<br>gid = bebfoot<br>read only = false</p>
+</blockquote>
