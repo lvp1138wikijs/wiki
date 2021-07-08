@@ -2,7 +2,7 @@
 title: Secure Internal Servers
 description: 
 published: true
-date: 2021-06-29T17:15:54.504Z
+date: 2021-07-08T17:39:40.836Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T19:46:56.804Z
@@ -24,30 +24,53 @@ pcruz ALL=(ALL) ALL
 END
  
 systemctl restart sshd</code></pre>
-<h5>Set IPtables Firewall Rules to Enable SSH Access Only through VPN</h5>
-<p>All our internal servers ssh access limited through VPN ips only. We use OpenVPN. You can check this tutorial on how to set up an OpenVPN access server.</p>
-<p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct bond_ID of the server</mark></i></p>
 <p>&nbsp;</p>
+<h5>Set IPtables Firewall Rules to Enable SSH Access Only through VPN</h5>
+<p>All our internal servers ssh access is limited through VPN ips only. We use OpenVPN. You can check this tutorial on how to set up an OpenVPN access server.</p>
+<p>Install IPTables and clear the default rules</p>
 <pre><code class="language-plaintext">yum install iptables-services -y
 systemctl enable iptables
 iptables -F
-iptables -X
- 
-&gt;/etc/sysconfig/iptables
+iptables -X</code></pre>
+<p>&nbsp;</p>
+<h5>Additional IPtables Rules for API Server</h5>
+<p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
+<pre><code class="language-plaintext">&gt;/etc/sysconfig/iptables
 iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
 iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
 iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
 iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
-iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "</code></pre>
-<h5>Additional IPtables Rules for API Server</h5>
-<pre><code class="language-plaintext">iptables -A INPUT -p tcp --dport 80 -j ACCEPT  -m comment --comment "Apache Port"
+iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT  -m comment --comment "Apache Port"
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT  -m comment --comment "Apache SSL Port"
-iptables -A INPUT -p tcp --dport 3305 -j ACCEPT  -m comment --comment "MySQL Port"</code></pre>
-<h5>Additional IPtables Rules for CEPH Admin Server</h5>
-<pre><code class="language-plaintext">iptables -A INPUT -s 10.255.0.0/24 -p tcp -m tcp --dport 5252 -m comment --comment "SSH Enabled on CephIPs" -j ACCEPT
+iptables -A INPUT -p tcp --dport 3305 -j ACCEPT  -m comment --comment "MySQL Port"
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p icmp -m icmp --icmp-type 8 -m comment --comment "For Ping" -j ACCEPT
+iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -m comment --comment "For Ping" -j ACCEPT
+iptables -A INPUT -i bond0.50 -m comment --comment "Restricted Public Access" -j DROP
+</code></pre>
+<p>&nbsp;</p>
+<h5>IPtables Rules for CEPH Admin Server</h5>
+<p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
+<pre><code class="language-plaintext">&gt;/etc/sysconfig/iptables
+iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
+iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
+iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
+iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
+iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "
+iptables -A INPUT -s 10.255.0.0/24 -p tcp -m tcp --dport 5252 -m comment --comment "SSH Enabled on CephIPs" -j ACCEPT
 iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"
-iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"</code></pre>
-<h5>Additional IPtables Rules for Bridge Servers</h5>
+iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p icmp -m icmp --icmp-type 8 -m comment --comment "For Ping" -j ACCEPT
+iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -m comment --comment "For Ping" -j ACCEPT
+iptables -A INPUT -i bond0.50 -m comment --comment "Restricted Public Access" -j DROP
+</code></pre>
+<p>&nbsp;</p>
+<h5>IPtables Rules for Bridge Servers</h5>
+<p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
 <pre><code class="language-plaintext">iptables -A INPUT -m state --state NEW -p udp -m multiport --dports 5404,5405 -j ACCEPT
 iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 2224 -j ACCEPT
 iptables -A INPUT -p igmp -j ACCEPT
@@ -55,6 +78,24 @@ iptables -A INPUT -m addrtype --dst-type MULTICAST -j ACCEPT
 iptables -A INPUT -m addrtype --dst-type MULTICAST -j ACCEPT
 iptables -A FORWARD -i bond0.2 -j ACCEPT
 iptables -t nat -A POSTROUTING -o bond0.207 -j MASQUERADE</code></pre>
+<p>&nbsp;</p>
+<h5>IPtables Rules for Portal/Ticket System Servers</h5>
+<p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
+<pre><code class="language-plaintext">&gt;/etc/sysconfig/iptables
+iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
+iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
+iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
+iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
+iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "
+iptables -A INPUT -p tcp -m tcp --dport 873 -m comment --comment "Rsync Port" -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 80 -m comment --comment "Apache Port" -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 443 -m comment --comment "Apache SSL Port" -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 3305 -m comment --comment "MySQL Port" -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p icmp -m icmp --icmp-type 8 -m comment --comment "For Ping" -j ACCEPT
+iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -m comment --comment "For Ping" -j ACCEPT
+iptables -A INPUT -i bond0.50 -m comment --comment "Restricted Public Access" -j DROP</code></pre>
 <p>Finally, &nbsp;add the following rules save the rules and restart iptables firewall.&nbsp;</p>
 <p>Before restart recheck the rules added from /etc/sysconfig/iptables and make sure all rules are in proper order.&nbsp;</p>
 <pre><code class="language-plaintext">service iptables save
