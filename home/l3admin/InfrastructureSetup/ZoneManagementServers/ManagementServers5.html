@@ -2,12 +2,20 @@
 title: Management Servers 5
 description: 
 published: true
-date: 2021-06-01T20:53:10.795Z
+date: 2021-07-16T16:30:28.400Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-01T15:00:12.435Z
 -->
 
-<h2>Ceph-Admin-2</h2>
-<p>The management server4 is the Secondary Ceph Admin server. You can read the following tutorial on how to setup ceph admin server</p>
+<h2>Ceph-Admin-2 &amp; Minio1</h2>
+<p>The management server4 is the Secondary Ceph Admin server and the minio-1 server. You can read the following tutorial on how to setup ceph admin server</p>
 <p><a href="https://216.108.237.96:3443/en/home/l3admin/InfrastructureSetup/Ceph/CephAdmin2">Instruction to Setup Ceph Admin Server 2</a></p>
+<h3>Minio Installation</h3>
+<p>Run the following command</p>
+<pre><code class="language-plaintext">mkdir /var/serverchameleon/minio -p
+cd  /var/serverchameleon/minio
+wget https://dl.min.io/server/minio/release/linux-amd64/minio -O /var/serverchameleon/minio/minio
+chmod +x minio</code></pre>
+<p>Add a 4TB disk to the server for minio. Verify the disk added and reported fine. James will do the rest.</p>
+<p>&nbsp;</p>
