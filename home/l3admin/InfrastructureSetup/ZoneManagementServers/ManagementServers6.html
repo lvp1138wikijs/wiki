@@ -2,12 +2,22 @@
 title: Management Servers 6
 description: 
 published: true
-date: 2021-07-19T14:49:00.909Z
+date: 2021-07-19T17:28:15.747Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-01T21:00:57.826Z
 -->
 
-<h1>Bridge Server -1</h1>
-<p>The management server-6 is the Primary Bridge/Gateway server. You can read the following tutorial on how to setup bridges.</p>
+<h1>Bridge Server -1 &amp; Minio</h1>
+<p>The management server-6 is the Primary Bridge/Gateway server. &nbsp;We also use it as a Minio server too.&nbsp;</p>
+<p>You can read the following tutorial on how to set up bridges.</p>
 <p><a href="https://216.108.237.96:3443/en/home/l3admin/InfrastructureSetup/InternelServers/BridgeServer">Instruction to Setup Bridges</a></p>
+<p>&nbsp;</p>
+<h3>Minio Installation</h3>
+<p>Run the following command</p>
+<pre><code class="language-plaintext">mkdir /var/serverchameleon/minio -p
+cd  /var/serverchameleon/minio
+wget https://dl.min.io/server/minio/release/linux-amd64/minio -O /var/serverchameleon/minio/minio
+chmod +x minio</code></pre>
+<p>Copy</p>
+<p>Add a 4TB disk to the server for minio. Verify the disk added and reported fine. James will do the rest.</p>
