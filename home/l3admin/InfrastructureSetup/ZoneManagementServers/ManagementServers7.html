@@ -2,7 +2,7 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-07-19T20:17:57.197Z
+date: 2021-07-19T20:36:07.141Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
@@ -69,7 +69,34 @@ systemctl stop libvirtd
 cd /root
 wget https://libvirt.org/sources/libvirt-6.6.0-1.src.rpm
 rpmbuild --rebuild libvirt-6.6.0-1.src.rpm
-rpm -Uvh ~/rpmbuild/RPMS/x86_64/libvirt*.rpm</code></pre>
+rpm -Uvh ~/rpmbuild/RPMS/x86_64/libvirt*.rpm
+
+service libvirtd restart</code></pre>
 <p><i><mark class="marker-yellow">Note: qemu and libvirt won't install in the same ssh session, 2nd one will fail with errors, if it happens, open a new ssh session and compile other one in it</mark></i></p>
 <p>&nbsp;</p>
+<h6>Install OpenVswitch</h6>
+<pre><code class="language-plaintext">yum install autoconf automake libtool -y
+yum install python-sphinx python-six unbound-devel unwind-devel selinux-policy-devel python3-sphinx libunwind-devel -y
+mkdir -p /root/rpmbuild/SOURCES
+
+cd /root
+rm openvswitch* -rf
+wget http://openvswitch.org/releases/openvswitch-2.14.0.tar.gz
+tar xzf openvswitch-2.14.0.tar.gz
+cd openvswitch-2.14.0
+./configure
+make dist
+rm ../rpmbuild/SOURCES/openvswitch* -rf
+cp openvswitch-*.tar.gz ../rpmbuild/SOURCES/ -apRfv
+
+sed -i -- 's/openvswitch-kmod//g' rhel/openvswitch.spec
+sed -i -- 's/unwind-devel/libunwind-devel/g' rhel/openvswitch.spec
+rpmbuild -bb --nocheck rhel/openvswitch.spec
+rpm -Uvh --force /root/rpmbuild/RPMS/x86_64/openvswitch-2.14.0-1.x86_64.rpm
+systemctl enable openvswitch
+service openvswitch restart
+rm -rf /etc/openvswitch/conf.db
+service openvswitch restart
+ovs-vsctl add-br ovsbr
+ovs-vsctl add-port ovsbr bond0</code></pre>
 <p>&nbsp;</p>
