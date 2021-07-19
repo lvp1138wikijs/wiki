@@ -2,7 +2,7 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-07-19T18:34:17.594Z
+date: 2021-07-19T20:17:57.197Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
@@ -47,6 +47,7 @@ audit-libs-devel dbus-devel scrub libtirpc-devel  python36-docutils python3 sanl
 unwind-devel python3-sphinx  libusbx-devel -y
 
 yum install rh-python36 -y
+yum install git librados2-devel librbd1-devel -y 
 
 cd /root
 wget https://download.qemu.org/qemu-5.1.0.tar.xz
@@ -58,9 +59,17 @@ make
 make install</code></pre>
 <p>&nbsp;</p>
 <h6>Install KVM</h6>
-<pre><code class="language-plaintext">
-</code></pre>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<pre><code class="language-plaintext">yum install qemu-kvm libvirt libvirt-python virt-install bridge-utils virt-top -y
+
+yum install readline-devel bash-completion libattr-devel libblkid-devel augeas sanlock-devel libpcap-devel libnl3-devel \
+libacl-devel parted-devel xfsprogs-devel glusterfs-api-devel glusterfs-devel numactl-devel libcap-ng-devel fuse-devel \
+netcf-devel audit-libs-devel dbus-devel scrub libtirpc-devel  python36-docutils python3 sanlock -y
+
+systemctl stop libvirtd
+cd /root
+wget https://libvirt.org/sources/libvirt-6.6.0-1.src.rpm
+rpmbuild --rebuild libvirt-6.6.0-1.src.rpm
+rpm -Uvh ~/rpmbuild/RPMS/x86_64/libvirt*.rpm</code></pre>
+<p><i><mark class="marker-yellow">Note: qemu and libvirt won't install in the same ssh session, 2nd one will fail with errors, if it happens, open a new ssh session and compile other one in it</mark></i></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
