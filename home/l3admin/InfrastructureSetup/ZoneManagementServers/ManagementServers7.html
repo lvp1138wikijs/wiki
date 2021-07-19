@@ -2,14 +2,65 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-06-02T14:57:33.638Z
+date: 2021-07-19T18:34:17.594Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
 -->
 
 <h1>Bridge Server -2 &amp; OOB</h1>
-<p>The management server-7 is the Secondary Bridge/Gateway server. We also install the KVM hypervisor in it and created a windows VM for console access. It's called the console server. The server has connections to the ipmi switch. That helps us to connect the servers via ipmi.</p>
-<p>First, we have to set the server as a bridge. You can check this, <a href="https://216.108.237.96:3443/en/home/l3admin/InfrastructureSetup/BridgeServer">Instruction to Setup Bridges</a></p>
-<p>Then install the KVM hypervisor. Follow this page, How to Install KVM hypervisor.&nbsp;</p>
+<p>The management server-7 is the Secondary Bridge/Gateway server. We also install the KVM hypervisor &amp; Minio in. KVM is for running a windows VM for console access. It's called the console server. The server has connections to the ipmi switch. That helps us to connect the servers via ipmi. Also it has access to serial ports of switches.</p>
+<p>First, we have to set the server as a bridge. You can check this, <a href="https://216.108.237.96:3443/en/home/l3admin/InfrastructureSetup/InternelServers/BridgeServer">Instruction to Setup Bridges</a></p>
+<p>&nbsp;</p>
+<h3>Minio Installation</h3>
+<p>Run the following command</p>
+<pre><code class="language-plaintext">mkdir /var/serverchameleon/minio -p
+cd  /var/serverchameleon/minio
+wget https://dl.min.io/server/minio/release/linux-amd64/minio -O /var/serverchameleon/minio/minio
+chmod +x minio</code></pre>
+<p>Add a 4TB disk to the server for minio. Verify the disk added and reported fine. James will do the rest.</p>
+<p>&nbsp;</p>
+<h3>KVM hypervisor</h3>
+<p>&nbsp;</p>
+<h6>Install Kernel-ml version 5 &amp; Update Grub</h6>
+<p><code>rpm -Uvh https://linux.cc.iitk.ac.in/mirror/centos/elrepo/kernel/el7/x86_64/RPMS/kernel-ml-5.8.0-1.el7.elrepo.x86_64.rpm</code></p>
+<p>Then update the grub parameter. Add <i><mark class="marker-yellow">net.ifnames=0 biosdevname=0</mark></i> &nbsp;to the <i><mark class="marker-yellow">GRUB_CMDLINE_LINUX</mark></i> parameter at <i><mark class="marker-yellow">/etc/default/grub</mark></i> file</p>
+<pre><code class="language-plaintext">#cat /etc/default/grub
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="rhgb quiet nomodeset rd.auto=1 biosdevname=0 net.ifnames=0"
+GRUB_DISABLE_RECOVERY="true"</code></pre>
+<p>Then update the grub changes</p>
+<pre><code class="language-plaintext">grub2-mkconfig -o /boot/grub2/grub.cfg
+grep ^menuentry /boot/grub2/grub.cfg
+grub2-set-default 0</code></pre>
+<p>Now reboot the server and make sure the server rebooted with the kernel we installed.&nbsp;</p>
+<p>&nbsp;</p>
+<h6>Compile Qemu</h6>
+<pre><code class="language-plaintext">yum install glib2-devel libfdt-devel pixman-devel zlib-devel libaio-devel libcap-devel libiscsi-devel centos-release-scl \
+readline-devel bash-completion libattr-devel libblkid-devel augeas sanlock-devel libpcap-devel libnl3-devel libacl-devel \ 
+parted-devel xfsprogs-devel glusterfs-api-devel glusterfs-devel numactl-devel libcap-ng-devel fuse-devel netcf-devel \ 
+audit-libs-devel dbus-devel scrub libtirpc-devel  python36-docutils python3 sanlock python-sphinx python-six unbound-devel \
+unwind-devel python3-sphinx  libusbx-devel -y
+
+yum install rh-python36 -y
+
+cd /root
+wget https://download.qemu.org/qemu-5.1.0.tar.xz
+tar xvJf qemu-5.1.0.tar.xz
+cd qemu-5.1.0
+./configure --target-list=x86_64-softmmu  --enable-rbd --enable-kvm --enable-libusb --prefix=/usr/local --python=/opt/rh/rh-python36/root/usr/bin/python3.6
+
+make
+make install</code></pre>
+<p>&nbsp;</p>
+<h6>Install KVM</h6>
+<pre><code class="language-plaintext">
+</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
