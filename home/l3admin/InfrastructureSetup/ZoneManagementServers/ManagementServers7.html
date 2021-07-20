@@ -2,7 +2,7 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-07-20T15:31:21.809Z
+date: 2021-07-20T16:47:14.614Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
@@ -110,4 +110,14 @@ service openvswitch restart
 ovs-vsctl add-br ovsbr
 ovs-vsctl add-port ovsbr bond0</code></pre>
 <p>Now reboot the server.&nbsp;</p>
+<h6>Manually Create the KVM Vm</h6>
+<p>Export Windows 2019 from Backup Server</p>
+<pre><code class="language-plaintext">#this example command is from a las backup server
+rbd export  ostemplates/windows-kvm-efi-std-2k19-x64-20190208 /data/windows-kvm-efi-std-2k19-x64-20190208.img --keyring /etc/ceph/ceph-las-b/ceph.client.admin.keyring -c /etc/ceph/ceph-las-b/ceph.conf
+
+#copy to destination server
+scp -P 5252  /data/windows-kvm-efi-std-2k19-x64-20190208.img pcruz@64.235.49.44:/home/pcruz</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
