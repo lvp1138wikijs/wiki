@@ -2,7 +2,7 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-07-20T16:47:14.614Z
+date: 2021-07-20T16:48:22.053Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
@@ -116,7 +116,12 @@ ovs-vsctl add-port ovsbr bond0</code></pre>
 rbd export  ostemplates/windows-kvm-efi-std-2k19-x64-20190208 /data/windows-kvm-efi-std-2k19-x64-20190208.img --keyring /etc/ceph/ceph-las-b/ceph.client.admin.keyring -c /etc/ceph/ceph-las-b/ceph.conf
 
 #copy to destination server
-scp -P 5252  /data/windows-kvm-efi-std-2k19-x64-20190208.img pcruz@64.235.49.44:/home/pcruz</code></pre>
+scp -P 5252  /data/windows-kvm-efi-std-2k19-x64-20190208.img pcruz@64.235.49.44:/home/pcruz
+
+#on hv
+mkdir /vms
+cp /home/pcruz/windows-kvm-efi-std-2k19-x64-20190208.img /vms/vm1.disk</code></pre>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
