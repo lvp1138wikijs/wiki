@@ -2,17 +2,17 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-07-20T16:48:22.053Z
+date: 2021-07-20T17:05:28.847Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
 -->
 
-<h1>Bridge Server -2 &amp; OOB</h1>
+<h1><span style="font-family:Verdana, Geneva, sans-serif;">Bridge Server -2 &amp; OOB</span></h1>
 <p>The management server-7 is the Secondary Bridge/Gateway server. We also install the KVM hypervisor &amp; Minio in. KVM is for running a windows VM for console access. It's called the console server. The server has connections to the ipmi switch. That helps us to connect the servers via ipmi. Also it has access to serial ports of switches.</p>
 <p>First, we have to set the server as a bridge. You can check this, <a href="https://216.108.237.96:3443/en/home/l3admin/InfrastructureSetup/InternelServers/BridgeServer">Instruction to Setup Bridges</a></p>
 <p>&nbsp;</p>
-<h3>Minio Installation</h3>
+<h3><span style="font-family:Verdana, Geneva, sans-serif;">Minio Installation</span></h3>
 <p>Run the following command</p>
 <pre><code class="language-plaintext">mkdir /var/serverchameleon/minio -p
 cd  /var/serverchameleon/minio
@@ -20,7 +20,7 @@ wget https://dl.min.io/server/minio/release/linux-amd64/minio -O /var/servercham
 chmod +x minio</code></pre>
 <p>Add a 4TB disk to the server for minio. Verify the disk added and reported fine. James will do the rest.</p>
 <p>&nbsp;</p>
-<h3>KVM hypervisor</h3>
+<h3><span style="font-family:Verdana, Geneva, sans-serif;">KVM hypervisor</span></h3>
 <p>&nbsp;</p>
 <h6>Install Kernel-ml version 5 &amp; Update Grub</h6>
 <p><code>rpm -Uvh https://linux.cc.iitk.ac.in/mirror/centos/elrepo/kernel/el7/x86_64/RPMS/kernel-ml-5.8.0-1.el7.elrepo.x86_64.rpm</code></p>
@@ -110,19 +110,32 @@ service openvswitch restart
 ovs-vsctl add-br ovsbr
 ovs-vsctl add-port ovsbr bond0</code></pre>
 <p>Now reboot the server.&nbsp;</p>
-<h6>Manually Create the KVM Vm</h6>
-<p>Export Windows 2019 from Backup Server</p>
-<pre><code class="language-plaintext">#this example command is from a las backup server
-rbd export  ostemplates/windows-kvm-efi-std-2k19-x64-20190208 /data/windows-kvm-efi-std-2k19-x64-20190208.img --keyring /etc/ceph/ceph-las-b/ceph.client.admin.keyring -c /etc/ceph/ceph-las-b/ceph.conf
-
-#copy to destination server
-scp -P 5252  /data/windows-kvm-efi-std-2k19-x64-20190208.img pcruz@64.235.49.44:/home/pcruz
-
-#on hv
-mkdir /vms
-cp /home/pcruz/windows-kvm-efi-std-2k19-x64-20190208.img /vms/vm1.disk</code></pre>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<h2><span style="font-family:Verdana, Geneva, sans-serif;">Manually Create the KVM VM</span></h2>
+<p><strong>Export Windows 2019 from Backup Server to the Destination HVs</strong></p>
+<ul>
+  <li>This example command is from a las backup server
+  </li>
+</ul>
+<p><code>rbd export &nbsp;ostemplates/windows-kvm-efi-std-2k19-x64-20190208 /data/windows-kvm-efi-std-2k19-x64-20190208.img --keyring /etc/ceph/ceph-las-b/ceph.client.admin.keyring -c /etc/ceph/ceph-las-b/ceph.conf</code>
+</p>
+<ul>
+  <li>Copy to the Destination HVs</li>
+</ul>
+<p><code>scp -P 5252 &nbsp;/data/windows-kvm-efi-std-2k19-x64-20190208.img pcruz@64.235.49.44:/home/pcruz</code></p>
+<ul>
+  <li>On HVs</li>
+</ul>
+<p><code>mkdir /vms&nbsp;</code><br><code>cp /home/pcruz/windows-kvm-efi-std-2k19-x64-20190208.img /vms/vm1.disk</code></p>
+<p><strong>Configure openvswitch for vm connections</strong></p>
+<ul>
+  <li>&nbsp;First confirm each source of ethernet port. For example eth2 is OOB and eth3 is ipmi network.&nbsp;</li>
+  <li>First set up a bridge for OOB &nbsp;</li>
+</ul>
+<p style="text-align:justify;"><code>ovs-vsctl add-br oob</code><br><code>ovs-vsctl add-port oob eth2</code></p>
+<ul>
+  <li>Setup ipmi bridge</li>
+</ul>
+<p><code>ovs-vsctl add-br ipmi&nbsp;</code><br><code>ovs-vsctl add-port eth3</code></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
