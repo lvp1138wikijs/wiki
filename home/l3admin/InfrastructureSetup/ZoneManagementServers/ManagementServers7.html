@@ -2,7 +2,7 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-07-19T20:36:07.141Z
+date: 2021-07-20T15:31:21.809Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
@@ -73,6 +73,16 @@ rpm -Uvh ~/rpmbuild/RPMS/x86_64/libvirt*.rpm
 
 service libvirtd restart</code></pre>
 <p><i><mark class="marker-yellow">Note: qemu and libvirt won't install in the same ssh session, 2nd one will fail with errors, if it happens, open a new ssh session and compile other one in it</mark></i></p>
+<h6>Install ovmf UEFI boot loader</h6>
+<pre><code class="language-plaintext">cat &gt;&gt; /etc/yum.repos.d/kraxel.repo &lt;&lt;END
+[qemu-firmware-jenkins]
+name=firmware for qemu, built by jenkins, fresh from git repos
+baseurl=https://www.kraxel.org/repos/jenkins/
+enabled=0
+gpgcheck=0
+END
+
+yum --enablerepo=qemu-firmware-jenkins -y install edk2.git-ovmf-x64</code></pre>
 <p>&nbsp;</p>
 <h6>Install OpenVswitch</h6>
 <pre><code class="language-plaintext">yum install autoconf automake libtool -y
@@ -99,4 +109,5 @@ rm -rf /etc/openvswitch/conf.db
 service openvswitch restart
 ovs-vsctl add-br ovsbr
 ovs-vsctl add-port ovsbr bond0</code></pre>
+<p>Now reboot the server.&nbsp;</p>
 <p>&nbsp;</p>
