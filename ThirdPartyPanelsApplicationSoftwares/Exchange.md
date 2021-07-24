@@ -2,7 +2,7 @@
 title: Exchange
 description: 
 published: true
-date: 2021-07-24T04:50:24.456Z
+date: 2021-07-24T04:59:38.833Z
 tags: 
 editor: markdown
 dateCreated: 2021-07-24T04:50:24.456Z
@@ -103,21 +103,21 @@ Now we're ready to run the Exchange 2010 installer. We'll go through a typical i
 
 
 - Logon to the desktop of your soon to be Exchange server with a Domain Admin account.
--     Run setup from the Exchange 2010 media.
--     Click on "Step 3: Choose Exchange language option" and choose one of the options (Install only languages from the DVD will be fine in most cases).
--     Click on "Step 4: Install Microsoft Exchange."
--     Click Next at the Introduction page.
--     Accept the license terms and click Next.
--     Make a selection on the Error Reporting page and click Next.
--     Stick with the default "Typical Exchange Server Installation" and click Next.
--     Choose a name for your Exchange Organization and click Next.
--     Make a selection on the Client Settings page and click Next.
--     If you want your Exchange server to be available externally then choose a domain name such as mail.myorganization.com, click Next.
--     Make a selection on the Customer Experience Improvement Program page and click Next.
--     If all the prerequisites are there then you can click Install.
--     Grab a cup of coffee or take a walk while the installation process does its thing.
--     When the installation has finished go back to the Exchange installation page click on "Step 5: Get critical updates for Microsoft Exchange."
--     Install Microsoft Update (if necessary) so that Windows update will check for non-OS updates, and verify that there are no Exchange updates.
+- Run setup from the Exchange 2010 media.
+- Click on "Step 3: Choose Exchange language option" and choose one of the options (Install only languages from the DVD will be fine in most cases).
+- Click on "Step 4: Install Microsoft Exchange."
+- Click Next at the Introduction page.
+- Accept the license terms and click Next.
+- Make a selection on the Error Reporting page and click Next.
+- Stick with the default "Typical Exchange Server Installation" and click Next.
+- Choose a name for your Exchange Organization and click Next.
+- Make a selection on the Client Settings page and click Next.
+- If you want your Exchange server to be available externally then choose a domain name such as mail.myorganization.com, click Next.
+- Make a selection on the Customer Experience Improvement Program page and click Next.
+- If all the prerequisites are there then you can click Install.
+- Grab a cup of coffee or take a walk while the installation process does its thing.
+- When the installation has finished go back to the Exchange installation page click on "Step 5: Get critical updates for Microsoft Exchange."
+- Install Microsoft Update (if necessary) so that Windows update will check for non-OS updates, and verify that there are no Exchange updates.
 
 
 **Post Installation Steps**
@@ -127,19 +127,19 @@ Now that you have Exchange 2010 installed, you will need to do some basic config
  Open the Exchange Management Console via Start >> All Programs >> Microsoft Exchange Server 2010 >> Exchange Management Console
  
 
--     Expand Microsoft Exchange On-Premises so you can see: Organization Configuration, Server Configuration, Recipient Configuration, and Toolbox
-- 
--     Under Organization Configuration >> Hub Transport >> Accepted Domains add a new Accepted Domain for the domain you wish to use for email addresses. For example, your AD domain will be listed by default (i.e. ad.myorganization.com). You will probably want to add "myorganization.com" as an Authoritative Domain.
-- 
--     Under Organization Configuration >> Hub Transport >> Send Connectors >> New Send Connector ... >> Pick a name such as "MyOrganization Internet Send Connector" >> change the drop down to "Internet" >> Next >> Add ... >> enter "*" in the Address field and check the box to include all subdomains >> OK >> Next. Now, if you want your Exchange server to route mail directly, then click Next on the Network setting page, but if you want to route your email through an upstream provider then select "Route mail through the following smart hosts" and Add ... a mail gateway such as smtp.comcast.net. Click Next >> Next >> Next >> New
-- 
--     Under Server Configuration >> Hub Transport >> Right-click Default *** >> Properties >> Permission Groups tab, check the box for Anonymous users. This will allow your Exchange server to accept incoming mail delivery from remote mail servers.
-- 
--     Under Recipient Configuration >> Mailbox, create mailboxes for your existing AD users (or create a new user & mailbox)
-- 
--         New Mailbox ... >> select User Mailbox >> Next >> Existing users >> Add ... >> select an existing AD account >> OK >> Next >> specify an alias (e.g. the AD user name) >> Next >> New
-- 
--     If you want to use an SSL certificate for Outlook Web App, IMAP, POP, etc. click on Server Configuration and import or create the certificate.
+- Expand Microsoft Exchange On-Premises so you can see: Organization Configuration, Server Configuration, Recipient Configuration, and Toolbox
+
+- Under Organization Configuration >> Hub Transport >> Accepted Domains add a new Accepted Domain for the domain you wish to use for email addresses. For example, your AD domain will be listed by default (i.e. ad.myorganization.com). You will probably want to add "myorganization.com" as an Authoritative Domain.
+
+- Under Organization Configuration >> Hub Transport >> Send Connectors >> New Send Connector ... >> Pick a name such as "MyOrganization Internet Send Connector" >> change the drop down to "Internet" >> Next >> Add ... >> enter "*" in the Address field and check the box to include all subdomains >> OK >> Next. Now, if you want your Exchange server to route mail directly, then click Next on the Network setting page, but if you want to route your email through an upstream provider then select "Route mail through the following smart hosts" and Add ... a mail gateway such as smtp.comcast.net. Click Next >> Next >> Next >> New
+
+- Under Server Configuration >> Hub Transport >> Right-click Default *** >> Properties >> Permission Groups tab, check the box for Anonymous users. This will allow your Exchange server to accept incoming mail delivery from remote mail servers.
+
+- Under Recipient Configuration >> Mailbox, create mailboxes for your existing AD users (or create a new user & mailbox)
+
+- New Mailbox ... >> select User Mailbox >> Next >> Existing users >> Add ... >> select an existing AD account >> OK >> Next >> specify an alias (e.g. the AD user name) >> Next >> New
+
+- If you want to use an SSL certificate for Outlook Web App, IMAP, POP, etc. click on Server Configuration and import or create the certificate.
 
 
 
