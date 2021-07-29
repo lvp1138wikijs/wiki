@@ -2,7 +2,7 @@
 title: Secure Internal Servers
 description: 
 published: true
-date: 2021-07-29T16:21:37.647Z
+date: 2021-07-29T16:30:52.825Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T19:46:56.804Z
@@ -57,24 +57,6 @@ iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -m comment --comment "For Ping"
 iptables -A INPUT -i bond0.50 -m comment --comment "Restricted Public Access" -j DROP
 </code></pre>
 <p>&nbsp;</p>
-<h5>IPtables Rules for CEPH Admin Server</h5>
-<p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
-<pre><code class="language-plaintext">&gt;/etc/sysconfig/iptables
-iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
-iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
-iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
-iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
-iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "
-iptables -A INPUT -s 10.255.0.0/24 -p tcp -m tcp --dport 5252 -m comment --comment "SSH Enabled on CephIPs" -j ACCEPT
-iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"
-iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"
-iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A INPUT -p icmp -m icmp --icmp-type 8 -m comment --comment "For Ping" -j ACCEPT
-iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -m comment --comment "For Ping" -j ACCEPT
-iptables -A INPUT -i bond0.50 -m comment --comment "Restricted Public Access" -j DROP
-</code></pre>
-<p>&nbsp;</p>
 <h5>IPtables Rules for Bridge Servers</h5>
 <p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
 <pre><code class="language-plaintext">iptables -A INPUT -m state --state NEW -p udp -m multiport --dports 5404,5405 -j ACCEPT
@@ -103,6 +85,6 @@ iptables -A INPUT -p icmp -m icmp --icmp-type 8 -m comment --comment "For Ping" 
 iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -m comment --comment "For Ping" -j ACCEPT
 iptables -A INPUT -i bond0.50 -m comment --comment "Restricted Public Access" -j DROP</code></pre>
 <p>Finally, &nbsp;add the following rules save the rules and restart iptables firewall.&nbsp;</p>
-<p>Before restart recheck the rules added from /etc/sysconfig/iptables and make sure all rules are in proper order.&nbsp;</p>
+<p>Before restart, recheck the rules added to /etc/sysconfig/iptables and make sure all rules are in proper order.&nbsp;</p>
 <pre><code class="language-plaintext">service iptables save
 service iptables restart</code></pre>
