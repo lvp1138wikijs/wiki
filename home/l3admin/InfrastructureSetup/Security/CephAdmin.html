@@ -1,0 +1,59 @@
+<!--
+title: Secure Ceph Admin Servers
+description: 
+published: true
+date: 2021-07-29T16:31:12.620Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-07-29T16:31:12.620Z
+-->
+
+<h1>Secure Ceph Admin Server</h1>
+<h5>Secure the SSH Service</h5>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">useradd -s /bin/bash -d /home/pcruz -m -G wheel pcruz
+passwd pcruz
+
+sed -i 's/#Port 22/Port 5252/g' /etc/ssh/sshd_config
+sed -i 's/#Protocol 2/Protocol 2/g' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+sed -i '/PermitRootLogin no/a AllowUsers pcruz cephuser' /etc/ssh/sshd_config
+
+cat &gt;&gt; /etc/sudoers &lt;&lt;END
+pcruz ALL=(ALL) ALL
+END
+
+systemctl restart sshd
+
+cat &gt;&gt; /root/.bashrc &lt;&lt;END
+export PS1='\[\e[1;31m\][\u@\h \W]\$\[\e[0m\] '
+END</code></pre>
+<p>&nbsp;</p>
+<h5>Set IPtables Firewall Rules to Enable SSH Access Only through VPN</h5>
+<p>All our internal servers ssh access is limited through VPN ips only. We use OpenVPN. You can check this tutorial on how to set up an OpenVPN access server.</p>
+<p>Install IPTables and clear the default rules<br><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
+<pre><code class="language-plaintext">yum install iptables-services -y
+systemctl enable iptables
+iptables -F
+iptables -X
+
+&gt;/etc/sysconfig/iptables
+iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
+iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
+iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
+iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
+iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "
+iptables -A INPUT -s 10.255.0.0/24 -p tcp -m tcp --dport 5252 -m comment --comment "SSH Enabled on CephIPs" -j ACCEPT
+iptables -A INPUT -p tcp --dport 43795 -j ACCEPT -m comment --comment "Ceph Port"
+iptables -A INPUT -p tcp --dport 19998 -j ACCEPT  -m comment --comment "NetData Port"
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p icmp -m icmp --icmp-type 8 -m comment --comment "For Ping" -j ACCEPT
+iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -m comment --comment "For Ping" -j ACCEPT
+iptables -A INPUT -i bond0.50 -m comment --comment "Restricted Public Access" -j DROP</code></pre>
+<p>Finally, &nbsp;save the rules and restart iptables firewall.&nbsp;</p>
+<p>Before restart, recheck the rules added to /etc/sysconfig/iptables and make sure all rules are in proper order.&nbsp;</p>
+<pre><code class="language-plaintext">service iptables save
+service iptables restart</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
