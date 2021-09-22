@@ -2,7 +2,7 @@
 title: Error Messages in IIS 6.0
 description: 
 published: true
-date: 2021-09-22T04:52:01.549Z
+date: 2021-09-22T05:06:49.306Z
 tags: 
 editor: markdown
 dateCreated: 2021-09-22T04:52:01.549Z
@@ -56,3 +56,32 @@ If you selected URL, type the path to the Web site or virtual directory. The URL
 - Click OK, and then click OK again.
 
 
+## Enabling ASP Error Processing
+
+**To enable ASP error processing by mapping to a URL** 
+
+- Create a file that contains your custom error message, and save it to a virtual directory.
+
+- In IIS Manager, double-click the local computer; right-click the Web site, virtual directory, directory, or file for which you want to enable ASP error processing; and then clickProperties.
+
+- Click the Custom Errors tab.
+ 
+- In the Error messages for HTTP errors list, click the HTTP error that you want to change, and then click Edit.
+
+- In the Message Type list box, click URL.
+
+- In the URL box, type the URL that points to your customized error message by typing the path to the URL, beginning with the virtual directory name.
+
+- Click OK, and then click OK again.
+
+## Disabling HTTP Friendly Error Messages in Internet Explorer
+
+**To disable friendly HTTP error messages in Internet Explorer** 
+
+- On the Tools menu in Internet Explorer, click Internet Options.
+
+- Click the Advanced tab.
+
+- In the list of options under Browsing, clear the Show friendly HTTP error messages check box.
+ 
+- Click Apply, and then click OK.
