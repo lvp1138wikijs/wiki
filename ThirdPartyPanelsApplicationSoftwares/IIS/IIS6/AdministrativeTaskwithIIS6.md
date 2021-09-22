@@ -2,7 +2,7 @@
 title: Administrative Task with IIS 6
 description: 
 published: true
-date: 2021-09-22T03:23:50.735Z
+date: 2021-09-22T03:29:32.570Z
 tags: 
 editor: markdown
 dateCreated: 2021-09-22T03:23:50.735Z
@@ -129,6 +129,121 @@ In IIS 6.0, you cannot use IIS Manager to rename a virtual directory. Instead, y
 {.is-info}
 
 
+## Creating Application Pools in IIS 6.0
+
+**To create a new application pool** 
+
+1. In IIS Manager, double-click the local computer, right-click Application Pools, point to New, and then click Application Pool.
+
+1. In the Application pool ID box, type the name of the new application pool.
+
+1. Under Application pool settings, click either Use default settings for new application pool or Use existing application pool as template.
+
+1. If you selected Use existing application pool as template, from the Application pool name list box, click the application pool to be used as a template.
+ 
+1. Click OK.
+
+## SSL Server Certificate 
+
+**Requesting New SSL Certificate** 
+
+1. In IIS Manager, double-click the local computer, and then double-click the Web Sites folder.
+
+1. Right-click the Web site or file for which you want to request a certificate, and then click Properties.
+
+1. On the Directory Security or File Security tab, under Secure communications, click Server Certificate.
+ 
+1. In the Web Server Certificate Wizard, on the Delayed or Immediate Request page, click Prepare the request now, but send it later. By default, the certificate request file is saved as C:\Certreq.txt, but the wizard allows you to specify a different location.
+
+1. Complete the rest of the steps in the Web Server Certificate Wizard and then click Finish.
+
+1. Send the request to the certification authority. The CA will process the request and then send you the certificate.
+
+**Installing A SSL Certificate**
+
+1. In IIS Manager, expand the local computer, and then expand the Web Sites folder.
+
+1. Right-click the Web site or file that you want, and then click Properties.
+
+1. On the Directory Security or File Security tab, under Secure communications, click Server Certificate.
+ 
+1. In the Web Server Certificate Wizard, click Assign an existing certificate.
+ 
+1. Follow the Web Server Certificate Wizard, which will guide you through the process of installing a server certificate.
 
 
+## Redirecting Web Sites in IIS 6.0
 
+**To redirect requests to another Web site or directory** 
+
+1. In IIS Manager, expand the local computer, right-click the Web site or directory you want to redirect, and click Properties.
+
+1. Click the Home Directory, Virtual Directory, or Directory tab.
+
+1. Under The content for this source should come from, click A redirection to a URL.
+ 
+1. In the Redirect to box, type the URL of the destination directory or Web site. For example, to redirect all requests for files in the Catalog directory to the NewCatalog directory, type /NewCatalog.
+
+**To redirect all requests to a single file** 
+
+1. In IIS Manager, expand the local computer, right-click the Web site or directory you want to redirect, and click Properties.
+
+1. Click the Home Directory, Virtual Directory, or Directory tab.
+
+1. Under The content for this source should come from, click A redirection to a URL.
+ 
+1. In the Redirect to box, type the URL of the destination file.
+ 
+1. Select the The exact URL entered above check box to prevent the Web server from appending the original file name to the destination URL.
+
+You can use wildcards and redirect variables in the destination URL to precisely control how the original URL is translated into the destination URL.
+
+You can also use the redirect method to redirect all requests for files in a particular directory to a program. Generally, you should pass any parameters from the original URL to the program, which you can do by using redirect variables.
+
+**To redirect requests to a program** 
+
+1. In IIS Manager, expand the local computer, right-click the Web site or directory you want to redirect, and click Properties.
+
+1. Click the Home Directory, Virtual Directory, or Directory tab.
+
+1. Under The content for this source should come from, click A redirection to a URL.
+
+1. In the Redirect to box, type the URL of the program, including any redirect variables needed to pass parameters to the program. For example, to redirect all requests for scripts in a Scripts directory to a logging program that records the requested URL and any parameters passed with the URL, type /Scripts/Logger.exe?URL=$V+PARAMS=$P. $V and $P are redirect variables.
+
+1. Select the The exact URL entered above check box to prevent the Web server from appending the original file name to the destination URL.
+
+## Hosting Multiple Web Sites
+
+1. In IIS Manager, double-click the local computer, right-click the Web Sites folder, right-click the Web site, and click Properties.
+
+1. On the Web Site tab, click Advanced.
+ 
+1. Click Add.
+
+1. In the appropriate boxes, type an IP address, TCP port, and host header value for your Web site.
+
+## Backing Up and Restoring the Metabase in IIS 6.0
+
+IIS administrators can create backup files using IIS Manager or a programmatic administration script. The backup files are copies of the metabase configuration file (MetaBase.xml) and the matching metabase schema file (MBSchema.xml). Using the metabase configuration backup and restore feature, the metabase can be restored from the backup files.
+
+**To create a portable backup (password required)**
+
+1. In IIS Manager, right-click the local computer, point to All Tasks, and click Backup/Restore Configuration.
+
+1. Click Create Backup.
+
+1. In the Configuration backup name box, type a name for the backup file.
+
+1. Select the Encrypt backup using password check box, type a password into the Password box, and then type the same password in the Confirm password box.
+
+1. Click OK, and then click Close.
+
+**To create a non-portable backup (password not required) **
+
+1. In IIS Manager, right-click the local computer, point to All Tasks, and click Backup/Restore Configuration.
+
+1. Click Create Backup.
+
+1. In the Configuration backup name box, type a name for the backup file.
+
+1. Click OK, and click Close.
