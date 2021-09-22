@@ -2,7 +2,7 @@
 title: Administrative Task with IIS 6
 description: 
 published: true
-date: 2021-09-22T03:29:32.570Z
+date: 2021-09-22T04:16:15.081Z
 tags: 
 editor: markdown
 dateCreated: 2021-09-22T03:23:50.735Z
@@ -247,3 +247,60 @@ IIS administrators can create backup files using IIS Manager or a programmatic a
 1. In the Configuration backup name box, type a name for the backup file.
 
 1. Click OK, and click Close.
+
+**To restore the metabase backup **
+
+1. In IIS Manager, right-click the local computer, point to All Tasks, and click Backup/Restore Configuration.
+
+1. In the Backups list box, click the version of the Automatic Backup file that you want to restore, and click Restore. If prompted for a password, type the password you chose to secure the backup.
+
+1. When a confirmation message appears, click Yes.
+
+1. Click OK, and then click Close.
+
+## Enabling ASP.NET
+
+**To enable ASP.NET by using IIS Manager** 
+
+1. In IIS Manager, expand the local computer, and then click Web Service Extensions.
+
+1. In the details pane, click ASP.NET, and then click Allow.
+
+## Enabling ASP Pages in IIS 6.0
+
+1. In IIS Manager, expand the local computer, and then click Web Service Extensions.
+
+1. In the details pane, click Active Server Pages, and then click Allow.
+
+## Starting and Stopping Services
+
+**To restart IIS services **
+
+1. In IIS Manager, right-click the local computer, point to All Tasks, then click Restart IIS.
+1. 
+1. In the What do you want IIS to do drop-down list, click Restart Internet Services on computer name. You can also choose to reboot the computer, stop the Internet service, or start the Internet service.
+1. 
+1. IIS attempts to stop all services before restarting.
+
+**To start, stop, or pause individual sites** 
+
+- In IIS Manager, right-click the site you want to start, stop, or pause; and click Start, Stop, or Pause.
+
+## Enabling HTTP Compression
+
+**To enable global HTTP compression by using IIS Manager** 
+
+1. In IIS Manager, double-click the local computer, right-click the Web Sites folder, and then click Properties.
+
+1. Click theService tab, and in the HTTP compression section, select the Compress application files check box to enable compression for dynamic files.
+
+1. Select the Compress static files check box to enable compression for static files.
+
+1. In the Temporary directory box, type the path to a local directory or click Browse to locate a directory. Once a static file is compressed, it is cached in this temporary directory until it expires, or the content changes. The directory must be on the local drive of an NTFS–formatted partition. The directory cannot be compressed or shared, and the access control lists (ACLs) for the directory must include Full Control access to the identity of the application pool or to the IIS_WPG group.
+
+1. Under Maximum temporary directory size, click a folder size option. If you specify a maximum size under Limited to (in megabytes) (the default setting is 95 MB), then when the limit is reached, IIS automatically cleans up the temporary directory by applying the "least recently used" rule.
+
+1. Click Apply, and then click OK.
+
+
+
