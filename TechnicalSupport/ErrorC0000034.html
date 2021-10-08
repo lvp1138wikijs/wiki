@@ -1,0 +1,22 @@
+<!--
+title:  Fixing the " Error C0000034 applying update operation." 
+description: 
+published: true
+date: 2021-10-08T13:18:16.074Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-10-08T13:18:16.074Z
+-->
+
+<p>Reference URL:&nbsp;<a href="https://community.spiceworks.com/how_to/2019-fixing-the-fatal-error-c0000034-error-when-installing-win7-sp1">https://community.spiceworks.com/how_to/2019-fixing-the-fatal-error-c0000034-error-when-installing-win7-sp1</a><br>Reference ticket:&nbsp;<a href="https://secure.serverpoint.com/tickets/staff/index.php?/Tickets/Ticket/View/615952/inbox/-1/-1/-1/0">BWR-906-18231</a></p>
+<p><br><br>Can follow the steps below:</p>
+<p>1. After BIOS finishes loading, before the Windows logo appears, press F8 button :).<br>2. Select Repair Windows option<br>3. Select Troubleshoot (Refresh or Reset your PC, or use advanced tools).<br>4. Select CMD (command prompt)<br>5. Choose Administrator account and type your (administrator) password<br>6. In the Command Prompt window, type (navigate) to your windows directory path (usually C:)</p>
+<p>7. Navigate to system32 folder and open "notepad.exe"<br>example: %windir%/system32/notepad.exe</p>
+<p>This command will open Notepad.<br>8. In notepad go to File&gt;Open<br>9. Change the default type of file that notepad reads (from .txt to All Files)<br>10. In Notepad, go to C:Windows\winsxs (or whichever drive your system is installed on) and choose "pending.xml"<br>-- If you get an error that windows cannot open the file dialog box, under CMD window, navigate to "C:Windows\winsxs" and type: notepad "pending.xml"</p>
+<p>-- For security reasons you can copy/paste the "pending.xml" file to the same folder (just in case something goes wrong).</p>
+<p>11. Once the original "pending.xml" is opened (It’s going to take some time to load, because it’s a huge file), select "WordWrap" option (not mandatory but it is easier to read, this will take time too)<br>12. Press Ctrl + F on your keyboard and search for the following:<br>0000000000000000.cdf-ms</p>
+<p><br>Delete the following text (for future reference we will call this "CheckpointTextToBeDeleted":<br>NOTE: ONLY DELETE if you find all three tags - all-together and ordered exactly as in the red text below: CheckPoint, DeleteFile and MoveFile.<br>&lt;Checkpoint/&gt;</p>
+<p>&lt;DeleteFile path="SystemRootWinSxSFileMaps_0000000000000000.cdf-ms"/&gt;</p>
+<p>&lt;MoveFile source="SystemRootWinSxSTempPendingRenamese56db1db48d4cb0199440000b01de419._0000000000000000.cdf-ms" destination="SystemRootWinSxSFileMa_0000000000000000.cdf-ms"/&gt;</p>
+<p><br>Note1: MoveFile-tag source="..TempPendingRenames..." number might look different at your PC (nothing to worry about)<br>Note2: After you have deleted the text (it may take some time to delete the text), you have to search for other occurrences of "0000000000000000.cdf-ms".</p>
+<p>- Save the file (this will take time too)<br>- Close the Command Prompt and<br>- Restart the computer<br>Note: wait for the updates to rollback/finish (during this phase, the server might restart 2 or 3 more times!</p>
