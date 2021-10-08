@@ -1,0 +1,85 @@
+<!--
+title:  wget: unable to resolve host address 
+description: 
+published: true
+date: 2021-10-08T13:12:51.028Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-10-08T13:12:51.028Z
+-->
+
+<h4>Sometimes you may come across this error while trying to download any link using wget tool, especially on a newly deployed server.</h4>
+<h6>&nbsp;</h6>
+<h6>Sample Error:</h6>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <h6>wget <a href="http://layer1.cpanel.net/latest">http://layer1.cpanel.net/latest</a></h6>
+          <h6>--2017-01-18 11:28:37--&nbsp; <a href="http://layer1.cpanel.net/latest">http://layer1.cpanel.net/latest</a></h6>
+          <h6>Resolving <a href="http://layer1.cpanel.net">layer1.cpanel.net</a> (<a href="http://layer1.cpanel.net">layer1.cpanel.net</a>)... failed: Name or service not known.</h6>
+          <h6>wget: unable to resolve host address ‘<a href="http://layer1.cpanel.net">layer1.cpanel.net</a>’</h6>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<h6>&nbsp;</h6>
+<h6>Reason:</h6>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>Server is missing a valid resolver entry in the resolv.conf file</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<h6>How to Fix? Simple, just do following steps on the server.</h6>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <ol>
+            <li>Open /etc/resolv.conf file</li>
+            <li>Check if any name server entry is added there.</li>
+            <li>If not, add proper Nameservers</li>
+            <li>Save and quit the file.&nbsp;</li>
+          </ol>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<h6>&nbsp;</h6>
+<h6>If the server do not have own nameserver, you can user Google's Public <strong>DNS</strong>. It operates recursive name servers for public use:</h6>
+<h5>&nbsp;</h5>
+<h5>What is the format?</h5>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>nameserver 8.8.8.8nameserver 8.8.4.4</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<h5>&nbsp;</h5>
+<h5>Following are our own resolvers:</h5>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <h6>nameserver 64.235.53.251</h6>
+          <h6>nameserver 64.235.53.253</h6>
+          <h6>nameserver 64.235.48.251</h6>
+          <h6>nameserver 64.235.50.253</h6>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>That's it! Wget will now connect and download fine</p>
