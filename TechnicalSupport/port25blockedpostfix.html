@@ -1,0 +1,43 @@
+<!--
+title:  PORT 25 BLOCKED | POSTFIX 
+description: 
+published: true
+date: 2021-10-08T13:10:54.452Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-10-08T13:10:54.452Z
+-->
+
+<h3>Issue : Telnet to port 25 fails from outside the server, but works for localhost</h3>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>telnet: Unable to connect to remote host: No route to host</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<h3>&nbsp;</h3>
+<h3>Reason : In the postfix configuration file, /etc/postfix/<a href="http://main.cf">main.cf</a> , the inet_interfaces value will be set to accept connection locally.</h3>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>inet_interfaces = localhost</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<h3>&nbsp;</h3>
+<h3>Solution : Change the inet_interfaces value to all and restart postfix.</h3>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>inet_interfaces = all<br><br><br>/etc/init.d/postfix restart</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
