@@ -2,7 +2,7 @@
 title: Secure Internal Servers
 description: 
 published: true
-date: 2021-12-04T20:42:02.883Z
+date: 2021-12-08T17:25:15.909Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-05-19T19:46:56.804Z
@@ -42,10 +42,7 @@ iptables -X</code></pre>
 <h5>Additional IPtables Rules for API Server</h5>
 <p><i><mark class="marker-yellow">Note: Replace bond0.XX with correct interface name of the server</mark></i></p>
 <pre><code class="language-plaintext">&gt;/etc/sysconfig/iptables
-iptables -A INPUT -p tcp -s 64.235.41.50 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on SGP vpn "
-iptables -A INPUT -p tcp -s 167.99.160.171 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on US vpn "
-iptables -A INPUT -p tcp -s 64.235.37.226 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on AMS vpn "
-iptables -A INPUT -p tcp -s 64.235.50.5 --dport 5252 -j ACCEPT -m comment --comment "SSH Enabled on LAS_Ded vpn"
+iptables -A INPUT -s 64.235.41.50,64.235.37.226,64.235.50.5,167.99.160.171 -p tcp -m tcp --dport 5252  -j ACCEPT -m comment --comment "SSH Enabled on vpn servers"
 iptables -A INPUT -p tcp -m tcp --dport 5252 -j DROP -m comment --comment " All other Access Disabled "
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT  -m comment --comment "Apache Port"
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT  -m comment --comment "Apache SSL Port"
