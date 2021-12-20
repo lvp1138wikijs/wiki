@@ -2,7 +2,7 @@
 title: UrlScan
 description: 
 published: true
-date: 2021-12-20T20:13:35.698Z
+date: 2021-12-20T20:13:47.483Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-20T20:12:18.156Z
@@ -26,3 +26,10 @@ Administrators may configure UrlScan to reject HTTP requests based on the follow
 - Presence of specified headers in the request
 
 When UrlScan denies a request it will log the action and the reason for the denial, along with additional information about the request – typically, the complete URL and IP address of the source of the request. When a denial occurs, IIS sends a "404 Object not found” response to the client. This simple response reduces the possibility of inadvertently disclosing information about the server to a possible attacker.
+
+> UrlScan can be downloaded from Microsoft Website
+> 
+> http://www.iis.net/downloads/microsoft/urlscan
+> 
+> http://www.iis.net/learn/extensions/working-with-urlscan
+{.is-info}
