@@ -1,0 +1,52 @@
+<!--
+title: Create a new Web site
+description: 
+published: true
+date: 2021-12-20T18:04:06.391Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-12-20T18:04:06.391Z
+-->
+
+<p>To create a new Web site in IIS, you must set up a virtual host and configure the individual settings for the host. If you are using IIS, you can create a new Web site by translating the following terms to the IIS equivalents:</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>Apache term</td>
+        <td>IIS term</td>
+      </tr>
+      <tr>
+        <td>DocumentRoot</td>
+        <td>IIS Web Site Home Directory</td>
+      </tr>
+      <tr>
+        <td>ServerName</td>
+        <td>IIS Host Header</td>
+      </tr>
+      <tr>
+        <td>Listen</td>
+        <td>IIS IP Address and TCP Port</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p>To create a new Web site in IIS, follow these steps:</p>
+<ol>
+  <li>Log on to the Web server computer as an administrator.</li>
+  <li>Click Start, point to Settings, and then click Control Panel.</li>
+  <li>Double-click Administrative Tools, and then double-click Internet Services Manager.</li>
+  <li>Click Action, point to New, and then click Web Site.</li>
+  <li>After the Web Site Creation Wizard starts, click Next.</li>
+  <li>Type a description for the Web site. &nbsp; &nbsp; &nbsp; This description is used internally to identify the Web site in Internet Services Manager only.</li>
+  <li>Select the IP address to use for the site. &nbsp; If you select All (unassigned), the Web site is accessible on all interfaces and all configured IP addresses.</li>
+  <li>Type the TCP port number to publish the site on.</li>
+  <li>Type the Host Header name (the real name that is used to access this site).</li>
+  <li>Click Next.</li>
+  <li>Either type the path to the folder that is holding the Web site documents or click Browse to select the folder, and then click Next.</li>
+  <li>Select the access permissions for the Web site, and then click Next.</li>
+  <li>Click Finish.</li>
+</ol>
+<p>&nbsp;</p>
