@@ -2,7 +2,7 @@
 title: UrlScan
 description: 
 published: true
-date: 2021-12-20T20:12:54.671Z
+date: 2021-12-20T20:13:28.835Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-20T20:12:18.156Z
@@ -13,4 +13,15 @@ UrlScan is a security tool that restricts the types of HTTP requests that Micros
 
 > Note: Microsoft has now released UrlScan 3.1. This version updates earlier versions of UrlScan with additional features, including the ability to filter requests based on query strings - which can help mitigate SQL injection and other attacks that use a query string payload, and the ability to created custom rules that scan parts of your HTTP requests.
 {.is-info}
+
+
+Administrators may configure UrlScan to reject HTTP requests based on the following criteria:
+
+
+- The HTTP request method or verb
+- The file name extension of the requested resource
+- Suspicious URL encoding
+- Presence of non-ASCII characters in the URL
+- Presence of specified character sequences in the URL
+- Presence of specified headers in the request
 
