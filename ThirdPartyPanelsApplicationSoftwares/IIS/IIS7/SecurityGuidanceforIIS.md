@@ -2,7 +2,7 @@
 title: Security Guidance for IIS
 description: 
 published: true
-date: 2021-12-20T20:05:42.396Z
+date: 2021-12-20T20:15:01.663Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-20T20:05:42.396Z
@@ -14,5 +14,5 @@ dateCreated: 2021-12-20T20:05:42.396Z
 
 Find information about how to improve the security of your Web servers and applications by using the tools, security-hardening guidance, and other resources listed here.
 
-- IIS Lockdown Tool
-- UrlScan
+- [IISLockdownTool](/ThirdPartyPanelsApplicationSoftwares/IIS/IIS7/SecurityGuidanceforIIS/IISLockdownTool)
+- [URLscan](/ThirdPartyPanelsApplicationSoftwares/IIS/IIS7/SecurityGuidanceforIIS/URLscan)
