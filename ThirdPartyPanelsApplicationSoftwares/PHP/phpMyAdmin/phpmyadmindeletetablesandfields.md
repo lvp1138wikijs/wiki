@@ -2,7 +2,7 @@
 title: phpmyadmin:delete tables and fields
 description: 
 published: true
-date: 2021-12-21T17:27:35.934Z
+date: 2021-12-21T17:31:23.925Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-21T17:27:35.934Z
