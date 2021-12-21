@@ -2,7 +2,7 @@
 title: phpMyAdmin
 description: 
 published: true
-date: 2021-12-21T17:26:16.992Z
+date: 2021-12-21T17:29:05.152Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-21T17:26:16.992Z
