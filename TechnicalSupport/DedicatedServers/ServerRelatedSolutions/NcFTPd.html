@@ -1,0 +1,39 @@
+<!--
+title:  NcFTPd 
+description:  NcFTPd 
+published: true
+date: 2021-12-22T07:21:28.448Z
+tags: ncftpd, ftp
+editor: ckeditor
+dateCreated: 2021-12-22T07:21:28.448Z
+-->
+
+<p>NcFTPd is a high-performance File Transfer Protocol (FTP) server software solution for UNIX systems, designed especially for high-traffic sites and internet service providers. NcFTPd is the FTP server written by NcFTP Software Inc <a href="http://www.ncftp.com/">http://www.ncftp.com/</a>. The current version is: 2.8.7 .</p>
+<p><strong>Documentation Link : </strong><a href="http://www.ice.mtu.edu/%7Ejamyles/docs/ncftpd/doc/">http://www.ice.mtu.edu/~jamyles/docs/ncftpd/doc/</a></p>
+<h3>Notes about ncFTPd</h3>
+<p><strong>To shut it down, and clear some temporary files:</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>/var/run/ncftpd.pid.sh</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>To start it:</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>/var/serverchameleon/ncftpd/sbin/ncftpd -q /var/serverchameleon/conf/ftp/ncftpd/serverchameleon_ncftpd_general.cf</code></p>
+          <p><code>/var/serverchameleon/conf/ftp/ncftpd/serverchameleon_ncftpd_domain.cf &gt; /dev/null</code> <code>&amp;</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>/etc/shells must contain /bin/true and /bin/bash</strong></p>
+<p>Any username in <strong>/etc/ftpusers </strong>will be DENIED access via FTP. WARNING: sometimes after some Gentoo updates, Gentoo fills <strong>/etc/ftpusers</strong> with the usernames of ALL users in the system. Obviously, ncFTPd will deny access to all of them. Remove them and only leave system users, including root.</p>
+<p>&nbsp;</p>
