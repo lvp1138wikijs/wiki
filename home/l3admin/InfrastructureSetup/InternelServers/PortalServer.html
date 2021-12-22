@@ -2,7 +2,7 @@
 title: Client Portal Server
 description: 
 published: true
-date: 2021-08-11T19:47:30.774Z
+date: 2021-12-22T18:45:28.584Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-29T17:05:03.427Z
@@ -13,9 +13,8 @@ dateCreated: 2021-06-29T17:05:03.427Z
 <p>Platform used: Linux VPS with CentOS 7</p>
 <h5>Install Packages</h5>
 <pre><code class="language-plaintext">yum install epel-release
-yum install -y httpd mariadb-server mod_ssl php php-cli mod_fcgid php-cgi php-common \
-php-gd php-mcrypt php-pdo php-mbstring php-pdo_mysql php-imap php-php-ldap mariadb
- 
+yum install -y httpd mariadb mod_ssl php php-cli mod_fcgid
+
 systemctl restart httpd
 systemctl restart mariadb
 systemctl enable httpd
@@ -44,20 +43,7 @@ rm -rf /var/www/cgi-bin
 groupadd webroot
 useradd -s /bin/bash -d /var/www -m -g webroot webroot
 mkdir -p /var/www/public_html/cgi-bin
-chown -R webroot:webroot /var/www
-sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/g' /etc/php.ini
-sed -i 's/short_open_tag = Off/short_open_tag = On/g' /etc/php.ini
-cat &gt;&gt; /var/www/public_html/cgi-bin/php.fcgi &lt;&lt;END
-#!/bin/bash
-PHP_CGI=/usr/bin/php-cgi
-PHP_FCGI_CHILDREN=4
-PHP_FCGI_MAX_REQUESTS=0
-export PHP_FCGI_CHILDREN
-export PHP_FCGI_MAX_REQUESTS
-exec $PHP_CGI
-END
-chmod 755 /var/www/public_html/cgi-bin/php.fcgi
-chown -R webroot:webroot /var/www/public_html/cgi-bin/php.fcgi</code></pre>
+chown -R webroot:webroot /var/www</code></pre>
 <h5>Copy the SSL Certificate from Server Alecka</h5>
 <p>Get the ssl certificates from server alecka. The path is /etc/httpd/ssl. Certificates name start with wild.serverpoint.com. If you didn't find, then ask James and get the latest SSL certificate. We are using a wildcard SSL certificate.</p>
 <p><code>mkdir -p /etc/httpd/ssl</code><br><code>touch /etc/httpd/ssl/wild.serverpoint.com.crt /etc/httpd/ssl/wild.serverpoint.com.key /etc/httpd/ssl/wild.serverpoint.com.ca</code></p>
@@ -84,13 +70,11 @@ cat &gt;&gt; /etc/httpd/conf.d/portal.serverpoint.conf &lt;&lt;END
     ServerAlias portal1.serverpoint.com
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/public_html
-    DirectoryIndex index.html index.htm index.php index.phtml index.php5 index.cgi default.html default.php default.phtml default.php5
+    DirectoryIndex index.html index.htm index.cgi
 
     &lt;Directory /var/www/public_html&gt;
         Options +ExecCGI +Includes +FollowSymLinks
         AllowOverride All
-        AddHandler php5-fastcgi .php .phtml .php5
-        Action php5-fastcgi /cgi-bin/php.fcgi
         Order allow,deny
         allow from all
     &lt;/Directory&gt;
@@ -112,13 +96,11 @@ cat &gt;&gt; /etc/httpd/conf.d/portal.serverpoint.conf &lt;&lt;END
     ServerAlias portal1.serverpoint.com
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/public_html
-    DirectoryIndex index.html index.htm index.php index.phtml index.php5 index.cgi default.html default.php default.phtml default.php5
+    DirectoryIndex index.html index.htm index.cgi
 
     &lt;Directory /var/www/public_html&gt;
         Options +ExecCGI +Includes  +FollowSymLinks
         AllowOverride All
-        AddHandler php5-fastcgi .php .phtml .php5
-        Action php5-fastcgi /cgi-bin/php.fcgi
         Order allow,deny
         allow from all
     &lt;/Directory&gt;
@@ -135,7 +117,7 @@ cat &gt;&gt; /etc/httpd/conf.d/portal.serverpoint.conf &lt;&lt;END
         SSLCertificateFile    /etc/httpd/ssl/wild.serverpoint.com.crt
         SSLCertificateKeyFile /etc/httpd/ssl/wild.serverpoint.com.key
         SSLCertificateChainFile /etc/httpd/ssl/wild.serverpoint.com.ca
-        &lt;FilesMatch "\.(cgi|shtml|phtml|php)$"&gt;
+        &lt;FilesMatch "\.(cgi|shtml)$"&gt;
                 SSLOptions +StdEnvVars
         &lt;/FilesMatch&gt;
         &lt;Directory /usr/lib/cgi-bin&gt;
