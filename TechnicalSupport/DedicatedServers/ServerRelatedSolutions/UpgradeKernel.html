@@ -1,0 +1,15 @@
+<!--
+title: Upgrade to Enterprise Kernel 
+description: Upgrade to Enterprise Kernel 
+published: true
+date: 2021-12-22T07:00:19.999Z
+tags: upgrade kernel, enterprise kernel
+editor: ckeditor
+dateCreated: 2021-12-22T07:00:19.999Z
+-->
+
+<p>Here are the steps to upgrade to Enterprise Kernel</p>
+<p>wget <a href="http://centos.serverpoint.com/centos-5/5/updates/i386/RPMS/kernel-PAE-2.6.18-194.3.1.el5.i686.rpm">http://centos.serverpoint.com/centos-5/5/updates/i386/RPMS/kernel-PAE-2.6.18-194.3.1.el5.i686.rpm</a></p>
+<p>rpm -ivh kernel-PAE-2.6.18-194.3.1.el5.i686.rpm</p>
+<p>Then in grub/menu.lst make sure the kernel number is set to 0 to use that one</p>
+<p>default = 0</p>
