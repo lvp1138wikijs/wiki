@@ -1,0 +1,58 @@
+<!--
+title:  RootKit Detection 
+description:  RootKit Detection 
+published: true
+date: 2021-12-22T07:24:19.528Z
+tags: rootkit detection
+editor: ckeditor
+dateCreated: 2021-12-22T07:24:19.528Z
+-->
+
+<p>A quick method is to check existance of</p>
+<p><strong>/usr/include/file.h</strong> or <strong>/usr/include/proc.h</strong></p>
+<p>in 99% of the cases every rootkit have these files.</p>
+<p>If you suspect a rootkit, Run below commands before doing updates, These commands will disable the special file attributes. Beware if those attributes are set to +i and +a then even root user cant replace those files, so update or reinstallation of a package will be of no use, It will not replace old files. Below commands will remove special attributes from all system directories. If you get an error like “ioctl device errors” just ignore, that mean the kernel dont support special attributes.</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /bin</code></p>
+          <p><code>chattr -ai *</code></p>
+          <p><code>cd /usr/bin</code></p>
+          <p><code>chattr -ai *</code></p>
+          <p><code>cd /sbin</code></p>
+          <p><code>chattr -ai *</code></p>
+          <p><code>cd /usr/sbin</code></p>
+          <p><code>chattr -ai *</code></p>
+          <p><code>cd /lib</code></p>
+          <p><code>chattr -ai *</code></p>
+          <p><code>cd /usr/lib</code></p>
+          <p><code>chattr -ai *</code></p>
+          <p><code>cd /etc</code></p>
+          <p><code>chattr -ai *</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<h3>Run rkhunter</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /root</code></p>
+          <p><code>wget http://sourceforge.net/projects/rkhunter/files/rkhunter/1.4.2/rkhunter-1.4.2.tar.gz</code></p>
+          <p><code>tar -xzf rkhunter-1.4.2.tar.gz</code></p>
+          <p><code>cd rkhunter-1.4.2</code></p>
+          <p><code>./installer.sh --install</code></p>
+          <p><code>/usr/local/bin/rkhunter --checkall</code></p>
+          <p><code>After that examine /var/log/rkhunter.log special search the string&nbsp; "Warning"</code> <code>in that file.</code></p>
+          <p>&nbsp;</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
