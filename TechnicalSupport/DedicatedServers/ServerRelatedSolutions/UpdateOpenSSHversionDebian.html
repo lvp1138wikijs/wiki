@@ -1,0 +1,29 @@
+<!--
+title: Update OpenSSH version  in Debian Wheezy 
+description: Update OpenSSH version 
+published: true
+date: 2021-12-22T07:10:34.068Z
+tags: debian, update openssh
+editor: ckeditor
+dateCreated: 2021-12-22T07:10:34.068Z
+-->
+
+<p>The basic repository of Debian now contains OpenSSH version 4.x p which comes under portable and old versions of OpenSSH.</p>
+<p>First we will check if new version is available in the source.</p>
+<blockquote>
+  <ol>
+    <li>apt-get update</li>
+    <li>apt-get install openssh-server</li>
+  </ol>
+</blockquote>
+<p>If new version is not available we can install a more newer version of the OpenSSH from another source list. Need to add stable backports to the source list.</p>
+<blockquote>
+  <p>&nbsp;</p>
+  <ol>
+    <li>Edit your /etc/apt/sources.list and add following line to it.<br>&nbsp;&nbsp;&nbsp; deb <a href="http://ftp.debian.org/debian/">http://ftp.debian.org/debian/</a> wheezy-backports main non-free contrib</li>
+    <li>Now update the repo from the available list<br>&nbsp;&nbsp;&nbsp; apt-get update</li>
+  </ol>
+  <p>&nbsp;&nbsp;&nbsp; Now install the OpenSSH from the new available package list</p>
+  <p>&nbsp;&nbsp;&nbsp; apt-get -t wheezy-backports install openssh-server</p>
+  <p>You will now have a more newer version of the OpenSSH in your server.</p>
+</blockquote>
