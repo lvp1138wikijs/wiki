@@ -1,0 +1,103 @@
+<!--
+title: How to add additional IPs in CentOS 
+description: Additional IPs in CentOS 
+published: true
+date: 2021-12-22T06:57:26.670Z
+tags: additional ip, ip configuration
+editor: ckeditor
+dateCreated: 2021-12-22T06:57:26.670Z
+-->
+
+<h2>Add Additional IPs in centOS Server without Control Panel</h2>
+<h3>Method 1: Add Additional IP to eth0</h3>
+<p>Change your current directory to the /etc/sysconfig/network-scripts directory with the command:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>cd /etc/sysconfig/network-scripts</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>To create the new interface, you will copy ifcfg-eth0 to ifcfg-eth0:0 with the command:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>cp ifcfg-eth0 ifcfg-eth0:0</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Next, edit icfg-eth0:0 and change the DEVICE line to be similar to:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>DEVICE=eth0:0</code></p>
+          <p><code>and change the IPADDR line to be similiar to:</code></p>
+          <p><code>IPADDR=0.0.0.0</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>To activate the new IP address, issue a command similar to:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>ifup eth0:0</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>&nbsp;</h3>
+<h3>Method 2: Add Continues/Range IPs&nbsp;</h3>
+<p><strong>As an example to add the range of ip address from xxx.xxx.xxx.1 to xxx.xxx.xxx.24 to a linux server follow these setups.</strong></p>
+<p>Go to /etc/sysconfig/network-scripts/ . Then list the files using the command&nbsp;<strong>ls</strong></p>
+<p>Here is an example:</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /etc/sysconfig/network-scripts/</code></p>
+          <p><code>[root@1795</code> <code>network-scripts]# ls</code></p>
+          <p><code>ifcfg-eth0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifdown-bnep&nbsp;&nbsp; ifdown-isdn&nbsp;&nbsp;&nbsp; ifdown-sl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifup-eth&nbsp;&nbsp;&nbsp; ifup-isdn&nbsp;&nbsp; ifup-routes&nbsp;&nbsp;&nbsp; init.ipv6-global</code></p>
+          <p><code>ifcfg-eth0:1</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code>ifdown-eth&nbsp;&nbsp;&nbsp; ifdown-post&nbsp;&nbsp;&nbsp; ifdown-tunnel&nbsp; ifup-ippp&nbsp;&nbsp; ifup-plip&nbsp;&nbsp; ifup-sit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; net.hotplug</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p><strong>vi ifcfg-eth0-range0</strong></p>
+<p><strong>eth0</strong>&nbsp;being your primary network card and&nbsp;<strong>range0</strong>&nbsp;being the first range you are adding. If another range is going to be added use range1 and so on.</p>
+<p>This file should be configured as below.</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>IPADDR_START=xxx.xxx.xxx.1</code></p>
+          <p><code>IPADDR_END=xxx.xxx.xxx.24</code></p>
+          <p><code>CLONENUM_START=3</code></p>
+          <p><code>NETMASK=255.255.255.0</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>save and exit the file.</p>
+<p><strong>service network restart</strong></p>
+<p>To view the added IPs, run the command&nbsp;<strong>ifconfig | grep inet</strong></p>
+<p>Now the ips should be binded to the server and useable.</p>
+<p>The&nbsp;<strong>clonenum_start</strong>&nbsp;needs to be something over 254 if another range will be added.</p>
+<p>for example:</p>
+<p><strong>CLONENUM_START:</strong>&nbsp;This is the number that will be assigned to the first IP alias interface. For instance, if your Internet interface is eth0</p>
+<p><strong>CLONENUM_START = 3&nbsp;</strong>, then this config file will create 24 interfaces starting with eth0:3 (eth0:3, eth0:4, eth0:5 etc) and ending with eth0:27.</p>
+<p>&nbsp;</p>
