@@ -1,0 +1,43 @@
+<!--
+title: How to run file system scan on freebsd server manually 
+description: Run file system scan on freebsd 
+published: true
+date: 2021-12-22T07:16:16.118Z
+tags: file system scan, freebsd
+editor: ckeditor
+dateCreated: 2021-12-22T07:16:16.118Z
+-->
+
+<p>Servers which have freebsd installed manually (not using nm), do not show partitions to run file system scan using nm. Therefore they require to run fs check manually.</p>
+<p><strong>netboot server</strong></p>
+<p><strong>login to server via ssh</strong></p>
+<p><strong>run the command</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>sysinstall</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>then in menu, select configure » Label</strong></p>
+<p><strong>There make sure all partitions are listed, note them down, skip swap</strong></p>
+<p><strong>press crtl+c to close</strong></p>
+<p><strong>then run</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>fsch_ufs /dev/xxxxx</code></p>
+          <p><code>replace xxxx with partition</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>repeat it to all partitions except swap</p>
+<p>reboot system normally</p>
+<p>Note: sysinstall will only be used to view partitionl table, nothing else.</p>
+<p>&nbsp;</p>
