@@ -1,0 +1,122 @@
+<!--
+title: Secure Server Through IP tables Rules 
+description: IPTABLES Rules for Plesk Server
+published: true
+date: 2021-12-22T07:19:22.362Z
+tags: iptables, linuxplesk
+editor: ckeditor
+dateCreated: 2021-12-22T07:19:22.362Z
+-->
+
+<h3>For Plesk based Linux Server</h3>
+<p>Create file named firewall.sh and add the following rules in it and save it. Then run the following code</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>sh firewall.sh</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code># Clear rules</code></p>
+          <p><code>iptables -t filter -F</code></p>
+          <p><code>iptables -t filter -X</code></p>
+          <p><code>echo - Clear rules : [OK]</code></p>
+          <p><code># SSH In</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 22</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - SSH : [OK]</code></p>
+          <p><code># Don't break</code> <code>established connections</code></p>
+          <p><code>iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></p>
+          <p><code>iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></p>
+          <p><code>echo - established connections : [OK]</code></p>
+          <p><code># Block all connections by default</code></p>
+          <p><code>iptables -t filter -P INPUT DROP</code></p>
+          <p><code>iptables -t filter -P FORWARD DROP</code></p>
+          <p><code>iptables -t filter -P OUTPUT DROP</code></p>
+          <p><code>echo - Block all connections : [OK]</code></p>
+          <p><code># Loopback</code></p>
+          <p><code>iptables -t filter -A INPUT -i lo -j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -o lo -j ACCEPT</code></p>
+          <p><code>echo - Loopback : [OK]</code></p>
+          <p><code># ICMP (Ping)</code></p>
+          <p><code>iptables -t filter -A INPUT -p icmp -j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p icmp -j ACCEPT</code></p>
+          <p><code>echo - PING : [OK]</code></p>
+          <p><code># DNS In/Out</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 53</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p udp --dport 53</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 53</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A INPUT -p udp --dport 53</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - DNS : [OK]</code></p>
+          <p><code># NTP Out</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p udp --dport 123</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - NTP : [OK]</code></p>
+          <p><code># FTP Out</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 20:21</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 30000:50000</code> <code>-j ACCEPT</code></p>
+          <p><code># FTP In</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 20:21</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 5001:65535</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></p>
+          <p><code>echo - FTP : [OK]</code></p>
+          <p><code># HTTP + HTTPS Out</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 80</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 443</code> <code>-j ACCEPT</code></p>
+          <p><code># HTTP + HTTPS In</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 80</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 443</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - HTTP/HTTPS : [OK]</code></p>
+          <p><code># Mail SMTP:25</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 25</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 25</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - SMTP : [OK]</code></p>
+          <p><code># Mysql : 3306</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 3306</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 3306</code> <code>-j ACCEPT</code></p>
+          <p><code># Mail SMTPS:465</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 465</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 465</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - SMTPS : [OK]</code></p>
+          <p><code># Mail POP3:110</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 110</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 110</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - POP : [OK]</code></p>
+          <p><code># Mail POP3S:995</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 995</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 995</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - POPS : [OK]</code></p>
+          <p><code># Mail IMAP:143</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 143</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 143</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - IMAP : [OK]</code></p>
+          <p><code># Mail IMAPS:993</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 993</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 993</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - IMAPS : [OK]</code></p>
+          <p><code># AUTH:113</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 113</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 113</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - AUTH : [OK]</code></p>
+          <p><code># SECURE PLESK</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 8443</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 8443</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - Secure Plesk : [OK]</code></p>
+          <p><code># UNSECURE PLESK</code></p>
+          <p><code>iptables -t filter -A INPUT -p tcp --dport 8880</code> <code>-j ACCEPT</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 8880</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - unSecure Plesk : [OK]</code></p>
+          <p><code># PLESK LICENSE</code></p>
+          <p><code>iptables -t filter -A OUTPUT -p tcp --dport 5224</code> <code>-j ACCEPT</code></p>
+          <p><code>echo - Plesk license : [OK]</code></p>
+          <p><code>echo - Firewall [OK]</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
