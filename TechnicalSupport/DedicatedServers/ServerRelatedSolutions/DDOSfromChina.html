@@ -1,0 +1,46 @@
+<!--
+title:  DDos Attacks from China  
+description:  DDos Attacks from China  
+published: true
+date: 2021-12-22T07:07:08.486Z
+tags: ddos, china
+editor: ckeditor
+dateCreated: 2021-12-22T07:07:08.486Z
+-->
+
+<h2>How to prevent DDos Attacks from China&nbsp;</h2>
+<h3>A distributed denial-of-service (DDoS) attack is one in which a multitude of compromised systems attack a single target, thereby causing denial of service for users of the targeted system. The flood of incoming messages to the target system essentially forces it to shut down, thereby denying service to the system to legitimate users.</h3>
+<p><strong>Here is a solution to prevent DDOS from various chinese IPs</strong><br><br>1. SSH to your server as root&nbsp;<br>2. Then run the following commands</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /root</code></p>
+          <p><code>wget http://jftechnologies.net/block_china.sh.txt</code></p>
+          <p><code>chmod 755</code>&nbsp; <code>block_china.sh.txt</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>3. Run the script</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>./block_china.sh.txt</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>You can list the current firewall rules by running the command,</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>iptables -L</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
