@@ -1,0 +1,30 @@
+<!--
+title:  Hardware Reset in Linux 
+description:  Hardware Reset in Linux 
+published: true
+date: 2021-12-22T07:14:24.703Z
+tags: hardware reset in linux
+editor: ckeditor
+dateCreated: 2021-12-22T07:14:24.703Z
+-->
+
+<p>Sometimes, a process in Linux goes crazy, or the kernel freezes certain processes, and a <strong>“shutdown -rf now”</strong> doesn't do anything and you need to power cycle the machine.</p>
+<p>Well, there is a series of commands that actually bypasses that and causes the hardware to do a reset no matter how screwed up Linux is at the moment. Here:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>echo 1 &gt; /proc/sys/kernel/sysrq</p>
+          <p>echo s &gt; /proc/sysrq-trigger</p>
+          <p>sleep 5</p>
+          <p>echo u &gt; /proc/sysrq-trigger</p>
+          <p>sleep 5</p>
+          <p>echo b &gt; /proc/sysrq-trigger</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>The process is called the <strong>“magic sysrq key”</strong>. Here is a wikipedia entry about it: <a href="http://en.wikipedia.org/wiki/Magic_SysRq_key">http://en.wikipedia.org/wiki/Magic_SysRq_key</a></p>
+<p>The echo 1, s, u and b all have specific meanings.</p>
