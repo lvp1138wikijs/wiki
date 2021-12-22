@@ -1,0 +1,191 @@
+<!--
+title:  Hardening CentOS 
+description:  Hardening CentOS 
+published: true
+date: 2021-12-22T06:54:25.998Z
+tags: hardening centos
+editor: ckeditor
+dateCreated: 2021-12-22T06:54:25.998Z
+-->
+
+<h2>Hardening CentOS&nbsp;</h2>
+<h4>For hardening CentOS, please do the following steps:</h4>
+<p>Install useful packages such as tcpdump, mtr, zsh, perl and logrotate using the commands&nbsp;&nbsp;</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <p># yum install tcpdump</p>
+          <p>#yum install mtr</p>
+          <p>#yum install zsh</p>
+          <p>#yum install perl</p>
+          <p>#yum install logrotate</p>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<ol>
+  <li>Setup automatic yum updates.<br>&nbsp;</li>
+</ol>
+<p><i>You can create daily or weekly updates with the following shell script.</i></p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <ul>
+            <li>/etc/cron.daily/yumupdate.sh to apply updates one a day.</li>
+            <li>/etc/cron.weekly/yumupdate.sh to apply updates once a week.</li>
+          </ul>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<ol>
+  <li>For more details about cron tab, click <a href="http://64.235.39.80:8090/display/CS/Crontab">here</a></li>
+</ol>
+<p><i><strong><u>Sample shell script to update system</u></strong></i></p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <p>#!/bin/bash&nbsp;<br>&nbsp;</p>
+          <p>YUM=/usr/bin/yum&nbsp;<br>&nbsp;</p>
+          <p>$YUM -y -R 120 -d 0 -e 0 update yum&nbsp;<br>&nbsp;</p>
+          <p>$YUM -y -R 10 -e 0 -d 0 update</p>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p><i>where,</i></p>
+<ol>
+  <li><br>
+    <ol>
+      <li><i>First command will update yum itself and next will apply system updates.</i></li>
+      <li><i><strong>-R 120 </strong>: Sets the maximum amount of time yum will wait before performing a command</i></li>
+      <li><i><strong>-e 0 </strong>: Sets the error level to 0 (range 0 - 10). 0 means print only critical errors about which you must be told.</i></li>
+      <li><i><strong>-y</strong> : Assume yes; assume that the answer to any question which would be asked is yes.</i></li>
+    </ol>
+  </li>
+  <li>Set password policies.<br><br>&nbsp;</li>
+</ol>
+<p>Passwords will expire every 180 days. In order to do that, please do the following command:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>perl -npe 's/PASS_MAX_DAYS\s+99999/PASS_MAX_DAYS 180/' -i /etc/login.defs</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Passwords may only be changed once a day. In order to do that, please do the following command:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>perl -npe 's/PASS_MIN_DAYS\s+0/PASS_MIN_DAYS 1/g' -i /etc/login.defs</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<ol>
+  <li>Set OS policies<br><br>&nbsp;</li>
+</ol>
+<p>Set idle users to be disconnected after 15 minutes. In order to do that, please do the following commands:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>vi /etc/profile.d/os-security.sh<br><br>then add the following entries.&nbsp;<br>echo "Idle users will be removed after 15 minutes"echo "readonly TMOUT=900" &gt;&gt; /etc/profile.d/os-security.shecho "readonly HISTFILE" &gt;&gt; /etc/profile.d/os-security.shThen make the file as executable using the command:<br>chmod +x /etc/profile.d/os-security.sh</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p><br><br>&nbsp;</p>
+<ol>
+  <li>Install (if it is not installed) and configure IPTables firewall. (Please refer the article <a href="http://64.235.39.80:8090/display/CS/Secure+Server+Through+IP+tables+Rules">Secure Server Through IP tables Rules</a> for&nbsp; more details).<br>
+    <ol>
+      <li>Open specified TCP/UDP ports.</li>
+      <li>Set rules to block common attacks.<br>
+        <ol>
+          <li>Syn Floods.</li>
+          <li>Fragmented Packets.</li>
+          <li>Malformed XMAS Packets.</li>
+          <li>Drop NULL packets.</li>
+          <li>Limit pings to 3 per second and bursts of 25.</li>
+          <li>Discourage Port Scanning.</li>
+        </ol>
+      </li>
+      <li>For more details, click <a href="http://64.235.39.80:8090/pages/viewpage.action?pageId=2064825">here</a></li>
+      <li>Set up Connection Tracking.<br><br>&nbsp;</li>
+    </ol>
+  </li>
+  <li>Install DDoS Deflate.&nbsp;<br>
+    <ol>
+      <li>More information about DDoS Deflate is available <a href="http://64.235.39.80:8090/display/CS/Install+mod_evasive+for+Apache">here</a></li>
+    </ol>
+  </li>
+  <li>Install CHKROOTKIT.<br>
+    <ol>
+      <li>Scheduled to check daily for issues and email your Admin Email.</li>
+      <li>More information about CHKROOTKIT is available <a href="http://64.235.39.80:8090/display/CS/RootKit+Detection">here</a></li>
+    </ol>
+  </li>
+  <li>Install rkhunter (Root Kit Hunter).<br>
+    <ol>
+      <li>Scheduled to check daily for issues and email your Admin Email.<br><br>&nbsp;</li>
+      <li>More information about rkhunter is available <a href="http://64.235.39.80:8090/display/CS/RootKit+Detection">here</a></li>
+    </ol>
+  </li>
+  <li>Install LSM (Linux Socket Monitor).<br>&nbsp;</li>
+</ol>
+<p>To install LSM, execute the following commands (as root):</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>wget <a href="http://www.r-fx.ca/downloads/lsm-current.tar.gz">http://www.r-fx.ca/downloads/lsm-current.tar.gz</a><br>md5sum lsm-current.tar.gz | cut -d ‘ ‘ -f1<br><a href="http://www.r-fx.ca/downloads/lsm-current.tar.gz">&nbsp;</a></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p><strong>Note:</strong>The md5sum should be d35ff3171cba48b5ed3127c7bb8dd1f0. If not, then delete the file and download again.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>tar -zxvf lsm-current.tar.gz<br>cd lsm-0.6<br>./installer.sh<br>cd <strong>..</strong><br>rm -rf lsm*</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>LSM is now installed. Next, we need to update the LSM base comparison files. To do this, execute the command:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>/usr/local/sbin/lsm -g</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Next, edit <i><strong>/usr/local/lsm/conf.lsm</strong></i> as root. Find the line that reads:<i><strong>USER=”root”</strong></i> and change it to <i><strong>USER=</strong>”[Fill in the email address to which LSM reports must be sent]".</i></p>
+<p>Save the file and exit the editor.</p>
+<p>Next, check for changes in sockets by executing the command: <i><strong>/usr/local/sbin/lsm -c</strong></i> as root. LSM will check for unwanted sockets and send a report to the specified email address, if any are found.</p>
+<ol>
+  <li>Secure the SSH Daemon.<br><br>
+    <ol>
+      <li>Change the SSH port to a random number.</li>
+      <li>Create an "admin" user.</li>
+      <li>Make it so only the "admin" user can be logged into over SSH.<br><br>&nbsp;</li>
+    </ol>
+  </li>
+  <li>In order to do that you can follow the steps specified at <a href="http://64.235.39.80:8090/display/CS/Disable+Direct+Root+Login+to+SSH">here</a>.</li>
+</ol>
+<p><br>&nbsp;</p>
