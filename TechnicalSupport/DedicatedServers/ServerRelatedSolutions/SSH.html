@@ -1,0 +1,121 @@
+<!--
+title: Securing Secure Shell (SSH) 
+description: Securing Secure Shell (SSH) 
+published: true
+date: 2021-12-22T07:26:27.124Z
+tags: ssh
+editor: ckeditor
+dateCreated: 2021-12-22T07:26:27.124Z
+-->
+
+<p>Secure Shell (SSH) is one of the most useful ways to connect remotely to a Linux server. With an SSH connection, you can administer your server remotely using the full power and flexibility of the command line interface. As a result, however, SSH can be vulnerable to attack by malicious individuals. While the SSH protocol is fairly secure by default, it is always possible to improve the security of your SSH configuration.</p>
+<p>You can secure the ssh service by editing the main configuration file&nbsp; /etc/ssh/sshd_config<br>&nbsp;</p>
+<h5>Change the default port<br>&nbsp;</h5>
+<p>Login to the server as root user.</p>
+<p>Edit the&nbsp;sshd_config<strong>&nbsp;</strong>file using vi editor.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>vi /etc/ssh/sshd_config</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>By default, SSH uses port 22, but it is possible to change the port number. This will make it more difficult to attack your server using SSH, as an attacker would first need to locate and identify the port. You can choose any number higher than 1024 and lower than 65535. (Ports 1 through 1024 are reserved, and 65535 is the highest possible port number.) Please change the following lines:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>#Port 22&nbsp;<br>Port 5555</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<h5>Enforce the newer, more secure Version 2 SSH protocol</h5>
+<p>There are two versions of the SSH protocol. Version 2 is the newer one, and it has been greatly enhanced to improve security.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>#Protocol 2,1<br><strong>Protocol 2</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>By selecting only protocol 2, you will only be able to connect using the newer, more secure protocol.</p>
+<h5>Restrict access to specific users</h5>
+<p>Restricting access to a small list of users makes it much more difficult for hackers to connect, as they must first discover usernames before attempting to connect, rather than attempting a list of common user names.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th><strong>AllowUsers user1 user2 user3</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>In this case, the users user1, user2 and user3 are the only ones who will be able to connect. Simply replace them with your own user names. Note that Linux is case sensitive,&nbsp;so in this case, user1 and User1 would be considered two different user names.</p>
+<h5>Disable direct access by root&nbsp;</h5>
+<p>Please refer the URL:&nbsp;<a href="http://64.235.39.80:8090/display/CS/Disable+Direct+Root+Login+to+SSH">Disable direct root login to SSH</a></p>
+<h5>Reduce login time</h5>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>#LoginGraceTime 2m<br><strong>LoginGraceTime 30</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>After 30 seconds without a successful login, your server will automatically close the connection.</p>
+<h5>Save and reload ssh</h5>
+<p>Before any of these settings can be applied, be sure to save the changes, and then restart the ssh service. You can restart ssh by running the following command:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th><strong>/etc/init.d/sshd restart</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>After restarting ssh, it is strongly recommended that you attempt to open a second concurrent connection before disconnecting. This will allow you to test if the new connection is successful, and to reverse any changes if necessary.</p>
+<p>These changes are not made to the SSH configuration file, but can significantly improve the security of your SSH installation.</p>
+<h5>Enforce strong passwords using PAM&nbsp;</h5>
+<p>PAM, or the Pluggable authentication module, has tools to enforce strong passwords. A strong password is one that cannot be easily guessed, and which contains a mix of letters and numbers.</p>
+<p>In Debian or Ubuntu, open the following file in your chosen editor:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>/etc/pam.d/common-password</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>&nbsp;In CentOS, Fedora, or other RedHat-based distributions, open this file:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>/etc/pam.d/system-auth</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>In the file you have opened, add this line:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>password requisite pam_cracklib.so retry=3 minlen=10 difok=3 dcredit=-1 ucredit=-1 lcredit=-1</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>After enabling these changes, users will be given three options to attempt to log in successfully, after which they will be disconnected or returned to their normal shell prompt. In addition, passwords will have a minimum length of 10 characters. Passwords must also have three characters' difference from the previous password, and must have one digit, one upper case character, and one lower case.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
