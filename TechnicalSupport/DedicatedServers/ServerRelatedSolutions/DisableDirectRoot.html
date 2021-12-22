@@ -1,0 +1,91 @@
+<!--
+title:  Disable Direct Root Login to SSH 
+description: 
+published: true
+date: 2021-12-22T07:12:24.338Z
+tags: diable direct root, ssh
+editor: ckeditor
+dateCreated: 2021-12-22T07:12:24.338Z
+-->
+
+<p>To allow the root user to directly access the server using ssh is a security risk and it is highly recommend that you disable it on the server. Once direct root login is disabled, you can login to the server as a normal user and then use the command "su -" or "sudo su -" to gain root access. With su - command you will have to enter the correct root password to gain access. With "sudo su -"&nbsp; you can enter normal user password to gain access</p>
+<p>You can follow the steps give below to get it done.</p>
+<p>1) Login to the server as root user and create a new system user&nbsp; and specify the password for it.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <p>adduser&nbsp; admin</p>
+          <p>passwd admin</p>
+        </th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Note : I have specified 'admin' as the username here. You can replace admin with any username of your choice.</p>
+<p>You can skip this step 2,3&nbsp; if you just need "su -" access. These steps are used to configure sudo access for the user.</p>
+<p>2) Now you will have to add the user admin to the wheel group if you are going to use sudo option.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>usermod -G10 admin</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>3) Now enable sudo privilege for user. Edit the file /etc/sudoers using the following command</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>visudo</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Add the following line towards the end of the file and save/edit the file.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th><code>admin ALL=(ALL) ALL</code></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Replace admin with the actual username if you are using another username.</p>
+<p>4) Now login to user admin using ssh in a different shell and verify su - and sudo su - privileges are working for the user. Proceed to step 5 only if the access is working.</p>
+<p>5) Now edit the main configuration file for the ssh /etc/ssh/sshd_config&nbsp; and disable root login.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>vi /etc/ssh/sshd_config</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Find the line PermitRootLogin yes and change it as follows</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>PermitRootLogin no</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>After making the changes save and exit the file.</p>
+<p>6) Now restart the sshd service to make the changes in effect</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>/etc/rc.d/init.d/sshd restart</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>That should do it. Now do not close the current shell,&nbsp; Open a new shell and test everything is working fine. You can close the current shell once everything works perfectly for you.&nbsp;</p>
