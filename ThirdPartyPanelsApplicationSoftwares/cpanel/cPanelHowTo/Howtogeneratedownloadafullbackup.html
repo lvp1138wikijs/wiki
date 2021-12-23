@@ -1,0 +1,188 @@
+<!--
+title: How to generate/download a full backup
+description: 
+published: true
+date: 2021-12-23T19:50:08.019Z
+tags: 
+editor: ckeditor
+dateCreated: 2021-12-23T19:50:08.019Z
+-->
+
+<p>For generating full back up for an account,please login to your cPanel and do the following steps:</p>
+<p>&nbsp;</p>
+<ol>
+  <li>Click Backups</li>
+  <li>Click Generate/ Download Full Backup</li>
+  <li>In the drop down menu, select Home Directory</li>
+  <li>In the box to the right of Email Address, type the email address where you will receive notification once the back up is done.</li>
+  <li>Leave the rest of the settings blank.</li>
+  <li>Click Generate back up.</li>
+  <li>This will generate the back up for you and place the TAR.GZ file inside of your Home Directory.</li>
+  <li>You can now download the backup via cpanel / FTP/ or SSH</li>
+</ol>
+<p>&nbsp;</p>
+<p>For downloading the backup from cPanel (easiest way), please do the following:</p>
+<p>&nbsp;</p>
+<ol>
+  <li>Click Backups</li>
+  <li>Click Generate/Download a Full Backup</li>
+  <li>Under "Backups Available for Download", click the link with the file name of the backup.</li>
+  <li>It will then start to download.</li>
+  <li>Select a destination on your PC for where you would like to save it to.</li>
+  <li>Click Save</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>For generating full backup of server ( all account ), please login to WHM as root user and do the following steps:</p>
+<p>&nbsp;</p>
+<ol>
+  <li>Find the Backup menu and select the Legacy Backup Configuration option.</li>
+</ol>
+<p>2. &nbsp; Then select your Backup Configuration Options and click on Save button.</p>
+<p>3. Then execute the script /scripts/cpbackup to create the full backup of all account on the server.</p>
+<p>&nbsp;</p>
+<p>Options and descriptions for Backup Configuration Options:</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>Backup Status</strong></td>
+        <td>
+          <p>Enabled — Enable backups and restorations.</p>
+          <p>Disabled — Disable backups and restorations.</p>
+          <p>Restore Only — Disable backups and allow restorations.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Backup Interval&nbsp;</strong></td>
+        <td>Select the interval at which you wish to run automatic backups. You may select Daily, Weekly, or Monthly. Selecting Daily will give you both monthly and weekly backups. Selecting Weekly will also run monthly backups.</td>
+      </tr>
+      <tr>
+        <td><strong>Backup Retention&nbsp;</strong></td>
+        <td>
+          <p>Select the backups you wish to retain.</p>
+          <p>&nbsp;</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Days to Run Backup&nbsp;</strong></td>
+        <td>
+          <p>Select the days on which you wish to run backups.</p>
+          <p>&nbsp;</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Remount/Unmount Backup Drive&nbsp;</strong></td>
+        <td>
+          <p>Select whether or not you wish to remount and unmount the specified backup drive while backups are running.</p>
+          <p>note Note: Enabling this option requires a separate drive, coda, or network filesystem (NFS) drive.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Bail Out If Backup Drive Mount Fails&nbsp;</strong></td>
+        <td>Select whether or not you wish to cancel the backup process if the backup drive fails to mount.</td>
+      </tr>
+      <tr>
+        <td><strong>Incremental Backup</strong></td>
+        <td>
+          <p>Select whether you wish to only back up what has changed.</p>
+          <p>note Note: You cannot enable this option with FTP backups. This option does not use file compression.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Backup Accounts&nbsp;</strong></td>
+        <td>Select whether or not you wish to back up accounts. (By default, only system files are contained within backups.)</td>
+      </tr>
+      <tr>
+        <td><strong>Compress Account Backups&nbsp;</strong></td>
+        <td><span style="font-family:Arial, Helvetica, sans-serif;">Select whether or not you wish to compress backup files.</span></td>
+      </tr>
+      <tr>
+        <td><strong>Backup Configuration Files</strong>&nbsp;</td>
+        <td>&nbsp;Select whether or not you wish to back up configuration files. (Configuration files are not required to restore a backup.) For more information, see our list of configuration files included in the backup.</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>Backup SQL &nbsp; Databases</strong>&nbsp;</td>
+        <td>
+          <p>Per Account Only — Creates an individual database backup for each account.</p>
+          <p>Entire MySQL Directory — Creates a single backup for the entire MySQL directory.</p>
+          <p>Per Account and Entire MySQL Directory — Creates both individual backups for each account, and a single database backup that contains the entire MySQL directory.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Backup Access Logs</strong>&nbsp;</td>
+        <td>
+          <p>Select whether or not you wish to store access logs.</p>
+          <p>&nbsp;</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Use local DNS zone files rather than retrieving the latest zone updates from the cluster</strong>.</td>
+        <td>Selecting Enabled will cause the pkgacct script to grab the local DNS zone file, rather than searching the cluster for the latest zone record. This may improve performance, but may result in outdated DNS information whenever an account is restored.</td>
+      </tr>
+      <tr>
+        <td><strong>Backup Type</strong>&nbsp;</td>
+        <td>
+          <p>Standard — Selecting this option stores backup files locally or on a network file system.</p>
+          <p>Remote FTP (Accounts Only) — Selecting this option allows you to store backup files on a remote server.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>EXPERIMENTAL: Use Hard Links for weekly and monthly backups to reduce disk usage and backup time</strong>.</td>
+        <td>Select whether or not you wish to use hard links for weekly and yearly backups. You can read more about hard links.</td>
+      </tr>
+      <tr>
+        <td><strong>EXPERIMENTAL: Enable use of optimized account backup tool</strong>.</td>
+        <td>Enabling this setting instructs the backup utility to use /usr/local/cpanel/bin/pkgacct if it exists and is executable.</td>
+      </tr>
+      <tr>
+        <td><strong>Remote FTP Host (Remote FTP Backup Only)</strong></td>
+        <td>
+          <p>If you have opted to use Remote FTP backups, enter the remote FTP server's IP address in the corresponding text box.</p>
+          <p>note Note: When you specify the backup host, you should exclude the FTP protocol.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>FTP Backup User (Remote FTP Backup Only)</strong></td>
+        <td>If you have opted to use Remote FTP backups, enter the FTP account's username in the corresponding text box.</td>
+      </tr>
+      <tr>
+        <td><strong>FTP Backup Password (Remote FTP Backup Only)</strong></td>
+        <td>If you have opted to use Remote FTP backups, enter the FTP account's password in the corresponding text box.</td>
+      </tr>
+      <tr>
+        <td><strong>FTP Backup Directory</strong></td>
+        <td>If you have opted to use Remote FTP backups, enter the directory in which backup files will be stored.</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>FTP Backup Timeout&nbsp;</strong></td>
+        <td>If you have opted to use Remote FTP backups, enter the number of seconds of inactivity after which the FTP transfer will time out. This option defaults to 120 seconds.</td>
+      </tr>
+      <tr>
+        <td><strong>FTP Backup Passive Mode</strong>&nbsp;</td>
+        <td>If you have opted to use Remote FTP backups, enable this option if the remote server is behind a firewall, or if FTP backups fail.</td>
+      </tr>
+      <tr>
+        <td><strong>Backup Destination</strong>&nbsp;</td>
+        <td>If you are using Standard backups, enter the directory in which you wish to store backups.</td>
+      </tr>
+      <tr>
+        <td><strong>Select Specific Users</strong>&nbsp;</td>
+        <td>&nbsp;Click the Select button to select users whose accounts should be backed up automatically.</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
