@@ -2,7 +2,7 @@
 title: Traccar
 description: 
 published: true
-date: 2021-12-23T18:07:35.099Z
+date: 2021-12-23T18:08:03.184Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-23T18:07:35.099Z
@@ -228,7 +228,7 @@ FINEST|2888/0|Service traccar|18-02-28 13:29:28|[main] INFO org.eclipse.jetty.se
 FINEST|2888/0|Service traccar|18-02-28 13:29:28|[main] INFO org.eclipse.jetty.server.Server - Started @193064ms
 ```
 
-
+Done
 
 
 
