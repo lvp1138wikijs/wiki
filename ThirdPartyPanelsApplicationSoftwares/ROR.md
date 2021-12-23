@@ -2,7 +2,7 @@
 title: Ruby on Rails
 description: 
 published: true
-date: 2021-12-23T14:11:45.318Z
+date: 2021-12-23T14:16:51.887Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-23T14:11:45.318Z
@@ -34,4 +34,47 @@ The following are  the list of the pre-installed RubyGems:
 - actionmailer (1.2.1) - Service layer for easy email delivery and testing
 - actionpack (1.12.1) - Web-flow and rendering framework putting the VC in MVC
 - actionwebservice (1.1.2) - Web service support for Action Pack
+
+
+## ROR:installation
+
+Follow these steps to install ROR in your server:
+
+- Select and go to any directory where you  will install ROR:
+
+```
+    cd /
+    mkdir temp
+    chmod 775 temp
+```
+
+- Next download ROR from it's source on the internet.
+- The following link has the source code fro all the Operating systemas and distros:
+
+http://rubyforge.org/frs/?group_id=167
+
+```
+cd temp
+wget ftp://ftp.ruby-lang.org/pub/ruby/ruby-1.8.2.tar.gz
+tar -zxvf ruby-1.8.2.tar.gz cd ruby-1.8.2
+```
+
+- We can next isnatll ROR in the /usr/local/ruby direcory:
+
+```
+./configure -prefix=/usr/local/ruby -exec-prefix=/usr/local/ruby
+```
+
+- Next move on to the compilation of the source code:
+
+```
+make
+make install
+```
+
+Now you have installed ROR in your linux server.
+
+
+
+
 
