@@ -1,8 +1,8 @@
 ---
-title: Memo Email
+title:  MEMO: New App Interface | 12th September 2016 
 description: 
 published: true
-date: 2021-12-25T15:36:49.997Z
+date: 2021-12-25T16:06:30.565Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-25T15:35:55.034Z
