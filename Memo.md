@@ -2,7 +2,7 @@
 title: Memo Email
 description: 
 published: true
-date: 2021-12-25T15:35:55.034Z
+date: 2021-12-25T15:36:49.997Z
 tags: 
 editor: markdown
 dateCreated: 2021-12-25T15:35:55.034Z
