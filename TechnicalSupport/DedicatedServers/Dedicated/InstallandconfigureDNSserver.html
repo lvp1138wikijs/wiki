@@ -1,0 +1,98 @@
+<!--
+title: Install and configure DNS server in Windows Server 2008 
+description: Install and configure DNS server in Windows Server 2008 
+published: true
+date: 2021-12-26T08:10:10.044Z
+tags: windows, dns server
+editor: ckeditor
+dateCreated: 2021-12-26T08:10:10.044Z
+-->
+
+<ul>
+  <li>Launch&nbsp;<strong>Server Manager</strong>&nbsp;by clicking&nbsp;<strong>Start &gt; Administrative Tools &gt; Server Manager.&nbsp;</strong>Click&nbsp;<strong>Roles</strong>&nbsp;and then&nbsp;<strong>Add Roles.</strong><br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/install-dns-server-in-windows-server-2008-1.png?version=1&amp;modificationDate=1485355248000&amp;api=v2"></figure>
+<ul>
+  <li>Select&nbsp;<strong>DNS Server</strong>&nbsp;from the list and then click Next button.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/install-dns-server-in-windows-server-2008-2.png?version=1&amp;modificationDate=1485355364000&amp;api=v2"></figure>
+<ul>
+  <li>A little introduction to DNS Server and a few useful links for further details as shown in below image. Click Next to move on.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/install-dns-server-in-windows-server-2008-3.png?version=1&amp;modificationDate=1485355383000&amp;api=v2"></figure>
+<ul>
+  <li>Click Install button.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/install-dns-server-in-windows-server-2008-4.png?version=1&amp;modificationDate=1485355386000&amp;api=v2"></figure>
+<ul>
+  <li>DNS Server has been installed successfully as per below snapshot. Click Close to finish the&nbsp;<strong>Add Roles Wizard</strong>.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/install-dns-server-in-windows-server-2008-5.png?version=1&amp;modificationDate=1485355387000&amp;api=v2"></figure>
+<h2>Creating Forward Lookup Zone</h2>
+<ul>
+  <li>Launch&nbsp;<strong>DNS Manager</strong>&nbsp;by clicking Start &gt; Administrative Tools &gt; DNS or type dnsmgmt.msc in Run window (Press Windows Key + R) and press Enter.</li>
+  <li>Expand Server (e.g. WIN2008) &gt; Right click&nbsp;<strong>Forward Lookup Zones</strong>&nbsp;&gt;&nbsp;<strong>New Zone</strong>&nbsp;which will launch New Zone wizard.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-in-windows-server-2008-1.png?version=1&amp;modificationDate=1485356647000&amp;api=v2"></figure>
+<ul>
+  <li>Click Next on Welcome to the New Zone wizard.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-in-windows-server-2008-2.png?version=1&amp;modificationDate=1485356773000&amp;api=v2"></figure>
+<ul>
+  <li>Since this is our primary DNS Server for the zone select&nbsp;<strong>Primary zone</strong>. Then move on by clicking Next button.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-in-windows-server-2008-3.png?version=1&amp;modificationDate=1485356846000&amp;api=v2"></figure>
+<ul>
+  <li style="text-align:justify;">Enter the domain name for which you want to create the zone for e.g. cloudtech.biz. Say you want to build up DNS Server for your own Windows Server 2008 based hosting server then enter your registered domain name here otherwise if it is for intranet only it can be anything (domain naming conventions must be followed).&nbsp;<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-in-windows-server-2008-4.png?version=1&amp;modificationDate=1485356983000&amp;api=v2"></figure>
+<ul>
+  <li style="text-align:justify;">Click&nbsp;<strong>Next on the Zone File Name</strong>.</li>
+  <li style="text-align:justify;">Select the<strong>&nbsp;Allow both nonsecure and Secure dynamic updates</strong>&nbsp;and click Next to Continue.</li>
+  <li style="text-align:justify;">Select Yes,&nbsp;<strong>I want to create reverse lookup zone now</strong>, Click Next to continue.</li>
+  <li style="text-align:justify;">Select&nbsp;<strong>Primary Zone</strong>&nbsp;in Zone creating Window.</li>
+  <li style="text-align:justify;">Choose whether you want to&nbsp;<strong>create IPv4 or IPv6 reverse lookup zone</strong>.( in&nbsp; mycase IPv4 Reverse lookup zone).<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/WIN-2008-DNS-IPv4.jpg?version=1&amp;modificationDate=1485357259000&amp;api=v2"></figure>
+<ul>
+  <li style="text-align:justify;"><strong>Forward lookup zone</strong>&nbsp;has been created successfully for cloudtech.biz and shows the summary as in below image. Click Finish to close the New Zone Wizard.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-in-windows-server-2008-7.png?version=1&amp;modificationDate=1485357577000&amp;api=v2"></figure>
+<h2>Configure Forward Lookup Zone</h2>
+<ul>
+  <li style="text-align:justify;">Right click on cloudtech.biz (forward lookup zone recently created) and then click Properties.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-in-windows-server-2008-8.png?version=1&amp;modificationDate=1485357679000&amp;api=v2"></figure>
+<ul>
+  <li style="text-align:justify;">Click on add button and create name server. You can add details like, serial number, TTL, refresh interval, retry interval, expires after values</li>
+</ul>
+<h2>Configure DNS Server Properties</h2>
+<ul>
+  <li>Open&nbsp;<strong>DNS Manager</strong>&nbsp;by clicking Start &gt; Administrative Tools &gt; DNS.</li>
+  <li>Right Click on the DNS Server for which you want to configure Properties for and click Properties.</li>
+  <li style="text-align:justify;"><strong>Interfaces</strong>: You can configure DNS Server to listen on specific interfaces/IP Addresses or all IP addresses. If the server has multiple interfaces then you can configure DNS Server to listen on specific interface. If the server is having only single interface with multiple IP addresses configured then you can configure it to listen on specific IP addresses. By default it is configured to listen on all interfaces and all IP addresses.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-lavel-properties-interfaces.png?version=1&amp;modificationDate=1485357947000&amp;api=v2"></figure>
+<ul>
+  <li style="text-align:justify;"><strong>Forwarders</strong>: You can add other DNS Servers provided by your ISP to forward DNS queries to in case this server doesn’t hold zones for the domains. These forwarder addresses are only used recursion is enabled. Forwarders are required if you are having an intranet/extranet DNS server serving a few zones and want to allow same server to resolve other DNS queries too.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-lavel-properties-forwarders.png?version=1&amp;modificationDate=1485357998000&amp;api=v2"></figure>
+<ul>
+  <li style="text-align:justify;"><strong>Advanced</strong>: You can configure some advanced aspects of DNS Server here. A very important options I want to discuss here is&nbsp;<strong>Disable recursion (also disables forwarders)</strong>. If you are setting up this DNS server to serve zones for domains hosted on your DNS server (dedicated server, VPS Server, Cloud VPS Server) then enable “<strong>Disable recursion</strong>” which also disables forwarders, doing this will only allow the zones hosted on this server to be served.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-lavel-properties-advanced.png?version=1&amp;modificationDate=1485358057000&amp;api=v2"></figure>
+<ul>
+  <li style="text-align:justify;"><strong>Root Hints</strong>: This is the list of root name servers.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-lavel-properties-root-hints.png?version=1&amp;modificationDate=1485358124000&amp;api=v2"></figure>
+<ul>
+  <li><strong>Debug Logging</strong>: For debugging purpose the debug logs can be enabled from here.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-lavel-properties-debug-logging.png?version=1&amp;modificationDate=1485358178000&amp;api=v2"></figure>
+<ul>
+  <li><strong>Event Logging</strong>: DNS Server events can be enabled for troubleshooting purpose.<br>&nbsp;</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/9405052/configure-dns-server-lavel-properties-event-logging.png?version=1&amp;modificationDate=1485358227000&amp;api=v2"></figure>
+<ul>
+  <li>DNS Server listens on TCP and UDP port 53, so make sure to allow traffic on these ports in Windows Firewall. Also make sure that if you are having any router or firewall device and DNS server is behind any of these device, do necessary configuration to allow connection to DNS Server.</li>
+</ul>
