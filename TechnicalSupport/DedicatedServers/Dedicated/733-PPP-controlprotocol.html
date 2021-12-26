@@ -1,0 +1,48 @@
+<!--
+title: 733 The PPP control protocol Issues in Windows
+description: 733 The PPP control protocol 
+published: true
+date: 2021-12-26T07:56:43.708Z
+tags: protocol issues, 733 ppp
+editor: ckeditor
+dateCreated: 2021-12-26T07:56:43.708Z
+-->
+
+<p><strong>You can try following steps to fix 733 error with TCP/IP</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <ol>
+            <li>Click Start, and then click Run.</li>
+            <li>In the Open box, type cmd, and then click OK.</li>
+            <li>At the command prompt, type the following command, and then press ENTER:</li>
+            <li>netsh int ip reset resetlog.txt</li>
+            <li>netsh winsock reset</li>
+            <li>It will change ip setting from static to dhcp</li>
+          </ol>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Open network setting and change ip to static again</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <ol>
+            <li>Click Start, point to Control Panel, point to Network Connections, and then click the local area connection that you want to configure.</li>
+            <li>In the Connection Status dialog box, click Properties.</li>
+            <li>Click Internet Protocol (TCP/IP), and then click Properties.</li>
+            <li>Set the IP</li>
+            <li>reboot</li>
+          </ol>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
