@@ -2,7 +2,7 @@
 title: LAMP on CentOS6
 description: 
 published: true
-date: 2021-12-28T14:02:32.996Z
+date: 2021-12-28T14:16:30.647Z
 tags: lamp
 editor: markdown
 dateCreated: 2021-12-28T14:02:32.996Z
