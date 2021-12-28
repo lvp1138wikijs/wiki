@@ -1,8 +1,8 @@
 ---
-title: Untitled Page
+title: Install Essentials Packages on CentOS/Fedora
 description: 
 published: true
-date: 2021-12-28T13:45:32.505Z
+date: 2021-12-28T14:21:09.232Z
 tags: essentials packages
 editor: markdown
 dateCreated: 2021-12-28T13:45:32.505Z
