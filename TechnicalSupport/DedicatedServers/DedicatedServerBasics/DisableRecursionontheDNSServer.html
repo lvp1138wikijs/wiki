@@ -1,0 +1,68 @@
+<!--
+title: Disable Recursion on the DNS Server 
+description: Disable Recursion on the DNS Server 
+published: true
+date: 2022-01-07T22:31:36.178Z
+tags: 
+editor: ckeditor
+dateCreated: 2022-01-07T22:31:36.178Z
+-->
+
+<p>The DNS server performs recursive queries on behalf of its DNS clients and DNS servers that have forwarded DNS client queries to it. Recursion is a name-resolution technique in which a DNS server queries other DNS servers on behalf of the requesting client to fully resolve the name and then sends an answer back to the client.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attackers can use recursion to deny the DNS Server service. Therefore, if a DNS server in your network is not intended to receive recursive queries, recursion should be disabled on that server.</p>
+<h2>Disable Recursion in Windows Server</h2>
+<p>Open DNS Manager.</p>
+<p>In the console tree, right-click the applicable DNS server, then click <strong>Properties</strong>.</p>
+<p><strong>Where?</strong></p>
+<p>DNS/<i>applicable DNS server</i></p>
+<p>Click the <strong>Advanced</strong> tab.</p>
+<p>In <strong>Server options</strong>, select the <strong>Disable recursion</strong> check box, and then click <strong>OK</strong>.</p>
+<p>If you disable recursion on the DNS server, you will not be able to use forwarders on the same server.</p>
+<p>&nbsp;</p>
+<p><strong>To disable recursion on the DNS server using a command line</strong></p>
+<p>Open a command prompt.</p>
+<p>Type the following command, and then press ENTER:</p>
+<p>&nbsp;&nbsp;</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th><strong>dnscmd &lt;ServerName&gt; /Config /NoRecursion {1|0}</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p><br>&nbsp;</p>
+<p><strong>&nbsp;</strong></p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th><strong>dnscmd /Config /help</strong></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p><br>&nbsp;</p>
+<p>To open an elevated Command Prompt window, click <strong>Start</strong>, point to <strong>All Programs</strong>, click <strong>Accessories</strong>, right-click <strong>Command Prompt</strong>, and then click <strong>Run as administrator</strong>.</p>
+<h2>Disable Recursion in Plesk</h2>
+<ol>
+  <li>Log into the <strong>Plesk Admin Panel</strong>.</li>
+</ol>
+<p>Select <strong>Tools and Settings</strong>.</p>
+<ol>
+  <li>Click <strong>DNS Template Settings</strong> from the section.</li>
+  <li>Select <strong>Localnets</strong> from the <strong>DNS Recursion</strong> section.</li>
+  <li>Click the <strong>OK</strong> button.</li>
+</ol>
+<h2>Disable Recursion in Linux</h2>
+<ol>
+  <li>Locate the BIND configuration file within the operating system. The BIND configuration file is usually located in one of the following paths:<ul>
+      <li>/etc/bind/named.conf</li>
+      <li>/etc/named.conf</li>
+    </ul>
+  </li>
+  <li>Open the named.conf file in your preferred editor.</li>
+  <li>Add the following details to the <strong>Options</strong> section:<br><code>allow-transfer {"none";};</code><br><code>allow-recursion {"none";};</code><br><code>recursion no;</code></li>
+  <li>Restart the device.</li>
+</ol>
