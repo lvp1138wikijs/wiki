@@ -1,0 +1,668 @@
+<!--
+title: General solutions 
+description: General solutions 
+published: true
+date: 2022-01-07T22:05:49.518Z
+tags: general
+editor: ckeditor
+dateCreated: 2022-01-07T22:05:49.518Z
+-->
+
+<h3>Reset Root Password of Linux dedicated server</h3>
+<p>Here the steps for <a href="http://64.235.39.80:8090/display/CS/Password+Reset+for+Linux+Dedicated+Server">reset the root password</a> for Linux servers</p>
+<h3>To echo errors on linux server</h3>
+<p><strong>Use command: echo &gt; error file name</strong></p>
+<h3>How to change eth2 to eth0 in Debian</h3>
+<p>Edit the file <strong>/etc/udev/rules.d/z25_persistent-net.rules</strong></p>
+<p>Change the MAC address in first line which is for eth0 in that file, put the mac of eth3 there and put the old mac on that line to the line of eth3 swap both mac addresses in that file Fix the <strong>/etc/network/interfaces</strong></p>
+<p>Change eth3 to eth0, then reboot.</p>
+<h3>Changing Main ip of server</h3>
+<p>Login to server as root Go to network directory :</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>cd /etc/sysconfig/network-scripts</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Then do <strong>ls </strong>, you will see files like</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>ifcfg-eth0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifdown-bnep&nbsp;&nbsp; ifdown-isdn&nbsp;&nbsp;&nbsp; ifdown-sl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifup-eth&nbsp;&nbsp;&nbsp; ifup-isdn&nbsp;&nbsp; ifup-routes&nbsp;&nbsp;&nbsp; init.ipv6-global</code></p>
+          <p><code>ifcfg-eth0:1</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code>ifcfg-eth0-range2&nbsp; ifdown-eth&nbsp;&nbsp;&nbsp; ifdown-post&nbsp;&nbsp;&nbsp; ifdown-tunnel&nbsp; ifup-ippp&nbsp;&nbsp; ifup-plip&nbsp;&nbsp; ifup-sit net.hotplug</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Edit the main file ifcfg-eth0 and change IP, then do the network restart</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>service network restart</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>If subnet is changed then change gateway too in file : <strong>/etc/sysconfig/network</strong></p>
+<p>After network restart, server will be inaccessible, access it using new IP, if subnet is different then Mr. Peter will change vlan too.</p>
+<h3>How to install yum on server</h3>
+<p>Check the <a href="http://64.235.39.80:8090/display/CS/YUM+Configuration+in+Centos"><strong>Link</strong></a> for configure YUM.</p>
+<h3>Installing fport Antivirus</h3>
+<p>A new 32 bit fprot is available at</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>http://serverpoint.com/files/fp.msi</code></p>
+          <p><code>License key is AGPJ2P-4EEHXL-9ZW8HH-T85UUB-GPLUCC-JAFS</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>A new 64 bit fprot is available at</p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>http://serverpoint.com/files/fp64.zip</code></p>
+          <p><code>License key is AGLM5G-FKL9YD-GHZLMP-WBJ4GB-AGKCCC-SAAS</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>Server Optimization</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>If there are too many mysql sleeping process in the server, it will overload mysql. This happens when the connection to the database</code></p>
+          <p><code>is not closed correctly by the script. Disabling mysql persistent connection in php.ini will help to reduce the mysql sleeping</code></p>
+          <p><code>process. You can check mysql processes using the command "mysqladmin -i3 processlist"</code></p>
+          <p><code>To disable mysql persistent connection, change On to Off in the following line in php.ini</code></p>
+          <p><code>mysql.allow_persistent Off</code></p>
+          <p><code>To check the number of apache connections, you can use the following command</code></p>
+          <p><code>netstat -plan|grep :80|awk {'print $5'}|cut -d: -f 1|sort|uniq -c|sort -nk 1</code></p>
+          <p><code>netstat -apn |grep :80</code> <code>|wc -l</code></p>
+          <p><code>netstat -an|awk '/tcp/ {print $6}'|sort|uniq -c</code></p>
+          <p><code>If there are too many TIME_WAIT requests, make sure KeepAlive is On and KeepAliveTimeout is low (3-5) in the apache configuration.</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<h3>Client does not support authentication protocol requested by server; consider upgrading MySQL client</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>This happens because the latest versions of MySql uses a new</code> <code>format for</code> <code>the password (it's a longer hash). In order for</code> <code>old clients to continue</code> <code>to use</code></p>
+          <p><code>the newer server, you have to set the passwords on the server to their old format or upgrade your client. Because upgrading the client can sometimes be</code></p>
+          <p><code>a pain, it's often easier to just update the passwords to the old format on the server.</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>Run mysql and login as root:</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>mysql -u root -p</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>Then, paste the following command, editing as necessary, to change the password of the user to the old format.</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>UPDATE mysql.user SET password=OLD_PASSWORD('somepassword') WHERE user='someuser'</code> <code>AND host='somehost';</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>Change 'someuser'</code> <code>with your db username and 'somehost'</code> <code>with localhost</code></p>
+          <p><code>After you have set the passwords to the old format, flush the tables.</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>flush privileges;</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>Then exit the mysql client with "quit"</code> <code>and you are set.</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h1>Custom software installation</h1>
+<h3>Ming Library (Centos)</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>yum install bison</code></p>
+          <p><code>yum install flex</code></p>
+          <p><code>mkdir /root/ming</code></p>
+          <p><code>cd /root/ming</code></p>
+          <p><code>wget http://downloads.sourceforge.net/ming/ming-0.4.0.beta5.tar.gz?download</code></p>
+          <p><code>tar xzf ming-0.4.0.beta3.tar.gz</code></p>
+          <p><code>cd ming*</code></p>
+          <p><code>./configure --enable-php</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>cp /usr/local/lib/libming* /usr/lib/</code></p>
+          <p><code>cp ./php_ext/ming.so /usr/lib/php/modules/</code></p>
+          <p><code>#Edit php.ini and add this</code> <code>line</code></p>
+          <p><code>extension=ming.so</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p><strong>NOTE:</strong> These installations are performed on Fedora8 and the steps will be different for other distro's. Also it is highly recommended to read the README or INSTALL file in the source directory before performing the installation.</p>
+<h3>To install pdf2swf</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /usr/src/</code></p>
+          <p><code>wget http://www.swftools.org/swftools-0.8.1.tar.gz</code></p>
+          <p><code>tar xzf swftools-0.8.1.tar.gz</code></p>
+          <p><code>cd swftools-0.8.1</code></p>
+          <p><code>./configure</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>pdf2swf -V will give the version</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install jpg2swf</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /usr/src/</code></p>
+          <p><code>wget http://downloads.sourceforge.net/jpeg2swf/jpeg2swf.tgz?modtime=1014418800&amp;big_mirror=0</code></p>
+          <p><code>tar xzf jpeg2swf.tgz</code></p>
+          <p><code>jpeg2swf -V to check the version</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install MPlayer + Mencoder</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>You can get MPlayer via Subversion. Issue the following command to get the latest sources:</code></p>
+          <p><code>&nbsp; svn checkout svn://svn.mplayerhq.hu/mplayer/trunk mplayer</code></p>
+          <p><code>Or download the source from the link</code></p>
+          <p><code>http://www.mplayerhq.hu/design7/dload.html</code></p>
+          <p><code>Now to install Mplayer</code></p>
+          <p><code>If you use subversion, a directory named mplayer will be created in the current directory.</code></p>
+          <p><code>cd mplayer/</code></p>
+          <p><code>./configure</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install flvtool</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>wget http://rubyforge.org/frs/download.php/17497/flvtool2-1.0.6.tgz</code></p>
+          <p><code>tar xzf flvtool2-1.0.6.tgz</code></p>
+          <p><code>cd flvtool2-1.0.6</code></p>
+          <p><code>ruby setup.rb config</code></p>
+          <p><code>ruby setup.rb setup</code></p>
+          <p><code>ruby setup.rb install</code></p>
+          <p><code>flvtool2 -V</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install lame</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /usr/src/</code></p>
+          <p><code>wget http://downloads.sourceforge.net/lame/lame-3.97.tar.gz?modtime=1159107882&amp;big_mirror=0</code></p>
+          <p><code>tar xzf lame-3.97.tar.gz</code></p>
+          <p><code>cd lame-3.97</code></p>
+          <p><code>./configure</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install libogg</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>wget http://downloads.xiph.org/releases/ogg/libogg-1.1.3.tar.gz</code></p>
+          <p><code>tar xzf libogg-1.1.3.tar.gz</code></p>
+          <p><code>cd libogg-1.1.3</code></p>
+          <p><code>./configure</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install libvorbis</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /usr/src/</code></p>
+          <p><code>wget http://downloads.xiph.org/releases/vorbis/libvorbis-1.2.0.tar.gz</code></p>
+          <p><code>tar xzf libvorbis-1.2.0.tar.gz</code></p>
+          <p><code>cd libvorbis-1.2.0</code></p>
+          <p><code>./configure</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install Subversion (On Centos)</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>yum -y install subversion</code></p>
+          <p><code>If you get the following error during the installation process</code></p>
+          <p><code>Error: Missing Dependency: perl(URI) &gt;= 1.17</code> <code>is needed by package</code></p>
+          <p><code>wget ftp://ftp.pbone.net/mirror/ftp.centos.org/5.1/os/i386/CentOS/perl-URI-1.35-3.noarch.rpm</code></p>
+          <p><code>rpm -ivh perl-URI-1.35-3.noarch.rpm</code></p>
+          <p><code>RPM download link depends on arch and redhat release</code></p>
+          <p><code>Or you can install it using yum itself.</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>To install FFMPEG</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>svn checkout svn://svn.mplayerhq.hu/ffmpeg/trunk ffmpeg</code></p>
+          <p><code>cd ffmpeg</code></p>
+          <p><code>./configure --enable-mp3lame --enable-libogg --enable-vorbis --enable-shared</code></p>
+          <p><code>If you don't have lame, or ogg, or vorbis installed, remove any of those parameters. The main thing is that "--enable-shared"</code> <code>needs to be turned on.</code></p>
+          <p><code>make clean &amp;&amp; make</code></p>
+          <p><code>make install</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>Using YUM on CentOS</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>Step1 :&nbsp; yum install ffmpeg ffmpeg-devel</code></p>
+          <p><code>If you get package</code> <code>not found, then you will need to add few lines in the yum repository for</code> <code>dag packages installation.</code></p>
+          <p><code>Create a file named dag.repo in /etc/yum.repos.d with the following contents on it</code></p>
+          <p><code>[dag]</code></p>
+          <p><code>name=Dag RPM Repository for</code> <code>Red Hat Enterprise Linux</code></p>
+          <p><code>baseurl=http://apt.sw.be/redhat/el$releasever/en/$basearch/dag</code></p>
+          <p><code>gpgcheck=1</code></p>
+          <p><code>enabled=1</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<h4>Common Errors</h4>
+<p>To fix rpmforge GPG key warning:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>rpm -Uhv http://apt.sw.be/redhat/el5/en/i386/rpmforge/RPMS/rpmforge-release-0.3.6-1.el5.rf.i386.rpm</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<h3>To build FFMPEG-PHP as a shared extension</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>cd /usr/src/</code></p>
+          <p><code>wget http://nchc.dl.sourceforge.net/sourceforge/ffmpeg-php/ffmpeg-php-0.5.3.1.tbz2</code></p>
+          <p><code>tar xjf ffmpeg-php-0.5.3.1.tbz2</code></p>
+          <p><code>cd ffmpeg-php-0.5.3.1</code></p>
+          <p><code>phpize</code></p>
+          <p><code>./configure</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>locate php.ini and add the following line and restart apache.</code></p>
+          <p><code>extension=ffmpeg.so</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Confirm it by checking the phpinfo.
+</p>
+<h3>Editing your crontab with Plesk</h3>
+<p>To add a cron job in Plesk:</p>
+<p>Log onto Plesk using your username and password.</p>
+<p>From your list of domains, click on the domain you would like to add the cronjob to.</p>
+<p>Click on Crontab.</p>
+<p>If you have multiple users on this domain (i.e. you have setup different FTP accounts for sub-domains or web users),</p>
+<p>from the drop-down select the username you want to create the cronjob for, and then click Set.</p>
+<p>Click on Add New Task.</p>
+<p>For each of the first five fields, enter the value as it would be for the cron line (i.e. the date/time fields). All</p>
+<p>fields are required, so if you don't have a specific value in that field, enter *.</p>
+<p>Finally, enter the full command into the Command field.</p>
+<p>Click OK to save or Cancel to return.</p>
+<h3>To install magentocommerce.com</h3>
+<p><a href="http://www.magentocommerce.com/download">http://www.magentocommerce.com/download</a></p>
+<p>We have registered an account with them, so login with the following details to download to get full features.</p>
+<p>username: serverpoint password: d3fault123</p>
+<p>Download the tar file and unzip it</p>
+<p>Ensure that the file magento/var/.htaccess, the directories magento/var, and all the directories under magento/media are writable by the web server.</p>
+<p>Create a database and user for magento.</p>
+<p>Now access the magento installation wizard using <a href="http://mydomain.com/magento/">http://mydomain.com/magento/</a></p>
+<p>Then you have configure various system-level settings that are required for Magento to function, like databases. Some of the settings are auto configured by it.</p>
+<p>Note down the encryption for future use.</p>
+<p>Please refer the following URL for more details</p>
+<p><a href="http://www.magentocommerce.com/knowledge-base/entry/magento-installation-guide">http://www.magentocommerce.com/knowledge-base/entry/magento-installation-guide</a></p>
+<p><a href="http://www.magentocommerce.com/wiki/magento_filesystem_permissions">http://www.magentocommerce.com/wiki/magento_filesystem_permissions</a></p>
+<h1>Customize PHP installation</h1>
+<p>Procedures are same for the following operations.</p>
+<p><strong>PHP as apache module</strong></p>
+<p><strong>Upgrading php on plesk servers</strong></p>
+<p><strong>Upgrading php on a server which runs php as apache module</strong></p>
+<p>Here the procedure</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>mkdir -p /root/imp</code></p>
+          <p><code>cd /root/imp</code></p>
+          <p><code>wget ftp://ftp.cac.washington.edu/imap/c-client.tar.Z</code></p>
+          <p><code>zcat c-client.tar.Z | tar -xvof -</code></p>
+          <p><code>cd imap-2006g</code></p>
+          <p><code>make ldb</code></p>
+          <p><code>-----------------------------</code></p>
+          <p><code>-PHP 5</code></p>
+          <p><code>-----------------------------</code></p>
+          <p><code>mkdir /root/php5</code></p>
+          <p><code>cd&nbsp; /root/php5</code></p>
+          <p><code>rsync aplus@dev1.aplushosting.com::sources/php-5.1.1.tar.gz ./</code></p>
+          <p><code>tar xzf php-5.1.1.tar.gz</code></p>
+          <p><code>cd php-5.1.1</code></p>
+          <p><code>./configure \</code></p>
+          <p><code>--with-mysql \</code></p>
+          <p><code>--prefix=/var/www/php5 \</code></p>
+          <p><code>--enable-force-cgi-redirect \</code></p>
+          <p><code>--with-openssl \</code></p>
+          <p><code>--with-zlib \</code></p>
+          <p><code>--with-curl \</code></p>
+          <p><code>--with-curlwrappers \</code></p>
+          <p><code>--enable-bcmath \</code></p>
+          <p><code>--with-gettext \</code></p>
+          <p><code>--with-bz2=/usr/bin/bzip2 \</code></p>
+          <p><code>--enable-calendar \</code></p>
+          <p><code>--enable-dio \</code></p>
+          <p><code>--enable-exif \</code></p>
+          <p><code>--enable-ftp \</code></p>
+          <p><code>--with-gd \</code></p>
+          <p><code>--with-mcrypt \</code></p>
+          <p><code>--with-mhash \</code></p>
+          <p><code>--with-ncurses \</code></p>
+          <p><code>--enable-soap \</code></p>
+          <p><code>--enable-sockets \</code></p>
+          <p><code>--enable-maintainer-zts \</code></p>
+          <p><code>--enable-memory-limit \</code></p>
+          <p><code>--enable-zend-multibyte \</code></p>
+          <p><code>--with-tsrm-pthreads \</code></p>
+          <p><code>--with-tiff-dir \</code></p>
+          <p><code>--with-jpeg-dir \</code></p>
+          <p><code>--with-png-dir \</code></p>
+          <p><code>--with-zlib-dir \</code></p>
+          <p><code>--with-imap=/root/imp/imap-2004g \</code></p>
+          <p><code>--with-xpm-dir \</code></p>
+          <p><code>--with-ttf \</code></p>
+          <p><code>--enable-gd-native-ttf \</code></p>
+          <p><code>--enable-safe-mode \</code></p>
+          <p><code>--enable-gd-jis-conv\</code></p>
+          <p><code>--disable-cgi \</code></p>
+          <p><code>--with-apxs2=/usr/bin/apxs2</code></p>
+          <p><code>make</code></p>
+          <p><code>make install</code></p>
+          <p><code>Note: Edit httpd.conf and take out the loadmodule statement added by install process and load the module as required by that specific OS.</code></p>
+          <p><code>Disable php 4</code> <code>module first.</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<h1>Ecommerce PCI</h1>
+<p>All servers who want to host any Ecommerce or need to manipulate credit card data are asked by their merchant provider to get PCI Certification for server security. (PCI = Payment Card Industry Standards Council <a href="https://www.pcisecuritystandards.org/">https://www.pcisecuritystandards.org/</a>)</p>
+<p>To get that certification, the server owner contacts an PCI Approved Vendor and have them scan his server remotely. After scanning the server Remotely they send a pdf report with list of security risks or vulnerability code related to his server and suggested Actions. The code can be also searched in Google to get several solutions.</p>
+<h1>Email problem</h1>
+<p>If server is not sending emails to yahoo or hotmail then check if spf record is setup for the domains, if not then setup it using</p>
+<p><a href="http://www.microsoft.com/mscorp/safety/content/technologies/senderid/wizard/"><strong>http://www.microsoft.com/mscorp/safety/content/technologies/senderid/wizard/</strong></a></p>
+<p>and put it in /var/named/domain.com.db</p>
+<h1>Installing Chinese Support in Centos</h1>
+<p># yum groupinstall “Chinese Support”</p>
+<p># yum -y install scim-chinese-standard scim-tables-chinese</p>
+<p># yum -y install fonts-chinese openoffice.org-langpack-zh_TW</p>
+<h1>Installing software development kit in CentOS</h1>
+<p># yum groupinstall 'Development Tools'</p>
+<h1>syslogd failed to start in cpanel</h1>
+<p>#yum install sysklogd</p>
+<p>#service syslog start</p>
+<h1>Header Errors</h1>
+<p>Warning: Cannot add header information - headers already sent by (output started at /home/username/www/errors.php:9)</p>
+<p>Warning: Cannot send session cache limiter - headers already sent in somefile.php on line 222</p>
+<p>Naturally, HTML will parse before PHP. The script is trying to send header information after you’ve already sent output to the browser. HTTP headers are required to be sent before any output from your script, which means that a header function must be placed before any html or even a white space. There are two solutions for this.</p>
+<p>Either (1) Set the header tags the top of the document, or (2) insert a header redirect by adding this to the very top of the page to force the output buffer:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>&lt;?php ob_start();</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>Then this</code> <code>at the very end of the page (not usually required)</code></p>
+          <p><code>&nbsp;</code>&nbsp;</p>
+          <p><code>ob_end_flush(); ?&gt;</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>OR</p>
+<p><strong>Enable output buffering in php.ini and restart apache/httpd service on the server</strong></p>
+<h1>Set time on linux server</h1>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>&nbsp;date +%T -s "10:13:13"</code></p>
+          <p><code>Where,</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp; 10: Hour (hh)</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp; 13: Minute (mm)</code></p>
+          <p><code>&nbsp;&nbsp;&nbsp; 30: Second (ss)</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h1>After upgrading kernel and OS update using apt-get on debian server, server will not reboot properly</h1>
+<p>When you update Debian/Ubuntu server grub menu.lst file update the root path from <strong>root (hd0,0)</strong> to <strong>root /dev/sdxx</strong></p>
+<h1>Windows Server</h1>
+<h3>Server is not coming up on ping and tracert</h3>
+<p>Windows servers, when we deliver them to customers, have their firewalls enabled. The only thing that is open on the firewall is Remote Desktop.</p>
+<p>Which means that ping is also blocked. As well as tracert. They both use the same protocol.</p>
+<h1>Linux Dedicated Server</h1>
+<h3>Port Scanning Responds UP But Browser Fails</h3>
+<p>That's fine. It's the servers default page. It will show up if you browse to the ip number.</p>
+<p>But it means the webserver is up</p>
+<h1>Rsync data from Linux Dedicated Server</h1>
+<p>Some directories cannot rsync</p>
+<p>/boot</p>
+<p>/proc</p>
+<p>/etc/fstab</p>
+<p>/sys</p>
+<p>/dev</p>
+<h3>CentOS</h3>
+<p>There we will consider 2 servers,</p>
+<p>target server, new server where we data is moving</p>
+<p>source server, old server from which data is moving to target server</p>
+<h2>Precedure:</h2>
+<p>First of all get the list of all directories in / partition of source server. Now make this command for all the directories except the above listed directories which cannot be moved</p>
+<p><strong>Syntax :-</strong> <strong>rsync -avHz –rsh=“ssh -l root” </strong><a href="mailto:root@xx.xx.xx"><strong>root@xx.xx.xx</strong></a><strong>.xx:/[directory_name] ./</strong></p>
+<p>Replace [directory_name] with the name of directory, like var,usr or bin</p>
+<p>Replace xx.xx.xx.xx with the ip of source server</p>
+<p>This command will run on target server, under / partition</p>
+<p>command to rsync /etc will be different because it need to exclude fstab</p>
+<p><strong>rsync -avHz –exclude=“fstab” –rsh=“ssh -l root” </strong><a href="mailto:root@xx.xx.xx"><strong>root@xx.xx.xx</strong></a><strong>.</strong><a href="http://xx/etc"><strong>xx:/etc</strong></a><strong> ./</strong></p>
+<p>Example:</p>
+<p>Here are the commands for rsync of CentOs x64 server</p>
+<p>Source server:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>[root@webgmail</code> <code>/]# ls -al /</code></p>
+          <p><code>total 85</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp; 4096</code> <code>Sep 25</code> <code>09:59</code> <code>bin</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 4</code> <code>root root&nbsp; 1024</code> <code>Sep 20</code> <code>20:25</code> <code>boot</code></p>
+          <p><code>drwxr-xr-x&nbsp; 11</code> <code>root root&nbsp; 3420</code> <code>Nov&nbsp; 3</code> <code>03:36</code> <code>dev</code></p>
+          <p><code>drwxr-xr-x&nbsp; 87</code> <code>root root&nbsp; 8192</code> <code>Nov&nbsp; 3</code> <code>07:38</code> <code>etc</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 3</code> <code>root root&nbsp; 4096</code> <code>Sep 21</code> <code>08:43</code> <code>home</code></p>
+          <p><code>drwxr-xr-x&nbsp; 11</code> <code>root root&nbsp; 4096</code> <code>Sep 25</code> <code>09:59</code> <code>lib</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 7</code> <code>root root&nbsp; 4096</code> <code>Sep 25</code> <code>09:59</code> <code>lib64</code></p>
+          <p><code>drwx------&nbsp;&nbsp; 2</code> <code>root root 16384</code> <code>Sep 20</code> <code>18:05</code> <code>lost+found</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp; 4096</code> <code>Jan 26</code>&nbsp; <code>2010</code> <code>media</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp;&nbsp;&nbsp;&nbsp; 0</code> <code>Nov&nbsp; 3</code> <code>03:36</code> <code>misc</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp; 4096</code> <code>Jan 26</code>&nbsp; <code>2010</code> <code>mnt</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp;&nbsp;&nbsp;&nbsp; 0</code> <code>Nov&nbsp; 3</code> <code>03:36</code> <code>net</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp; 4096</code> <code>Jan 26</code>&nbsp; <code>2010</code> <code>opt</code></p>
+          <p><code>dr-xr-xr-x 133</code> <code>root root&nbsp;&nbsp;&nbsp;&nbsp; 0</code> <code>Nov&nbsp; 3</code> <code>03:36</code> <code>proc</code></p>
+          <p><code>drwxr-x---&nbsp;&nbsp; 4</code> <code>root root&nbsp; 4096</code> <code>Nov&nbsp; 3</code> <code>05:24</code> <code>root</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp; 8192</code> <code>Sep 26</code> <code>04:02</code> <code>sbin</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp; 4096</code> <code>Jan 26</code>&nbsp; <code>2010</code> <code>selinux</code></p>
+          <p><code>drwxr-xr-x&nbsp;&nbsp; 2</code> <code>root root&nbsp; 4096</code> <code>Jan 26</code>&nbsp; <code>2010</code> <code>srv</code></p>
+          <p><code>drwxr-xr-x&nbsp; 11</code> <code>root root&nbsp;&nbsp;&nbsp;&nbsp; 0</code> <code>Nov&nbsp; 3</code> <code>03:36</code> <code>sys</code></p>
+          <p><code>drwxrwxrwt&nbsp;&nbsp; 4</code> <code>root root&nbsp; 4096</code> <code>Nov&nbsp; 3</code> <code>09:48</code> <code>tmp</code></p>
+          <p><code>drwxr-xr-x&nbsp; 15</code> <code>root root&nbsp; 4096</code> <code>Sep 20</code> <code>19:59</code> <code>usr</code></p>
+          <p><code>drwxr-xr-x&nbsp; 24</code> <code>root root&nbsp; 4096</code> <code>Sep 21</code> <code>07:00</code> <code>var</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>rsync commands to run in target server:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><code>it willl ask for</code> <code>root pasword after every command</code></p>
+          <p><code>cd /</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/bin ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/boot ./</code></p>
+          <p><code>rsync -avHz --exclude="fstab"</code> <code>--rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/etc ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/home ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/lib ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/lib64 ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/lost+found ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/media ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/misc ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/mnt ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/net ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/opt ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/root ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/sbin ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/selinux ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/srv ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/tmp ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/usr ./</code></p>
+          <p><code>rsync -avHz --rsh="ssh -l root"</code> <code>root@xx.xx.xx.xx:/var .</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<p><strong>Beaware</strong></p>
+<p>Once the server will be rebooted after rsync, it will up on ips of source server, therefore do not change vlan for server, otherwise both old and new servers will have ip conflict.</p>
+<p>Get kvm moved on server, and configure everything is working ok, services are running</p>
+<p>Change ips of old server to some other ips and then change vlan for new server</p>
+<p>Keep old server running until client confirm everything is running smoothly</p>
+<h1>How to enable quote in Linux</h1>
+<h3>Debian</h3>
+<p>Add <strong>‘usrquota’</strong> to the options in <strong>fstab</strong>. like this before and after…</p>
+<p>before</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>/dev/sda3 / ext3 defaults 1</code> <code>1</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>after</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><code>/dev/sda3 / ext3 defaults,usrquota 1</code> <code>1</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Then run these to get quotas working…</p>
+<p><strong># mount -o remount /</strong></p>
+<p><strong># quotaoff -av</strong></p>
+<p><strong># quotacheck -avum</strong></p>
+<p><strong># quotaon -av</strong></p>
+<p>and that should be you good to go.</p>
+<h2>IIS Errors</h2>
+<p><a href="http://64.235.39.80:8090/display/CS/IIS+Manager+Error">IIS Manager Error: The process cannot access the file because it is being used by another process</a></p>
