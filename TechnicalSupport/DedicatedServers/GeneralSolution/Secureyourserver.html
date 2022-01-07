@@ -1,0 +1,17 @@
+<!--
+title: How to secure your server?
+description: Secure your server
+published: true
+date: 2022-01-07T22:16:05.684Z
+tags: secure, dedicated
+editor: ckeditor
+dateCreated: 2022-01-07T22:16:05.684Z
+-->
+
+<p>In order to secure your server configuration, please do the following steps:</p>
+<p>1) <strong>Install and maintain a firewall</strong>: For securing your server you need to install and maintain a firewall in your server which manage connections to the server. In Windows, the firewall most commonly used is the Windows Advanced Firewall. In Linux, the most common firewall is iptables. Configuring iptables can be difficult. Please note that it is possible to block all incoming connections, including RDP and SSH, with your firewall.</p>
+<p>2) <strong>Always</strong> <strong>Keep your software updated and patched</strong>:&nbsp; Always try to keep 3rd party software to keep them updated and patched. Also please make sure that your WHM and Plesk installations are kept up to date.</p>
+<p>3) <strong>Maintain regular back ups</strong>: It is useful to keep regular backups in case your server has been compromised. Both WHM and Plesk have easy-to-use backup systems to create backups of user data. If ever your server is compromised, you can simply restore your data from the earliest clean backup.</p>
+<p>4) <strong>Change access ports</strong>: Consider changing the default ports of&nbsp; your services, particularly RDP and SSH. If these services are not available on the typical ports, it becomes that much more difficult for an attacker to access your server.</p>
+<p>5) <strong>Change passwords</strong>: Change your passwords regularly, especially if you are using an older version of Plesk or WHM. Make sure to choose a password that has mixed cases (capital letters and small letters) and numbers, preferably at least six to eight characters in length.</p>
+<p>6) <strong>Symptoms of Server Compromise</strong>: If you feel that your server has been infected by malware, then make a complete reinstall, from the latest non-infected backup if possible.</p>
