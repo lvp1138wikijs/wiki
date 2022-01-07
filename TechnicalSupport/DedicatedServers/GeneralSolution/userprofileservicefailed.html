@@ -1,0 +1,14 @@
+<!--
+title:  The user profile service failed the Logon while logging to Remote Desktop 
+description: 
+published: true
+date: 2022-01-07T22:18:59.675Z
+tags: rdp, user profile service
+editor: ckeditor
+dateCreated: 2022-01-07T22:18:59.675Z
+-->
+
+<p>When users are trying to login to server through RDP and getting "The user profile service failed the Logon" message, please do the following steps:</p>
+<p><br>1.Make sure the user is a member of Remote Desktop user group</p>
+<p>2.Check the permission for C:\Users\Default and add Full control for the user "Everyone" to the directory.&nbsp;</p>
+<p>3.Enable "Replace all child object permissions with inheritable permissions from this object" for that directory.</p>
