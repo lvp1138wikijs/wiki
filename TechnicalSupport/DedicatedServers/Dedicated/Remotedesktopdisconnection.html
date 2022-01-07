@@ -1,0 +1,24 @@
+<!--
+title: Remote desktop disconnection issue with Windows7 Cloud 
+description: RDP Disconnection
+published: true
+date: 2022-01-07T21:52:58.959Z
+tags: rdp, disconnection
+editor: ckeditor
+dateCreated: 2022-01-07T21:52:58.959Z
+-->
+
+<p>There were few customers complained that they have disconnection problem when they try to connect to windows7 cloud VM.</p>
+<p>Onapp support said, the problem is because of windows audio redirection to remote desktop client, and the solution is to disable audio redirection in rdp client before accessing windows7 cloud from your pc.</p>
+<p>&nbsp;</p>
+<ul>
+  <li>Open "Remote desktop Connections" in your computer</li>
+  <li>Click on "options"</li>
+  <li>Click on "local resources"</li>
+  <li>Click on "setting" under "Remote audio"</li>
+  <li>Set "Remote audio playbank" to "do not play"</li>
+  <li>Set "Remote audio recording" to "do not record"</li>
+  <li>Click ok</li>
+</ul>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/3702786/rdp.png?version=1&amp;modificationDate=1347146504000&amp;api=v2&amp;effects=border-simple,blur-border,tape"></figure>
+<p>&nbsp;</p>
