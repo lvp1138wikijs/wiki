@@ -1,0 +1,22 @@
+<!--
+title:  Share Terminal Session using Screen 
+description:  Share Terminal Session using Screen 
+published: true
+date: 2022-01-07T21:15:20.115Z
+tags: screen
+editor: ckeditor
+dateCreated: 2022-01-07T21:15:20.115Z
+-->
+
+<p>How to share your ssh terminal screen. So that we do not need to provide the person with server root credentials and monitor what all commands and updates are done from our terminal.</p>
+<p>Step-by-step guide</p>
+<p>&nbsp;</p>
+<p>ssh terminal sharing with "screen" and it is much simple. These are the steps to be followed:</p>
+<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br>Step1: create a test user<br>useradd -m USERNAME</p>
+<p>Step2: Set password<br>passwd USERNAME</p>
+<p>sTEP 3: Switch to that user:&nbsp;<br>su - USERNAME</p>
+<p>sTEP 4: start a session<br>screen -S session name</p>
+<p>Now ask that person to connect to that server providing the test user name and password:<br>Then provide the command to attach to the screen using the following command:</p>
+<p>screen -ls<br>screen -x "screen-name"</p>
+<p>That's it. we can then monitor and enter the passwords from our screen.</p>
+<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
