@@ -1,0 +1,96 @@
+<!--
+title: How to view a website before the dns is pointed to the server ?
+description: 
+published: true
+date: 2022-01-07T22:17:48.434Z
+tags: 
+editor: ckeditor
+dateCreated: 2022-01-07T22:17:48.434Z
+-->
+
+<p>To view the content of a website hosted on a shared ipaddress before the DNS for the domain is pointed to the server (temporarily) is to force your computer to make the domain point on a specific IP address. Follow these steps to do so:</p>
+<p><strong>Windows Operating System</strong> :</p>
+<p>1) Edit your host file using notepad. Click on "Start" -&gt; " Run" and execute the following shortcut to do that.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>%windir%\system32\notepad.exe %windir%\system32\drivers\etc\hosts</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>You may also browse the file manually, it is located in the location "C:\windows\system32\drivers\etc\hosts".</p>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/4523634/windows2.JPG?version=1&amp;modificationDate=1365305591000&amp;api=v2"></figure>
+<p>2) In the file, you will see something that looks like this:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>127.0.0.1 localhost(IP address) (domain)</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Now you can add an entry corresponding to your server's Shared IP address, then a space and finally, your domain. Example:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>255.255.255.255 your-domain-name.com</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>3) Save and exit the file.</p>
+<p>Now the domain your-domain-name.com will be pointed to the ipaddress 255.255.255.255. You can test it using a browser.</p>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/4523634/windows3.JPG?version=1&amp;modificationDate=1365305592000&amp;api=v2"></figure>
+<p><strong>Linux Operating system</strong></p>
+<p>Under most Linux distributions, the hosts file is located under /etc/hosts.<br><br>The file can be edited following this procedure (usually the same under OS X and Linux):</p>
+<ol>
+  <li>Login to the server using ssh as root user<br>&nbsp;</li>
+  <li>Type: vi /etc/hosts</li>
+  <li>Add the following line to the file with the domain name and the desired IP&nbsp;&nbsp;<br>&nbsp;</li>
+</ol>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>255.255.255.255 your-domain-name.com</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>&nbsp;</p>
+<ol>
+  <li>Hit Ctrl + X to save</li>
+  <li>Confirm that you want to save and exit</li>
+</ol>
+<p><strong>Mac Operating System</strong></p>
+<p>1) Open the terminal. You can open the terminal either by start typing Terminal on the Spotlight, or by going into Applications -&gt; Utilities -&gt; Terminal.</p>
+<p>2) Open the hosts file</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th><code>sudo nano /private/etc/hosts</code></th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>Type your user password when prompted.</p>
+<p>3) Add the following line to the file with the domain name and the desired IP&nbsp;&nbsp;<br>&nbsp;</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>255.255.255.255 your-domain-name.com</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>4) Save and exit the hosts file</p>
+<p>Note : make sure you clear the cache from your browser and in some cases the DNS cache may need to be flushed as well to make it work.</p>
+<p>Also Once the domain points correctly to the shared ipaddress, make sure to remove any host entries that you may have added during the process to ensure the domain is resolving in the same manner on your local system as other users on the internet!</p>
+<p><br>&nbsp;</p>
