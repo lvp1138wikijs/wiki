@@ -1,0 +1,81 @@
+<!--
+title: Tips to avoid getting your server blocked by Hotmail/Yahoo/Gmail 
+description: 
+published: true
+date: 2022-01-07T22:23:33.092Z
+tags: hotmail, yahoo, gmail, block
+editor: ckeditor
+dateCreated: 2022-01-07T22:23:33.092Z
+-->
+
+<p>1. Make sure all domains sending mail via your server have an appropriate email authentication such as SPF record
+
+  Add SPF entry in your DNS zones using the following:
+</p>
+<p>
+  v=spf1 a mx ip4:SERVER_MAIN_IP_ADDRESS -all
+
+</p>
+<p>In some situations, some of your customers might have dedicated IPs for their sites and their MX and A records point to those IPs. Those IP addresses "are NOT the main IP address " for the server.
+  By default, on a cPanel and/or a DirectAdmin powered server(s), the main IP address is the one which sends out mail.
+  So if the main IP of the server is 60.70.80.90, then you need the following as a minimal SPF record for all domains on that server:
+</p>
+<p>
+  "v=spf1 a mx ip4:60.70.80.90 -all"
+
+</p>
+<p>MSN/Hotmail recommends using -all terminators in the SPF record.&nbsp;</p>
+<p>
+
+  2. Assign an IP address to every client sending out large number of email messages.
+
+</p>
+<p>3. Don't act and/or any of your clients act like a phisher:
+
+</p>
+<p>4. Don't use an IP address as part of your email address. Use a valid domain name hosted on your server.
+
+</p>
+<p>5 Don't include HTML forms in email messages. Submitting and/or including forms in email messages is considered security threat for many ISPs.
+
+</p>
+<p>6. Don't include JavaScript code in email messages.
+
+</p>
+<p>7. Don't include embedded objects in email messages such as: Flash or Active-X.
+
+</p>
+<p>8. Don't re-send rejected messages. If a message gets rejected, it will not be accepted anytime soon. Re-sending rejected messages is a waste of resources and makes you appear to have a dirty list.
+</p>
+<p>
+  9. Use standard POP3 and SMTP Mail Ports, only.
+
+</p>
+<p>10. Make sure the IP address that your server sends mail from (which would be the main IP address), has:
+  Valid reverse DNS (rDNS); and that rDNS is reflective of your hostname, rather than some generic record that your upstream IP provider has put in place.
+
+</p>
+<p>SSH to your server and run the following two commands to see if your hostname is associated with the main IP of your server:
+</p>
+<p>
+  nslookup your.hostname</p>
+<p>nslookup YOUR_SERVER_MAIN_IP
+  (where YOUR_SERVER_MAIN_IP is the main IP address of your server).&nbsp;</p>
+<p>The system should return your_hostname
+
+</p>
+<p>You can setup RDNS fron client portal. Logon cleint portal from serverpointapps.com and then click on server name, then RDNS tab.
+
+</p>
+<p>11. Stopping customers from forwarding their email is very difficult.
+  Since it is not possible to guarantee that all email messages forwarded from your server to AOL / Hotmail / Yahoo are not spam or don't contain spam, you need to let your customers know that their email might be rejected by those entities.
+
+</p>
+<p>12. Enable SpamAssassin, or any good spam filter, on all accounts hosted on your server. Make sure spam rules are up-to-date all the time.
+
+</p>
+<p>13. Ensure your Mail server is not an open relay or proxy. Keep your Mail server up-to-date with the latest security patches to help prevent spammers from using your resources and tarnishing your reputation.
+
+</p>
+<p>14. Make sure all scripts either Php and/or cgi/Perl such as: formmail/cgimail are secure and can not be used by spammers to send out spam.</p>
+<p>&nbsp;</p>
