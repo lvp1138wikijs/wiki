@@ -1,0 +1,18 @@
+<!--
+title:  How to avoid frequently disconnecting RDP connection 
+description: Avoid frequently disconnecting RDP connection 
+published: true
+date: 2022-01-07T22:12:30.213Z
+tags: rdp, disconnection
+editor: ckeditor
+dateCreated: 2022-01-07T22:12:30.213Z
+-->
+
+<p>In order to avoid frequently disconnecting RDP connection, please do the following steps: ( Reference ticket : XAE-268-52225 )</p>
+<ol>
+  <li>Remove/uninstall "sound over RDP" application from VM.</li>
+  <li>In RDP client setting window, click "options" and then select the "Local Resources" tab.</li>
+  <li>In "Remote audio" settings, please make sure that "Remote audio playback" and "Remote audio recording" set to Do not play/Do not record respectively.</li>
+</ol>
+<figure class="image"><img src="http://64.235.39.80:8090/download/attachments/5046825/rdp%20setting.png?version=1&amp;modificationDate=1372906087000&amp;api=v2"></figure>
+<p>&nbsp;</p>
