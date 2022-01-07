@@ -1,0 +1,22 @@
+<!--
+title:  IIS Manager Error 
+description:  IIS Manager Error 
+published: true
+date: 2022-01-07T22:08:58.145Z
+tags: iis
+editor: ckeditor
+dateCreated: 2022-01-07T22:08:58.145Z
+-->
+
+<h2>IIS Manager Error: The process cannot access the file because it is being used by another process</h2>
+<p>When start IIS, the error message (in subject) appears.</p>
+<p>In EventLog(System) showing the following errors:</p>
+<p>&nbsp;</p>
+<p>Source: HttpEvent</p>
+<p>Msg: Unable to bind to the underlying transport for [::]:80. The IP Listen-Only list may contain a reference to an interface which may not exist on this machine. The data field contains the error number.</p>
+<p>&nbsp;</p>
+<h3>Solution</h3>
+<p>This is an issue with binding conflict. There is another application that is using port 80. If you change the bindings for the default website to 8080 [for test purpose] it will work.</p>
+<p>To change the port , go to IIS » Then right click on the default website » Then change the port</p>
+<p>You can run NETSTAT -ano and find out the PID for the process that is using port 80, then you can compare that PID with the process name in task manager [may be he installed apache]</p>
+<p>&nbsp;</p>
