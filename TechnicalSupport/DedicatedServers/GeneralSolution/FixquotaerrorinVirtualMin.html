@@ -1,0 +1,26 @@
+<!--
+title:  How to fix quota error in VirtualMin/WebMin 
+description: Fix quota error in VirtualMin/WebMin 
+published: true
+date: 2022-01-07T22:14:19.389Z
+tags: quota error, virtualmin, webmin
+editor: ckeditor
+dateCreated: 2022-01-07T22:14:19.389Z
+-->
+
+<p>While adding a new site in VirtualMin/WebMin, you can get the following quota error.</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>Failed to create virtual server : setquota: Mountpoint (or device) / not found or has no quota enabled. setquota: Not all specified mountpoints are using quota.</th>
+      </tr>
+    </thead>
+  </table>
+</figure>
+<p>In order to avoid this error, please do the following steps:</p>
+<ol>
+  <li>Login to VirtualMin/Webmin and then select System Settings -&gt; Virtualmin Configuration, and set "Set quotas for domain and mail users?" to "No".</li>
+  <li>You can disable them altogether on your filesystem.</li>
+  <li>You can do that in Webmin -&gt; System -&gt; Disk Quotas. On that screen, you'll have the option of disabling quotas for any particular partition on your server.</li>
+</ol>
