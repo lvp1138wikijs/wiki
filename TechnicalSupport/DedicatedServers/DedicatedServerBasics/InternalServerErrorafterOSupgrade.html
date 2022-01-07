@@ -1,0 +1,14 @@
+<!--
+title: Forms showing Internal Server Error after OS upgrade
+description: 
+published: true
+date: 2022-01-07T22:34:13.636Z
+tags: 
+editor: ckeditor
+dateCreated: 2022-01-07T22:34:13.636Z
+-->
+
+<p>Issue: The forms present in customers server is giving 'Internal Server Error' after OS upgrade. The error in the logs is 'Premature end of script headers'. It is as given below:</p>
+<p><br>----<br>[Thu Apr 10 14:30:57 2014] [error] [client 216.108.226.61] Premature end of script headers: FormMail.pl, referer: <a href="http://www.southtravels.com/middleeast/uae/kempinskihotelmall/enquiry.htm">http://www.southtravels.com/middleeast/uae/kempinskihotelmall/enquiry.htm</a><br>----<br><br>Solution:<br><strong># mv /usr/sbin/suexec /usr/sbin/suexec.old</strong><br><strong># cp /usr/local/psa/suexec/psa-suexec /usr/sbin/suexec</strong><br><strong># chown root:apache /usr/sbin/suexec</strong><br><strong># chmod 4510 /usr/sbin/suexec</strong><br><strong># service httpd restart</strong></p>
+<p>&nbsp;</p>
+<p>Ref Ticket ID: XOH-304-76638</p>
