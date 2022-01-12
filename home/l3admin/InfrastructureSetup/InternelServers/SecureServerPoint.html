@@ -2,7 +2,7 @@
 title: Secure ServerPoint
 description: Ticket System Server
 published: true
-date: 2022-01-12T17:52:06.635Z
+date: 2022-01-12T19:08:26.057Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-01-11T19:52:22.667Z
@@ -17,24 +17,23 @@ dateCreated: 2022-01-11T19:52:22.667Z
 <p><code>yum-config-manager --enable remi-php73 ; yum-config-manager --enable remi-php74</code></p>
 <h4>Install Packages&nbsp;</h4>
 <p><code>yum install epel-release yum-utils -y</code></p>
-<p><code>yum install -y httpd mod_ssl mariadb php php-cli mod_fcgid php-cgi php-mysql php-common \</code><br><code>php-gd php-mcrypt php-imap php-ldap iptables-services perl-DBD-SQLite perl-XML-Smart perl-URI-Encode -y</code></p>
+<p><code>yum install -y httpd mod_ssl mariadb php php-cli mod_fcgid php-cgi php-mysql php-common php-mbstring \</code><br><code>php-gd php-mcrypt php-imap php-ldap iptables-services perl-DBD-SQLite perl-XML-Smart perl-URI-Encode -y</code></p>
+<h4>Install Perl Modules</h4>
+<pre><code class="language-c">yum -y install perl perl-devel perl-version perl-ExtUtils-ParseXS perl-Compress-Raw-Zlib perl-CPAN perl-XML-Simple \
+perl-Crypt-SSLeay perl-Socket6 perl-DBI perl-libwww-perl perl-Crypt-DES perl-Net-SSLeay perl-libs perl-XML-Parser \
+perl-ExtUtils-MakeMaker perl-Test-Harness perl-IO-Compress-Base perl-Digest-SHA perl-Compress-Zlib \
+perl-Object-MultiType perl-XML-Smart perl-IO-Socket-INET6 perl-SNMP_Session perl-Error perl-Git perl-DBD-SQLite \
+perl-JSON perl-HTML-Tagset perl-URI perl-Crypt-CBC perl-Crypt-Rijndael perl-Net-LibIDN perl-Pod-Escapes perl-IO-Socket-SSL \
+perl-Unicode-String perl-Module-Pluggable perl-IO-Compress-Zlib perl-CGI rrdtool-perl perl-WWW-Curl perl-HTML-Parser \
+perl-DBD-MySQL perl-HTML-Template perl-Pod-Simple perl-Net-Telnet perl-XML-Entities perl-LWP-Protocol-https
+
+perl -MCPAN -e 'force install Business::PayPal::NVP'
+perl -MCPAN -e 'force install Data::Structure::Util'</code></pre>
 <h4>Install Mod_Cloudflare Module</h4>
 <p><code>yum install httpd-devel libtool git -y</code><br><code>git clone https://github.com/cloudflare/mod_cloudflare.git; cd mod_cloudflare</code><br><code>apxs -a -i -c mod_cloudflare.c</code><br><code>service httpd restart; httpd -M|grep cloudflare</code></p>
 <h4>Configure Apache &amp; PHP</h4>
 <p><code>service httpd start ; systemctl enable httpd.service</code><br><code>rm -rf /var/www/cgi-bin</code><br><code>groupadd webroot</code><br><code>mkdir -p /home/users/s/</code><br><code>useradd -s /bin/bash -d /home/users/s/serverpoint.com -m -g webroot webroot</code><br><code>passwd webroot</code><br><code>mkdir -p /home/users/s/serverpoint.com/public_html</code></p>
 <p><code>sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/g' /etc/php.ini</code><br><code>sed -i 's/short_open_tag = Off/short_open_tag = On/g' /etc/php.ini</code></p>
-<p>&nbsp;</p>
-<pre><code class="language-python">cat &gt;&gt; /home/users/s/serverpoint.com/public_html/cgi-bin/php.fcgi &lt;&lt;END
-#!/bin/bash
-PHP_CGI=/usr/bin/php-cgi
-PHP_FCGI_CHILDREN=4
-PHP_FCGI_MAX_REQUESTS=0
-export PHP_FCGI_CHILDREN
-export PHP_FCGI_MAX_REQUESTS
-exec $PHP_CGI
-END</code></pre>
-<p>&nbsp;</p>
-<p><code>chmod 755 /home/users/s/serverpoint.com/public_html/cgi-bin/php.fcgi</code><br><code>chown -R webroot:webroot /home/users/s/serverpoint.com/public_html</code></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
