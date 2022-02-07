@@ -2,7 +2,7 @@
 title: Ceph Admin 
 description: Setup and intallation instruction of ceph admin server
 published: true
-date: 2021-06-01T15:32:19.726Z
+date: 2022-02-07T17:46:58.265Z
 tags: ceph admin
 editor: ckeditor
 dateCreated: 2021-04-28T19:05:24.259Z
@@ -12,7 +12,7 @@ dateCreated: 2021-04-28T19:05:24.259Z
 <p>Now we have 3 monitors ready to install ceph and create the cluster. In order to do this, we need an admin server.&nbsp;</p>
 <p>OS installed: CentOS 7. It is installed through our installation portal. Login to the server and set the proper hostname. Then do the following</p>
 <h4>Install the Packages</h4>
-<p><code>yum install epel-release -y</code><br><code>yum update -y</code><br><code>yum install lldpd python-setuptools -y</code><br><code>systemctl enable lldpd</code></p>
+<p><code>yum install epel-release -y</code><br><code>yum update -y</code><br><code>yum install lldpd iperf ipmitool htop lshw python-setuptools-y</code><br><code>systemctl enable lldpd</code></p>
 <p>&nbsp;</p>
 <h5>Add the Ceph Repository</h5>
 <pre><code class="language-plaintext">cat &gt;&gt; /etc/yum.repos.d/ceph.repo &lt;&lt;END
