@@ -2,7 +2,7 @@
 title: Ceph Monitor
 description: Installation steps of Ceph Monitor Servers
 published: true
-date: 2021-04-28T19:18:37.213Z
+date: 2022-02-07T17:00:16.088Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-04-28T19:13:59.734Z
@@ -14,7 +14,7 @@ dateCreated: 2021-04-28T19:13:59.734Z
 <h4>Install the Packages</h4>
 <pre><code class="language-plaintext">yum install epel-release -y
 yum update -y 
-yum install lldpd python-setuptools -y
+yum install lldpd iperf ipmitool htop lshw python-setuptools -y
 systemctl enable lldpd</code></pre>
 <h4>Add the Ceph Repository</h4>
 <pre><code class="language-plaintext">cat &gt;&gt; /etc/yum.repos.d/ceph.repo &lt;&lt;END
