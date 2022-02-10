@@ -2,7 +2,7 @@
 title: Management Servers 7
 description: 
 published: true
-date: 2021-07-20T17:05:28.847Z
+date: 2022-02-10T17:24:54.073Z
 tags: 
 editor: ckeditor
 dateCreated: 2021-06-02T14:57:33.638Z
@@ -20,10 +20,10 @@ wget https://dl.min.io/server/minio/release/linux-amd64/minio -O /var/servercham
 chmod +x minio</code></pre>
 <p>Add a 4TB disk to the server for minio. Verify the disk added and reported fine. James will do the rest.</p>
 <p>&nbsp;</p>
-<h3><span style="font-family:Verdana, Geneva, sans-serif;">KVM hypervisor</span></h3>
+<h3><span style="font-family:Verdana, Geneva, sans-serif;">KVM hypervisor&nbsp;</span></h3>
 <p>&nbsp;</p>
 <h6>Install Kernel-ml version 5 &amp; Update Grub</h6>
-<p><code>rpm -Uvh https://linux.cc.iitk.ac.in/mirror/centos/elrepo/kernel/el7/x86_64/RPMS/kernel-ml-5.8.0-1.el7.elrepo.x86_64.rpm</code></p>
+<p><code>rpm -Uvh https://linux.cc.iitk.ac.in/mirror/centos/elrepo/kernel/el7/x86_64/RPMS/kernel-ml-5.13.5-1.el7.elrepo.x86_64.rpm</code></p>
 <p>Then update the grub parameter. Add <i><mark class="marker-yellow">net.ifnames=0 biosdevname=0</mark></i> &nbsp;to the <i><mark class="marker-yellow">GRUB_CMDLINE_LINUX</mark></i> parameter at <i><mark class="marker-yellow">/etc/default/grub</mark></i> file</p>
 <pre><code class="language-plaintext">#cat /etc/default/grub
 GRUB_TIMEOUT=5
@@ -36,7 +36,11 @@ GRUB_DISABLE_RECOVERY="true"</code></pre>
 <p>Then update the grub changes</p>
 <pre><code class="language-plaintext">grub2-mkconfig -o /boot/grub2/grub.cfg
 grep ^menuentry /boot/grub2/grub.cfg
-grub2-set-default 0</code></pre>
+grub2-set-default 0
+
+yum install lldpd iperf ipmitool htop lshw python-setuptools-y
+systemctl enable lldpd</code></pre>
+<p>&nbsp;</p>
 <p>Now reboot the server and make sure the server rebooted with the kernel we installed.&nbsp;</p>
 <p>&nbsp;</p>
 <h6>Compile Qemu</h6>
@@ -113,11 +117,9 @@ ovs-vsctl add-port ovsbr bond0</code></pre>
 <h2><span style="font-family:Verdana, Geneva, sans-serif;">Manually Create the KVM VM</span></h2>
 <p><strong>Export Windows 2019 from Backup Server to the Destination HVs</strong></p>
 <ul>
-  <li>This example command is from a las backup server
-  </li>
+  <li>This example command is from a las backup server</li>
 </ul>
-<p><code>rbd export &nbsp;ostemplates/windows-kvm-efi-std-2k19-x64-20190208 /data/windows-kvm-efi-std-2k19-x64-20190208.img --keyring /etc/ceph/ceph-las-b/ceph.client.admin.keyring -c /etc/ceph/ceph-las-b/ceph.conf</code>
-</p>
+<p><code>rbd export &nbsp;ostemplates/windows-kvm-efi-std-2k19-x64-20190208 /data/windows-kvm-efi-std-2k19-x64-20190208.img --keyring /etc/ceph/ceph-las-b/ceph.client.admin.keyring -c /etc/ceph/ceph-las-b/ceph.conf</code></p>
 <ul>
   <li>Copy to the Destination HVs</li>
 </ul>
@@ -128,8 +130,8 @@ ovs-vsctl add-port ovsbr bond0</code></pre>
 <p><code>mkdir /vms&nbsp;</code><br><code>cp /home/pcruz/windows-kvm-efi-std-2k19-x64-20190208.img /vms/vm1.disk</code></p>
 <p><strong>Configure openvswitch for vm connections</strong></p>
 <ul>
-  <li>&nbsp;First confirm each source of ethernet port. For example eth2 is OOB and eth3 is ipmi network.&nbsp;</li>
-  <li>First set up a bridge for OOB &nbsp;</li>
+  <li>First confirm each source of ethernet port. For example eth2 is OOB and eth3 is ipmi network.</li>
+  <li>First set up a bridge for OOB</li>
 </ul>
 <p style="text-align:justify;"><code>ovs-vsctl add-br oob</code><br><code>ovs-vsctl add-port oob eth2</code></p>
 <ul>
