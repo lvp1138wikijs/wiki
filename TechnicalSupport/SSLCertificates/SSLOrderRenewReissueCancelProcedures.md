@@ -2,7 +2,7 @@
 title: SSL Order / Renew / Reissue / Cancel Procedures
 description: 
 published: true
-date: 2021-06-03T15:03:34.722Z
+date: 2022-04-03T05:34:49.528Z
 tags: 
 editor: markdown
 dateCreated: 2021-06-03T15:03:34.722Z
@@ -22,11 +22,10 @@ The Secure Socket Layer protocol was created by Netscape to ensure secure transa
 - The browser decrypts the http data and html document using the symmetric key and displays the information.
 
 ## How to Order New / Renew SSL Certificates
-- Shared Hosting account
-- Dedicated / VPS account
+- [Shared Hosting account](/TechnicalSupport/SSLCertificates/ProcedureSharedandWebHostingPlans/SSLOrderRenewReissueCancelProcedures)
+- [Dedicated / VPS account](/TechnicalSupport/SSLCertificates)
 
 ## How to Reissue / Cancel Newly ordered SSL Certificates
 
-- How to reissue SSL?
-- How to Cancel and Get Refund on Newly Ordered SSL Certificate
-
+- [How to reissue SSL?](/TechnicalSupport/SSLCertificates/reissuessl)
+- [How to Cancel and Get Refund on Newly Ordered SSL Certificate](/TechnicalSupport/SSLCertificates/SSLOrderRenewReissueCancelProcedures/CancelandGetRefundNewOrder)
