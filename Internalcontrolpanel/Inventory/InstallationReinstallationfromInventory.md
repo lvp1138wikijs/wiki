@@ -2,7 +2,7 @@
 title: Installation/Re-installation from Inventory
 description: 
 published: true
-date: 2022-04-14T01:30:38.925Z
+date: 2022-04-14T01:44:22.896Z
 tags: 
 editor: markdown
 dateCreated: 2022-04-14T01:30:38.925Z
@@ -50,7 +50,7 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 ```
 
 - You can keep pinging server ip, and if it go down then it means server is rebooted and will be installing OS
-- You can also check OS Installation status from Client portal
+- You can also check [OS Installation Status from Client portal ](/TechnicalSupport/SystemAdminDocumentationLevel3/OSInstallationStatusProvisioningSelfProvisioning)
 - One OS (Linux/Windows) will be installed, you will get email in gmail.
 
 ```diagram
