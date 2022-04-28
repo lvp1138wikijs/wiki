@@ -2,7 +2,7 @@
 title: Email Client Configuration settings
 description: 
 published: true
-date: 2022-04-28T21:48:02.157Z
+date: 2022-04-28T21:52:53.049Z
 tags: 
 editor: markdown
 dateCreated: 2022-02-21T15:36:56.698Z
