@@ -2,7 +2,7 @@
 title: Email Client Configuration settings
 description: 
 published: true
-date: 2022-04-28T04:03:41.058Z
+date: 2022-04-28T04:26:36.080Z
 tags: 
 editor: markdown
 dateCreated: 2022-02-21T15:36:56.698Z
@@ -98,7 +98,7 @@ PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8v
 
 SMTP server: webmail4.serverpoint.com (user webmail 4 or 3 according to the mail server of the domain)
 
-Port: 25
+Port: 587
 Select: Secured connection using TLS 
 
 Email address: test@domain.com
