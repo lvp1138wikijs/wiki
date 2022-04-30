@@ -1,0 +1,151 @@
+<!--
+title: Disk Partition ( UUID ) 
+description: Disk Partition  in Linux
+published: true
+date: 2022-04-30T09:44:22.105Z
+tags: disk, partition, fdisk. mkpart, fstab, uuid
+editor: ckeditor
+dateCreated: 2022-04-30T09:44:22.105Z
+-->
+
+<p>You cannot create a Linux partition larger than 2 TB using the fdisk command. The fdisk won’t create partitions larger than 2 TB. In this tutorial, you will learn more about creating Linux filesystems greater than 2 Terabytes.</p>
+<p>To solve this problem use, <strong>parted</strong> command.</p>
+<p><strong>1. First, create partition and filesystem on server, here we use sdb partition :</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><strong>parted /dev/sdb</strong></p>
+          <p>(parted) <strong>mkpart</strong></p>
+          <p>Partition name? []? <strong>1</strong></p>
+          <p>File system type? [ext2]? <strong>ext4</strong></p>
+          <p>Start? <strong>1</strong></p>
+          <p>End? <strong>100%</strong></p>
+          <p>(parted)</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>1.a ) Sometimes, you have to Create a new GPT disklabel i.e. partition table: &nbsp;</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>(parted) <strong>mklabel gpt</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Sample outputs:</p>
+<p>============</p>
+<p>Warning: The existing disk label on /dev/sdb will be destroyed and all data on this disk will be lost.</p>
+<p>Do you want to continue? Yes/No? yes (parted)</p>
+<p>============</p>
+<p><strong>2. Check if partition is created correctly using the command "print":</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>(parted) <strong>print</strong></p>
+          <p>Model: ATA ST8000NM0055-1RM (scsi)</p>
+          <p>Disk /dev/sdb: 8002GB</p>
+          <p>Sector size (logical/physical): 512B/4096B</p>
+          <p>Partition Table: gpt</p>
+          <p>Disk Flags:</p>
+          <p>Number Start End Size File system Name Flags</p>
+          <p>1 1049kB 99.6MB 98.6MB ext4 1</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>3. FORMAT THE File System :</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>mkfs -t ext4 /dev/sdb1</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>4. Now get UUID of sdb partition using blkid command :</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>root@server# <strong>blkid</strong></p>
+          <p>/dev/sda1: UUID="82698453-c428-4fe4-8255-1e7d5e822c9a" TYPE="swap"</p>
+          <p>PARTUUID="f9ce737c-01" /dev/sda2: UUID="cedc46b1-0ca0-49e9-a693-6d1f6d75167e" TYPE="ext4"</p>
+          <p>PARTUUID="f9ce737c-02" /dev/sda3: UUID="8c2d4eea-7203-4821-a8df-6c147dd91f05" TYPE="ext4"</p>
+          <p>PARTUUID="f9ce737c-03" /dev/sdb1: PARTLABEL="1" PARTUUID="6157d4d4-5abc-4493-98f4-aaf0235b8990"</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>5. Now Create a folder named disk2 :&nbsp;</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p><strong>cd /</strong></p>
+          <p><strong>mkdir disk2</strong></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>6. EDIT FSTAB file to add PARTUUID and save it :</strong></p>
+<p>#<strong> vi /etc/fstab</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>/dev/sda1 swap swap defaults 0 0 /dev/sda3 / ext4 defaults 0 0</p>
+          <p>/dev/sda2 /boot ext4 defaults 0 0</p>
+          <p>devpts /dev/pts devpts gid=5,mode=620 0 0 proc /proc proc defaults 0 0</p>
+          <p>PARTUUID=6157d4d4-5abc-4493-98f4-aaf0235b8990 /disk2 ext4 defaults 0 0</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Save and Exit</strong></p>
+<p><strong>7. Now mount the disk using fstab :</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>mount -a</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>If there is an error in fstab it will show you, correct that and mount disk again.</p>
+<p><strong>8. Check the disk :</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>root@server#<strong> fstab -l</strong></p>
+          <p>/dev/sdb1 7.3T 93M 6.9T 1% /disk2</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Make sure you replace /dev/sdb1 with actual RAID or Disk name or Block Ethernet device such as /dev/etherd/e0.0. Do not forget to update your /etc/fstab file</p>
