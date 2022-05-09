@@ -1,0 +1,80 @@
+<!--
+title: Configure Public IP in CentOS
+description: Adding Public IP in CentOS
+published: true
+date: 2022-05-09T06:35:32.671Z
+tags: additional ip, ip configuration, centos, configure
+editor: ckeditor
+dateCreated: 2022-05-09T06:35:32.671Z
+-->
+
+<p>Steps to configure a network interface with a static IP address in a CentOS 7 and RHEL 7 server.</p>
+<p><strong>NOTE : These steps are for a server without BONDING</strong></p>
+<p><strong>Step 1 : Login to the server through SSH</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>ssh root@serverip</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Steps 2 : Navigate to /etc/sysconfig/network-scripts/</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>cd /etc/sysconfig/network-scripts</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Step 3 : Locate the network file. Here we use ifcfg-eth0</strong></p>
+<p>Take a backup of original file before making any changes in the network file :</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>cp -p /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.bak</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Note : i<strong>fcfg-eth0 </strong>is always used to configure the primary IP of the server without Bonding.</p>
+<p>If you want to configure additional public IPs, then the file name should be changed as : ifcfg-eth0:1, ifcfg-eth0:2 etc</p>
+<p><strong>Step 4 : Now edit ifcfg-eth0 :</strong></p>
+<p><strong>vi ifcfg-eth0</strong></p>
+<p>Enter the following :</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>DEVICE=eth0</p>
+          <p>ONBOOT=yes</p>
+          <p>BOOTPROTO=static</p>
+          <p>IPADDR=x.x.x.x</p>
+          <p>NETMASK=255.255.255.0</p>
+          <p>GATEWAY=x.x.x.1</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Note : EDIT IP Correctly</p>
+<p><strong>Step 5 : Save and exit the file</strong></p>
+<p><strong>Step 6 : Restart Network service</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>systemctl restart network.service</p>
+          <p>or</p>
+          <p>service network restart</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
