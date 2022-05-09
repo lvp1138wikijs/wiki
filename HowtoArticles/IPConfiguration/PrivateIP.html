@@ -1,0 +1,79 @@
+<!--
+title: Configure Private IP in CentOS
+description: Configure Private IP
+published: true
+date: 2022-05-09T08:21:55.477Z
+tags: configure, network, private ip, pvlan
+editor: ckeditor
+dateCreated: 2022-05-09T08:21:55.477Z
+-->
+
+<p>Steps to configure Private IP address in a CentOS 7 and RHEL 7 server.</p>
+<p><strong>NOTE : These steps are for a server with BONDING ENABLED</strong></p>
+<p><strong>Step 1 : Login to the server through SSH</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>ssh root@serverip</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Steps 2 : Navigate to /etc/sysconfig/network-scripts/</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>cd /etc/sysconfig/network-scripts</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Step 3 : Locate the network file. It should be ifcfg-bond0.X</strong></p>
+<p>Take a backup of original file before making any changes in the network file :</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>cp -p /etc/sysconfig/network-scripts/ ifcfg-bond0.X /etc/sysconfig/network-scripts/ ifcfg-bond0.X.bak</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Note : &nbsp;ifcfg-bond0.X is always used to configure the primary IP of the server with Bonding.</p>
+<p><strong>ifcfg-bond0.X should be replaced with correct pvlan number.&nbsp;</strong></p>
+<p><strong>Step 4 : Now edit&nbsp;</strong> the network file. For ease, I am taking ifcfg-bond0.28<strong> as example:</strong></p>
+<p><strong>vi &nbsp;ifcfg-bond0.28</strong></p>
+<p>Enter the following :</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>DEVICE=bond0.28</p>
+          <p>VLAN=yes</p>
+          <p>ONBOOT=yes</p>
+          <p>VLAN_ID=28</p>
+          <p>BOOTPROTO=static</p>
+          <p>IPADDR=192.168.0.11</p>
+          <p>NETMASK=255.255.255.0</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Note : ADD Private IP Correctly</p>
+<p><strong>Step 5 : Save and exit the file</strong></p>
+<p><strong>Step 6 : &nbsp;Bring the network up</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>ifup ifcfg-bond0.28</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;Test by pinging the IP to other private IP in the same network.</p>
