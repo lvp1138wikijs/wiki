@@ -1,0 +1,96 @@
+<!--
+title: Add IP in Centos with Bonding enabled
+description: IP configuration
+published: true
+date: 2022-05-09T08:14:34.744Z
+tags: additional ip, ip configuration, network, bonding
+editor: ckeditor
+dateCreated: 2022-05-09T08:14:34.744Z
+-->
+
+<p>Steps to configure a network interface with a static IP address in a CentOS 7 and RHEL 7 server.</p>
+<p><strong>NOTE : These steps are for a server with BONDING ENABLED</strong></p>
+<p><strong>Step 1 : Login to the server through SSH</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>ssh root@serverip</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Steps 2 : Navigate to /etc/sysconfig/network-scripts/</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>cd /etc/sysconfig/network-scripts</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Step 3 : Locate the network file. Here we use ifcfg-eth0</strong></p>
+<p>Take a backup of original file before making any changes in the network file :</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>cp -p /etc/sysconfig/network-scripts/ ifcfg-bond0.X /etc/sysconfig/network-scripts/ ifcfg-bond0.X.bak</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Note : &nbsp;ifcfg-bond0.X is always used to configure the primary IP of the server with Bonding.</p>
+<p>X should be replaced with correct vlan number.&nbsp;</p>
+<p>If you want to configure additional public IPs, then the file name should be changed as : &nbsp;ifcfg-bond0.49:0, &nbsp;ifcfg-bond0.49:1 etc</p>
+<p><strong>Step 4 : Now edit&nbsp;</strong> the network file. For ease, I am taking ifcfg-bond0.49<strong> as example:</strong></p>
+<p><strong>vi &nbsp;ifcfg-bond0.49</strong></p>
+<p>Enter the following :</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>DEVICE=bond0.49</p>
+          <p>VLAN=yes</p>
+          <p>ONBOOT=yes</p>
+          <p>VLAN_ID=49</p>
+          <p>BOOTPROTO=static</p>
+          <p>IPADDR=64.235.49.X</p>
+          <p>NETMASK=255.255.255.0</p>
+          <p>GATEWAY=64.235.49.1</p>
+          <p>BROADCAST=64.235.49.255</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Note : EDIT IP Correctly</p>
+<p><strong>Step 5 : Save and exit the file</strong></p>
+<p><strong>Step 6 : &nbsp;Bring the network up</strong></p>
+<p>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>ifup ifcfg-bond0.49</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><strong>Step 7 : &nbsp;If IP do not ping or show up in ifconfig, just restart network&nbsp;</strong></p>
+<p><strong>Restart Network service</strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p>systemctl restart network.service</p>
+          <p>or</p>
+          <p>service network restart</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
