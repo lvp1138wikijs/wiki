@@ -2,7 +2,7 @@
 title: Add IP in Centos with Bonding enabled
 description: IP configuration
 published: true
-date: 2022-05-09T08:15:27.347Z
+date: 2022-05-09T08:15:52.862Z
 tags: additional ip, ip configuration, network, bonding
 editor: ckeditor
 dateCreated: 2022-05-09T08:14:34.744Z
@@ -42,7 +42,7 @@ dateCreated: 2022-05-09T08:14:34.744Z
   </table>
 </figure>
 <p>Note : &nbsp;ifcfg-bond0.X is always used to configure the primary IP of the server with Bonding.</p>
-<p>X should be replaced with correct vlan number.&nbsp;</p>
+<p><strong>ifcfg-bond0.X should be replaced with correct vlan number.&nbsp;</strong></p>
 <p>If you want to configure additional public IPs, then the file name should be changed as : &nbsp;ifcfg-bond0.49:0, &nbsp;ifcfg-bond0.49:1 etc</p>
 <p><strong>Step 4 : Now edit&nbsp;</strong> the network file. For ease, I am taking ifcfg-bond0.49<strong> as example:</strong></p>
 <p><strong>vi &nbsp;ifcfg-bond0.49</strong></p>
