@@ -2,7 +2,7 @@
 title: Prepare Invoice PDF Document
 description: 
 published: true
-date: 2021-03-28T00:34:27.229Z
+date: 2022-08-19T05:00:13.128Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-28T00:34:27.229Z
@@ -12,7 +12,17 @@ Right now our system not send invoices as in PDF document. Its just send a text 
 
 If a customer requested us to send the invoice as document. Then will prepare it manually. Just follow the procedure. 
 
-Here are links to our invoice API
+The new invoice API: Peter provided on August 19, 2022
+Use these links for invoice URLs from now on. 
+
+
+- For dedicated server bandwidth: https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-band.cgi?invoicenumber=invoiceID&username=username
+- For dedicated server: https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-dedicated.cgi?invoicenumber=invoiceID&username=username
+- For shared hosting: https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-shared.cgi?invoicenumber=invoiceID&username=username
+- For ColossusCloud: https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-ccloud.cgi?invoicenumber=invoiceID&username=username
+
+
+Here are links to our old invoice API
 
 - For dedicated server bandwidth:   **https://secure.serverpoint.com/cgi-bin/cp/engine//api-invoice-band.cgi?invoicenumber=_invoiceID_&username=_username_**
 - 
