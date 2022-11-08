@@ -2,14 +2,14 @@
 title:  Change Cloud account to new Pricing plan 
 description: 
 published: true
-date: 2021-03-26T12:07:40.347Z
+date: 2022-11-08T17:49:56.455Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-26T12:07:40.347Z
 ---
 
 
-Use the below inserts to change the old Cloud customers (with old pricing plan) to new Plan (as shown in our website: https://www.colossuscloud.com/pricing.phtml :
+Use the below inserts to change the Slider plan VPS (with old pricing plan) to new Size-based Plan
 
 
 
