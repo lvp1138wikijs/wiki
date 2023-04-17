@@ -2,7 +2,7 @@
 title: How to Cancel and Get Refund on Newly Ordered SSL Certificate
 description: 
 published: true
-date: 2021-10-08T12:28:19.387Z
+date: 2023-04-17T23:27:41.195Z
 tags: 
 editor: markdown
 dateCreated: 2021-10-08T12:28:19.387Z
@@ -16,12 +16,9 @@ Goetrust team  is offering 30 days refund policy available for every SSL order. 
 
 To cancel a recently ordered SSL certificate and receive a refund, you would have to do this via the GeoTrust interface:
 
-    Go to the following URL: https://products.geotrust.com/orders/orderinformation/authentication.do
-    Enter in the common name (hostname of the SSL cert) or the order ID, the approver/validation email previously used, and the CAPTCHA number they provide.
-    On the following page, click "request access".
-    An email will be sent to the approver/validation email containing a URL. (if this is your customer, they will be the ones who receive it)
-    Go to the URL provided, and click on the "Cancel Order" button.
-    On the following page, they can confirm the cancellation by clicking on the "I Approve" button.
+    Go to the following URL: 
+    https://www.geocerts.com/support/cancel
+    
 
 As you would be cancelling this SSL certificate within 30 days of ordering it, this will trigger the refund process on GeoTrust's side, and they will refund to OpenSRS (Our Reseller), and They in turn will refund to our reseller account.
 
