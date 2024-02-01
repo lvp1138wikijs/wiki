@@ -2,7 +2,7 @@
 title: Prepare Invoice PDF Document
 description: 
 published: true
-date: 2024-01-03T19:40:12.135Z
+date: 2024-02-01T20:45:34.628Z
 tags: 
 editor: markdown
 dateCreated: 2021-03-28T00:34:27.229Z
@@ -20,6 +20,8 @@ Use these links for invoice URLs from now on.
 - For dedicated server: https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-dedicated.cgi?invoicenumber=invoiceID&username=username
 - For shared hosting: https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-shared.cgi?invoicenumber=invoiceID&username=username
 - For ColossusCloud: https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-ccloud.cgi?invoicenumber=invoiceID&username=username
+
+ - Invoice due {invoice generated} https://portal-old-api.serverpoint.com/cgi-bin/gen4cp/engine/api-invoice-ccloud-hr-due.cgi?username=_username_
 
 
 Here are links to our old invoice API
