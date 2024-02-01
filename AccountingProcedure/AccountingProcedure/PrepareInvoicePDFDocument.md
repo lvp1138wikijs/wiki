@@ -2,8 +2,8 @@
 title: Prepare Invoice PDF Document
 description: 
 published: true
-date: 2024-02-01T20:45:34.628Z
-tags: 
+date: 2024-02-01T20:46:20.397Z
+tags: invoice pdf, pdf
 editor: markdown
 dateCreated: 2021-03-28T00:34:27.229Z
 ---
