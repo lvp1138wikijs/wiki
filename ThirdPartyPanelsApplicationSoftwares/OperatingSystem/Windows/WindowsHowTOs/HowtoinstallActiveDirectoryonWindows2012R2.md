@@ -2,8 +2,8 @@
 title: How to install Active Directory on Windows 2012 R2
 description: 
 published: true
-date: 2022-01-27T05:15:56.509Z
-tags: 
+date: 2024-02-06T16:46:18.888Z
+tags: cal installation
 editor: markdown
 dateCreated: 2021-05-16T05:56:51.454Z
 ---
