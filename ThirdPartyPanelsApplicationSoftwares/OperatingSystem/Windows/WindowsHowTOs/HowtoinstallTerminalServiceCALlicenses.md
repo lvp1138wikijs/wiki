@@ -2,8 +2,8 @@
 title: How to install Terminal Service CAL licenses
 description: 
 published: true
-date: 2021-05-19T05:39:28.653Z
-tags: 
+date: 2024-02-06T16:46:25.578Z
+tags: cal
 editor: markdown
 dateCreated: 2021-05-19T05:03:38.978Z
 ---
