@@ -2,7 +2,7 @@
 title: Secure ServerPoint
 description: Ticket System Server
 published: true
-date: 2025-03-29T19:29:12.845Z
+date: 2025-03-29T20:03:51.085Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-01-11T19:52:22.667Z
@@ -47,7 +47,7 @@ sed -i 's/User apache/User webroot/g' /etc/httpd/conf/httpd.conf
 sed -i 's/Group apache/Group webroot/g' /etc/httpd/conf/httpd.conf
 sed -i 's/#AddHandler cgi-script .cgi/AddHandler cgi-script .cgi .pl/g' /etc/httpd/conf/httpd.conf
 sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/home/users/s/serverpoint.com"#' /etc/httpd/conf/httpd.conf
-sed -i 's#Directory "/var/www/html"#Directory "/home/users/s/serverpoint.co"#' /etc/httpd/conf/httpd.conf
+sed -i 's#Directory "/var/www/html"#Directory "/home/users/s/serverpoint.com"#' /etc/httpd/conf/httpd.conf
 sed -i 's/Options Indexes FollowSymLinks/Options FollowSymLinks/g' /etc/httpd/conf/httpd.conf
 
 cat &gt;&gt; /etc/httpd/conf.d/fcgid.conf &lt;&lt;END
