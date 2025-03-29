@@ -2,7 +2,7 @@
 title: Secure ServerPoint
 description: Ticket System Server
 published: true
-date: 2022-01-12T21:27:45.309Z
+date: 2025-03-29T13:38:04.408Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-01-11T19:52:22.667Z
@@ -34,9 +34,231 @@ perl -MCPAN -e 'force install Data::Structure::Util'</code></pre>
 <h4>Configure Apache &amp; PHP</h4>
 <p><code>service httpd start ; systemctl enable httpd.service</code><br><code>rm -rf /var/www/cgi-bin</code><br><code>groupadd webroot</code><br><code>mkdir -p /home/users/s/</code><br><code>useradd -s /bin/bash -d /home/users/s/serverpoint.com -m -g webroot webroot</code><br><code>passwd webroot</code><br><code>mkdir -p /home/users/s/serverpoint.com/public_html</code></p>
 <p><code>sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=1/g' /etc/php.ini</code><br><code>sed -i 's/short_open_tag = Off/short_open_tag = On/g' /etc/php.ini</code></p>
+<h5>Copy the SSL Certificate from Server Alecka</h5>
+<p>Get the ssl certificates from server alecka. The path is /etc/httpd/ssl. Certificates name start with wild.serverpoint.com. If you didn't find, then ask James and get the latest SSL certificate. We are using a wildcard SSL certificate.</p>
+<p><code>mkdir -p /etc/httpd/ssl</code><br><code>touch /etc/httpd/ssl/wild.serverpoint.com.crt /etc/httpd/ssl/wild.serverpoint.com.key /etc/httpd/ssl/wild.serverpoint.com.ca</code></p>
 <p>&nbsp;</p>
+<h4>Apache and PHP configuration. Run the following code block.</h4>
 <p>&nbsp;</p>
+<pre><code class="language-plaintext">cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.`date +%Y-%m-%d:%H:%M:%S`
+rm -rf /etc/httpd/conf.d/welcome.conf
+
+sed -i 's/User apache/User webroot/g' /etc/httpd/conf/httpd.conf
+sed -i 's/Group apache/Group webroot/g' /etc/httpd/conf/httpd.conf
+sed -i 's/#AddHandler cgi-script .cgi/AddHandler cgi-script .cgi .pl/g' /etc/httpd/conf/httpd.conf
+sed -i 's#DocumentRoot "/var/www/html"#DocumentRoot "/home/users/s/serverpoint.com"#' /etc/httpd/conf/httpd.conf
+sed -i 's#Directory "/var/www/html"#Directory "/home/users/s/serverpoint.co"#' /etc/httpd/conf/httpd.conf
+sed -i 's/Options Indexes FollowSymLinks/Options FollowSymLinks/g' /etc/httpd/conf/httpd.conf
+
+cat &gt;&gt; /etc/httpd/conf.d/fcgid.conf &lt;&lt;END
+FcgidConnectTimeout 200
+FcgidMaxRequestLen 15728640
+FcgidFixPathinfo 1
+END
+
+cat &gt;&gt; /etc/httpd/conf.d/secure.serverpoint.conf &lt;&lt;END
+&lt;VirtualHost *:80&gt;
+    ServerName secure.serverpoint.com
+    ServerAdmin webmaster@localhost
+    DocumentRoot /home/users/s/serverpoint.com/public_html
+    DirectoryIndex index.html index.htm index.php index.phtml index.php5 index.cgi default.html default.php default.phtml default.php5
+#    SuexecUserGroup webroot webroot
+    &lt;Directory /home/users/s/serverpoint.com/public_html&gt;
+        Options +ExecCGI +Includes +FollowSymLinks
+        AllowOverride All
+        AddHandler php5-fastcgi .php .phtml .php5
+        Action php5-fastcgi /cgi-bin/php.fcgi
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    ScriptAlias /cgi-bin/ /home/users/s/serverpoint.com/public_html/cgi-bin/
+    &lt;Directory "/home/users/s/serverpoint.com/public_html/cgi-bin"&gt;
+        AllowOverride All
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+    &lt;Directory "/home/users/s/serverpoint.com/public_html/cgi-bin/oldcps"&gt;
+        Order Deny,Allow
+        Deny from all
+        Allow from 64.235.41.50
+        Allow from 64.235.37.226
+        Allow from 64.235.50.5
+        Allow from 216.108.228.61
+        Allow from 64.235.46.88
+    &lt;/Directory&gt;
+    &lt;Directory "/home/users/s/serverpoint.com/public_html/tickets/staff"&gt;
+        Order Deny,Allow
+        Deny from all
+        Allow from 64.235.41.50
+        Allow from 64.235.37.226
+        Allow from 64.235.50.5
+        Allow from 216.108.228.61
+        Allow from 64.235.46.88
+    &lt;/Directory&gt;
+    ErrorLog /var/log/httpd/default.error.log
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+    CustomLog /var/log/httpd/default.access.log combined
+&lt;/VirtualHost&gt;
+&lt;VirtualHost *:443&gt;
+    ServerName secure.serverpoint.com
+    ServerAdmin webmaster@localhost
+    DocumentRoot /home/users/s/serverpoint.com/public_html
+    DirectoryIndex index.html index.htm index.php index.phtml index.php5 index.cgi default.html default.php default.phtml default.php5
+ #   SuexecUserGroup webroot webroot
+    &lt;Directory /home/users/s/serverpoint.com/public_html&gt;
+        Options +ExecCGI +Includes  +FollowSymLinks
+        AllowOverride All
+        AddHandler php5-fastcgi .php .phtml .php5
+        Action php5-fastcgi /cgi-bin/php.fcgi
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    ScriptAlias /cgi-bin/ /home/users/s/serverpoint.com/public_html/cgi-bin/
+    &lt;Directory "/home/users/s/serverpoint.com/public_html/cgi-bin"&gt;
+        AllowOverride All
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+    &lt;Directory "/home/users/s/serverpoint.com/public_html/cgi-bin/oldcps"&gt;
+        Order Deny,Allow
+        Deny from all
+        Allow from 64.235.41.50
+        Allow from 64.235.37.226
+        Allow from 64.235.50.5
+        Allow from 216.108.228.61
+        Allow from 64.235.46.88
+    &lt;/Directory&gt;
+    &lt;Directory "/home/users/s/serverpoint.com/public_html/tickets/staff"&gt;
+        Order Deny,Allow
+        Deny from all
+        Allow from 64.235.41.50
+        Allow from 64.235.37.226
+        Allow from 64.235.50.5
+        Allow from 216.108.228.61
+        Allow from 64.235.46.88
+    &lt;/Directory&gt;
+#   SSL Engine Switch:
+        #   Enable/Disable SSL for this virtual host.
+        SSLEngine on
+        SSLCertificateFile    /etc/httpd/ssl/wild.serverpoint.com.crt
+        SSLCertificateKeyFile /etc/httpd/ssl/wild.serverpoint.com.key
+        SSLCertificateChainFile /etc/httpd/ssl/wild.serverpoint.com.ca
+        &lt;FilesMatch "\.(cgi|shtml|phtml|php)$"&gt;
+                SSLOptions +StdEnvVars
+        &lt;/FilesMatch&gt;
+        &lt;Directory /usr/lib/cgi-bin&gt;
+                SSLOptions +StdEnvVars
+        &lt;/Directory&gt;
+        BrowserMatch "MSIE [2-6]"                 nokeepalive ssl-unclean-shutdown                 downgrade-1.0 force-response-1.0
+        # MSIE 7 and newer should be able to use keepalive
+        BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+    ErrorLog /var/log/httpd/default.error.log
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+    CustomLog /var/log/httpd/default.access.log combined
+&lt;/VirtualHost&gt;
+END
+
+service httpd restart</code></pre>
 <p>&nbsp;</p>
+<h5>Secure SSH &amp; Firewall Rules</h5>
 <p>&nbsp;</p>
+<pre><code class="language-plaintext">sed -i 's/#Port 22/Port 5252/g' /etc/ssh/sshd_config
+sed -i 's/#Protocol 2/Protocol 2/g' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+sed -i '/PermitRootLogin no/a AllowUsers webroot' /etc/ssh/sshd_config
+
+cat &gt;&gt; /etc/sudoers &lt;&lt;END
+webroot ALL=(ALL) ALL
+END
+
+systemctl restart sshd
+
+yum install iptables-services -y
+systemctl enable iptables
+iptables -F
+iptables -X
+
+&gt;/etc/sysconfig/iptables
+
+cat &gt;&gt; /etc/sysconfig/iptables &lt;&lt;END
+# Generated by iptables-save v1.4.21 on Thu Aug 15 09:19:38 2019
+*filter
+:INPUT DROP [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-N FILTER_INPUT_BACKUP_ADMIN
+-A INPUT -p tcp --dport 9102 -j FILTER_INPUT_BACKUP_ADMIN
+-A INPUT -p tcp --dport 1167 -j FILTER_INPUT_BACKUP_ADMIN
+-A FILTER_INPUT_BACKUP_ADMIN -s 72.18.207.136 -j ACCEPT
+-A INPUT -s 64.235.41.50,64.235.37.226,64.235.50.5,72.18.207.158 -p tcp -m tcp --dport 5252  -j ACCEPT -m comment --comment "SSH Enabled on vpn servers"
+-A INPUT -p tcp -s 72.18.207.158 --dport 873 -m comment --comment "Rsync" -j ACCEPT
+-A INPUT -p tcp -s 72.18.207.240 --dport 1167 -j ACCEPT -m comment --comment "CDP Enabled From R1soft"
+#-A INPUT -m multiport -p tcp --dports 80,443 -j ACCEPT  -m comment --comment "Apache Ports"
+-A INPUT -p tcp -m tcp -s 72.18.207.240 --dport 9102 -m comment --comment "Bacula backup server" -j ACCEPT
+-A INPUT -s 64.235.55.60,64.235.55.61 -p tcp -m tcp --dport 3305 -j ACCEPT -m comment --comment "MySQL Server"
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p icmp -j ACCEPT -m comment --comment "For Ping"
+-N FILTER_Apache
+-A INPUT -m multiport -p tcp --dports 80,443 -j FILTER_Apache
+-A FILTER_Apache -s 64.235.32.0/19 -j ACCEPT
+-A FILTER_Apache -s 72.18.192.0/20 -j ACCEPT
+-A FILTER_Apache -s 216.108.224.0/20 -j ACCEPT
+-A FILTER_Apache -s 173.245.48.0/20 -j ACCEPT
+-A FILTER_Apache -s 103.21.244.0/22 -j ACCEPT
+-A FILTER_Apache -s 103.22.200.0/22 -j ACCEPT
+-A FILTER_Apache -s 103.31.4.0/22 -j ACCEPT
+-A FILTER_Apache -s 141.101.64.0/18 -j ACCEPT
+-A FILTER_Apache -s 108.162.192.0/18 -j ACCEPT
+-A FILTER_Apache -s 190.93.240.0/20 -j ACCEPT
+-A FILTER_Apache -s 188.114.96.0/20 -j ACCEPT
+-A FILTER_Apache -s 197.234.240.0/22 -j ACCEPT
+-A FILTER_Apache -s 198.41.128.0/17 -j ACCEPT
+-A FILTER_Apache -s 162.158.0.0/15 -j ACCEPT
+-A FILTER_Apache -s 104.16.0.0/13 -j ACCEPT
+-A FILTER_Apache -s 104.24.0.0/14 -j ACCEPT
+-A FILTER_Apache -s 172.64.0.0/13 -j ACCEPT
+-A FILTER_Apache -s 131.0.72.0/22 -j ACCEPT
+-A FILTER_Apache -s 10.255.0.0/24 -j ACCEPT
+-A FILTER_Apache -s 95.216.64.250 -j ACCEPT
+-A FILTER_Apache -s 190.104.217.135 -j ACCEPT
+-A FILTER_Apache -s 144.48.37.241 -j ACCEPT
+-A FILTER_Apache -s 104.247.192.170 -j ACCEPT
+-A FILTER_Apache -s 136.175.8.15 -j ACCEPT
+-A FILTER_Apache -s 107.161.26.107 -j ACCEPT
+-A FILTER_Apache -s 172.105.6.187 -j ACCEPT
+-A FILTER_Apache -s 173.248.161.42 -j ACCEPT
+-A FILTER_Apache -s 66.11.113.250 -j ACCEPT
+-A FILTER_Apache -s 172.93.197.58 -j ACCEPT
+-A FILTER_Apache -s 172.82.138.70 -j ACCEPT
+-A FILTER_Apache -s 209.205.207.243 -j ACCEPT
+-A FILTER_Apache -s 66.23.202.26 -j ACCEPT
+-A FILTER_Apache -s 64.79.76.50 -j ACCEPT
+-A FILTER_Apache -s 208.82.130.170 -j ACCEPT
+-A FILTER_Apache -s 192.154.102.130 -j ACCEPT
+-A FILTER_Apache -s 5.226.139.158 -j ACCEPT
+-A FILTER_Apache -s 195.154.167.97 -j ACCEPT
+-A FILTER_Apache -s 217.182.201.227 -j ACCEPT
+-A FILTER_Apache -s 37.252.125.64 -j ACCEPT
+-A FILTER_Apache -s 54.36.110.96 -j ACCEPT
+-A FILTER_Apache -s 78.110.173.218 -j ACCEPT
+-A FILTER_Apache -s 112.213.38.162 -j ACCEPT
+-A FILTER_Apache -s 172.104.181.238 -j ACCEPT
+-A FILTER_Apache -s 103.6.85.58 -j ACCEPT
+-A FILTER_Apache -s 180.149.230.17 -j ACCEPT
+-A FILTER_Apache -s 203.29.240.44 -j ACCEPT
+-A FILTER_Apache -s 163.47.21.47 -j ACCEPT
+-A FILTER_Apache -s 54.232.120.40 -j ACCEPT
+-A FILTER_Apache -s 162.254.202.35 -j ACCEPT
+COMMIT
+END
+
+service iptables restart</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
